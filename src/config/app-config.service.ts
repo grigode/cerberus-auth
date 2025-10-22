@@ -18,6 +18,14 @@ export class AppConfigService implements AppConfigI {
     return 'api';
   }
 
+  get CONTENT_SECURITY_POLICY(): boolean {
+    return (
+      this.parseBoolean(
+        this.configService.get<string>('CONTENT_SECURITY_POLICY'),
+      ) || false
+    );
+  }
+
   // KEYS
 
   get COOKIE_KEY(): string {
@@ -35,11 +43,10 @@ export class AppConfigService implements AppConfigI {
   }
 
   get CORS_CREDENTIALS(): boolean {
-    const credentials = this.configService.get<string>('CORS_CREDENTIALS');
-
-    if (!credentials) return false;
-
-    return ['1', 'true'].includes(credentials?.toLocaleLowerCase());
+    return (
+      this.parseBoolean(this.configService.get<string>('CORS_CREDENTIALS')) ||
+      false
+    );
   }
 
   get CORS_METHODS(): string[] {
@@ -52,5 +59,11 @@ export class AppConfigService implements AppConfigI {
 
   private parseArrayString(value?: string): Array<string> | undefined {
     if (value) return value.split(',');
+  }
+
+  private parseBoolean(value?: string): boolean | undefined {
+    if (!value) return false;
+
+    return ['1', 'true'].includes(value?.toLocaleLowerCase());
   }
 }

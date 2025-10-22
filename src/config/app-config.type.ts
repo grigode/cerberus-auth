@@ -2,6 +2,7 @@ export interface AppConfigI {
   get APP_NAME(): string;
   get PORT(): number;
   get GLOBAL_PREFIX(): string;
+  get CONTENT_SECURITY_POLICY(): boolean;
 
   // KEYS
 

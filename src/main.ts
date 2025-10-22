@@ -1,4 +1,5 @@
 import cookie from '@fastify/cookie';
+import helmet from '@fastify/helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -18,7 +19,12 @@ async function bootstrap() {
 
   const config = app.get(AppConfigService);
 
+  await app.register(helmet, {
+    contentSecurityPolicy: config.CONTENT_SECURITY_POLICY,
+  });
+
   app.setGlobalPrefix(config.GLOBAL_PREFIX);
+
   await app.register(cookie, {
     secret: config.COOKIE_KEY,
     parseOptions: {

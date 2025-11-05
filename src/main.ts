@@ -9,6 +9,7 @@ import {
 
 import { AppModule } from './app.module';
 import { AppConfigService } from './config/app-config.service';
+import { WinstonLoggerService } from './contexts/shared/logger/infrastructure';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -18,6 +19,10 @@ async function bootstrap() {
   );
 
   const config = app.get(AppConfigService);
+
+  const logger = app.get(WinstonLoggerService);
+
+  app.useLogger(logger);
 
   await app.register(helmet, {
     contentSecurityPolicy: config.CONTENT_SECURITY_POLICY,

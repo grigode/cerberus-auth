@@ -1,3 +1,5 @@
+import { DataSourceOptions } from 'typeorm';
+
 export interface AppConfigI {
   get APP_NAME(): string;
   get PORT(): number;
@@ -12,4 +14,7 @@ export interface AppConfigI {
   get CORS_ORIGINS(): string[];
   get CORS_CREDENTIALS(): boolean;
   get CORS_METHODS(): string[];
+
+  // DATABASE
+  get MAIN_DATABASE_SOURCE(): DataSourceOptions;
 }

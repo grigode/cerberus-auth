@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { DataSourceOptions } from 'typeorm';
 
 import { AppConfigI } from './app-config.type';
 
@@ -8,12 +9,11 @@ export class AppConfigService implements AppConfigI {
   constructor(private readonly configService: ConfigService) {}
 
   get APP_NAME(): string {
-    return this.configService.get<string>('APP_NAME') || 'Cerberus Auth';
+    return this.getString('APP_NAME', 'Cerberus Auth');
   }
 
   get PORT(): number {
-    const port = this.configService.get<number>('PORT');
-    return Number(port) || 8000;
+    return this.getNumber('PORT', 8000);
   }
 
   get GLOBAL_PREFIX(): string {
@@ -21,49 +21,78 @@ export class AppConfigService implements AppConfigI {
   }
 
   get CONTENT_SECURITY_POLICY(): boolean {
-    return (
-      this.parseBoolean(
-        this.configService.get<string>('CONTENT_SECURITY_POLICY'),
-      ) || false
-    );
+    return this.getBoolean('CONTENT_SECURITY_POLICY', false);
   }
 
   // KEYS
 
   get COOKIE_KEY(): string {
-    return this.configService.get<string>('COOKIE_KEY') || 'default_cookie_key';
+    return this.getString('COOKIE_KEY', 'default_cookie_key');
   }
 
   // CORS
 
   get CORS_ORIGINS(): string[] {
-    const origins = this.parseArrayString(
-      this.configService.get<string>('CORS_ORIGINS'),
-    );
-
-    return origins || [];
+    return this.getArrayString('CORS_ORIGINS', []);
   }
 
   get CORS_CREDENTIALS(): boolean {
-    return (
-      this.parseBoolean(this.configService.get<string>('CORS_CREDENTIALS')) ||
-      false
-    );
+    return this.getBoolean('CORS_CREDENTIALS', false);
   }
 
   get CORS_METHODS(): string[] {
-    const methods = this.parseArrayString(
-      this.configService.get<string>('CORS_METHODS'),
-    );
+    return this.getArrayString('CORS_METHODS', []);
+  }
 
-    return methods || [];
+  // DATABASE
+
+  get MAIN_DATABASE_SOURCE(): DataSourceOptions {
+    return {
+      type: 'mysql',
+      host: this.getString('MAIN_DATABASE_HOST', 'localhost'),
+      port: this.getNumber('MAIN_DATABASE_PORT', 3306),
+      username: this.getString('MAIN_DATABASE_USERNAME', 'root'),
+      password: this.getString('MAIN_DATABASE_PASSWORD', '<password>'),
+      database: this.getString('MAIN_DATABASE_DATABASE', 'cerberus-auth'),
+      entities: [__dirname + '/../**/*.db-entity.ts'],
+      synchronize: this.getBoolean('MAIN_DATABASE_DATABASE', true),
+      timezone: this.getString('MAIN_DATABASE_TIMEZONE', 'z'),
+    };
+  }
+
+  // Getters
+
+  private getString(key: string, _default: string): string {
+    const value = this.configService.get<string>(key);
+    return value || _default;
+  }
+
+  private getArrayString(key: string, _default: string[]): string[] {
+    const value = this.configService.get<string>(key);
+    return this.parseArrayString(value) || _default;
+  }
+
+  private getNumber(key: string, _default: number): number {
+    const value = this.parseNumber(this.configService.get<string>(key));
+    return value || _default;
+  }
+
+  private getBoolean(key: string, _default: boolean): boolean {
+    const value = this.configService.get<string>(key);
+    return value ? this.parseBoolean(value) : _default;
+  }
+
+  // Parsers
+
+  private parseNumber(value?: string): number | undefined {
+    if (value) return Number(value);
   }
 
   private parseArrayString(value?: string): Array<string> | undefined {
     if (value) return value.split(',');
   }
 
-  private parseBoolean(value?: string): boolean | undefined {
+  private parseBoolean(value?: string): boolean {
     if (!value) return false;
 
     return ['1', 'true'].includes(value?.toLocaleLowerCase());

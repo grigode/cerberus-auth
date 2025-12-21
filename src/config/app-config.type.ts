@@ -1,10 +1,22 @@
 import { DataSourceOptions } from 'typeorm';
 
+export interface SuperAdminCredentialsI {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
 export interface AppConfigI {
   get APP_NAME(): string;
   get PORT(): number;
   get GLOBAL_PREFIX(): string;
   get CONTENT_SECURITY_POLICY(): boolean;
+
+  // SEED DATABASE
+
+  get SUPERADMIN_CREDENTIALS(): SuperAdminCredentialsI;
 
   // KEYS
 

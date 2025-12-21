@@ -22,5 +22,5 @@ export class ProviderEntity {
   name: string;
 
   @OneToMany(() => UserEntity, (user) => user.profile)
-  user: UserEntity[];
+  users: UserEntity[];
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, OneToOne } from 'typeorm';
-import { PrimaryGeneratedColumn } from 'typeorm/browser';
+import { PrimaryGeneratedColumn } from 'typeorm';
 
 import { UserEntity } from './user.db-entity';
 
@@ -25,8 +25,13 @@ export class ProfileEntity {
   @Column({ name: 'last_name', type: 'varchar', length: 32 })
   lastName: string;
 
-  @Column({ name: 'profile_image', type: 'varchar', length: 255 })
-  profileImage: string;
+  @Column({
+    name: 'profile_image',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  profileImage: string | null;
 
   @OneToOne(() => UserEntity, (user) => user.profile)
   user: UserEntity;

@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -44,10 +45,13 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
-  @ManyToOne(() => ProviderEntity, (provider) => provider.user)
+  @Column({ name: 'must_change_password', type: 'boolean', default: false })
+  mustChangePassword: boolean;
+
+  @ManyToOne(() => ProviderEntity, (provider) => provider.users)
   provider: ProviderEntity;
 
-  @ManyToOne(() => RoleEntity, (provider) => provider.user)
+  @ManyToOne(() => RoleEntity, (provider) => provider.users)
   role: RoleEntity;
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
@@ -63,13 +67,18 @@ export class UserEntity {
    * Updated only on actual user data changes.
    * Authentication events (login) must NOT update this field.
    */
-  @Column({ name: 'updated_at', type: 'datetime' })
+  @Column({
+    name: 'updated_at',
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 
   @Column({ name: 'last_login_at', type: 'datetime', nullable: true })
   lastLoginAt: Date | null;
 
   @OneToOne(() => ProfileEntity, (profile) => profile.user)
+  @JoinColumn()
   profile: ProfileEntity;
 
   @OneToMany(

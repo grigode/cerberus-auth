@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DataSourceOptions } from 'typeorm';
 
-import { AppConfigI } from './app-config.type';
+import { AppConfigI, SuperAdminCredentialsI } from './app-config.type';
 
 @Injectable()
 export class AppConfigService implements AppConfigI {
@@ -22,6 +22,18 @@ export class AppConfigService implements AppConfigI {
 
   get CONTENT_SECURITY_POLICY(): boolean {
     return this.getBoolean('CONTENT_SECURITY_POLICY', false);
+  }
+
+  // SEED DATABASE
+
+  get SUPERADMIN_CREDENTIALS(): SuperAdminCredentialsI {
+    return {
+      username: this.getString('SUPERADMIN_USERNAME', 'admin'),
+      firstName: this.getString('SUPERADMIN_PROFILE_FIRSTNAME', 'Super'),
+      lastName: this.getString('SUPERADMIN_PROFILE_LASTNAME', 'Admin'),
+      email: this.getString('SUPERADMIN_EMAIL', 'admin@system.local'),
+      password: this.getString('SUPERADMIN_PASSWORD', 'ChangeMe123!'),
+    };
   }
 
   // KEYS
@@ -53,9 +65,9 @@ export class AppConfigService implements AppConfigI {
       port: this.getNumber('MAIN_DATABASE_PORT', 3306),
       username: this.getString('MAIN_DATABASE_USERNAME', 'root'),
       password: this.getString('MAIN_DATABASE_PASSWORD', '<password>'),
-      database: this.getString('MAIN_DATABASE_DATABASE', 'cerberus-auth'),
-      entities: [__dirname + '/../**/*.db-entity.ts'],
-      synchronize: this.getBoolean('MAIN_DATABASE_DATABASE', true),
+      database: this.getString('MAIN_DATABASE_DATABASE', 'cerberus_auth'),
+      entities: [__dirname + '/../**/*.db-entity.{ts,js}'],
+      synchronize: this.getBoolean('MAIN_DATABASE_SYNCHRONIZE', true),
       timezone: this.getString('MAIN_DATABASE_TIMEZONE', 'z'),
     };
   }

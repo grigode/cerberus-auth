@@ -51,8 +51,8 @@ The goal is to keep the domain independent from frameworks and infrastructure, m
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/griegocode/auth-template.git
-cd auth-template
+git clone https://github.com/grigode/cerberus-auth.git
+cd cerberus-auth
 ```
 
 ### 2. Install dependencies

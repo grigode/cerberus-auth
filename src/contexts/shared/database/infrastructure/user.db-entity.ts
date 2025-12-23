@@ -42,7 +42,7 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   password: string;
 
   @Column({ name: 'must_change_password', type: 'boolean', default: false })

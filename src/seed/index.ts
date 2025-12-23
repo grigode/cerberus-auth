@@ -1,5 +1,6 @@
 import { AppConfigService } from 'src/config/app-config.service';
-import { HashPasswordAdapter } from 'src/contexts/identity/infrastructure/adapters/hash-password.adapter';
+import { PROVIDERS } from 'src/contexts/auth/domain/entities/user/value-objects/user-provider.vo';
+import { HashPasswordAdapter } from 'src/contexts/auth/infrastructure/adapters/hash-password.adapter';
 import {
   PermissionEntity,
   ProfileEntity,
@@ -93,11 +94,9 @@ export const seedDatabase = async (
 
   // Providers
 
-  const providers = ['auth', 'google', 'github'];
-
   const providerEntities: ProviderEntity[] = [];
 
-  for (const provider of providers) {
+  for (const provider of PROVIDERS) {
     let pro = await providerRepo.findOne({ where: { name: provider } });
 
     if (!pro) {

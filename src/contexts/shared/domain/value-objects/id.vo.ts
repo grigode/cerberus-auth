@@ -1,5 +1,5 @@
 export class IdValueObject {
-  protected constructor(readonly value: number) {}
+  constructor(readonly value: number) {}
 
   static fromPersistence<T extends IdValueObject>(
     this: new (value: number) => T,

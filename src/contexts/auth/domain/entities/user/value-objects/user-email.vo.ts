@@ -1,7 +1,7 @@
 import { ValidationError } from 'src/contexts/shared/domain';
 
 export class UserEmailVo {
-  protected constructor(readonly value: string) {}
+  private constructor(readonly value: string) {}
 
   static create(value: string): UserEmailVo {
     if (!value) throw new ValidationError('Email is required');

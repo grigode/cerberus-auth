@@ -1,4 +1,4 @@
-import { ValidationError } from '../exceptions';
+import { ValidationError } from '../errors';
 
 export interface StringValueObjectValidationOptions {
   minLength: number;
@@ -6,7 +6,7 @@ export interface StringValueObjectValidationOptions {
 }
 
 export class StringValueObject {
-  protected constructor(readonly value: string) {}
+  constructor(readonly value: string) {}
 
   static _create<T extends StringValueObject>(
     this: new (value: string) => T,

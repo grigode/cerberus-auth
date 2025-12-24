@@ -1,2 +1,2 @@
-export * from './exceptions';
+export * from './errors';
 export * from './value-objects';

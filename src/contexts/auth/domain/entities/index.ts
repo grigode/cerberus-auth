@@ -1,4 +1,5 @@
 export * from './confirmation-token';
+export * from './permission';
 export * from './profile';
 export * from './refresh-token';
 export * from './role';

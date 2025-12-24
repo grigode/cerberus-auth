@@ -1,5 +1,5 @@
 export class BooleanValueObject {
-  protected constructor(readonly value: boolean) {}
+  constructor(readonly value: boolean) {}
 
   static create<T extends BooleanValueObject>(
     this: new (value: boolean) => T,

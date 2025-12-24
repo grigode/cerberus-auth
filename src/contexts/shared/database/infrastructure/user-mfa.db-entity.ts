@@ -37,9 +37,6 @@ export class UserMfaEntity {
   @Column({ name: 'auth_tag', type: 'varbinary', length: 16 })
   authTag: Buffer;
 
-  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
-  createdAt: Date;
-
   @Column({ name: 'enabled_at', type: 'datetime', nullable: true })
   enabledAt: Date | null;
 

@@ -2,6 +2,7 @@ export * from './boolean.vo';
 export * from './buffer.vo';
 export * from './created-at.vo';
 export * from './date.vo';
+export * from './email.vo';
 export * from './id.vo';
 export * from './ip-address.vo';
 export * from './json.vo';

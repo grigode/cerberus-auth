@@ -8,7 +8,14 @@ export interface StringValueObjectValidationOptions {
 export class StringValueObject {
   constructor(readonly value: string) {}
 
-  static _create<T extends StringValueObject>(
+  static create<T extends StringValueObject>(
+    this: new (value: string) => T,
+    value: string,
+  ): StringValueObject {
+    return new StringValueObject(value);
+  }
+
+  static validate<T extends StringValueObject>(
     this: new (value: string) => T,
     value: string,
     options: { minLength: number; maxLength: number } = {

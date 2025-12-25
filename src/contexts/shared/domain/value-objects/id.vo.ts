@@ -1,10 +1,11 @@
-export class IdValueObject {
-  constructor(readonly value: number) {}
+export abstract class IdValueObject {
+  readonly value: string;
 
-  static fromPersistence<T extends IdValueObject>(
-    this: new (value: number) => T,
-    value: number,
-  ): IdValueObject {
-    return new this(value);
+  protected constructor(value: string) {
+    this.value = value;
+  }
+
+  equals(other: IdValueObject): boolean {
+    return this.value === other.value;
   }
 }

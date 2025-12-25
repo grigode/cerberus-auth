@@ -1,4 +1,5 @@
 import { InternalServerError } from 'src/contexts/shared/domain/errors/internal-server-error';
+
 import {
   ConfirmationToken,
   Profile,

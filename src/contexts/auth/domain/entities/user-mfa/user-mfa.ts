@@ -1,6 +1,5 @@
 import { InternalServerError } from 'src/contexts/shared/domain/errors/internal-server-error';
-import { User } from '../user/user';
-import { UserIdVo } from '../user/value-objects';
+
 import {
   UserMfaAuthTagVo,
   UserMfaConfirmedAtVo,
@@ -10,6 +9,8 @@ import {
   UserMfaLastusedAtVo,
   UserMfaSecretCiphertextVo,
 } from './value-objects';
+import { User } from '../user/user';
+import { UserIdVo } from '../user/value-objects';
 
 export interface UserMfaI {
   id: UserIdVo | null;

@@ -1,6 +1,6 @@
 import { AppConfigService } from 'src/config/app-config.service';
-import { PROVIDERS } from 'src/contexts/auth/domain/entities/user/value-objects/user-provider.vo';
-import { HashPasswordAdapter } from 'src/contexts/auth/infrastructure/adapters/hash-password.adapter';
+import { PROVIDERS } from 'src/contexts/auth/domain';
+import { HasherAdapter } from 'src/contexts/auth/infrastructure/adapters';
 import {
   PermissionEntity,
   ProfileEntity,
@@ -128,7 +128,7 @@ export const seedDatabase = async (
     await userRepo.insert({
       username: credentials.username,
       email: credentials.email,
-      password: await HashPasswordAdapter.hash(credentials.password),
+      password: await new HasherAdapter().hashPassword(credentials.password),
       mustChangePassword: true,
       isEmailVerified: true,
       provider: findProvider('auth')!,

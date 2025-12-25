@@ -5,6 +5,6 @@ export class UserDeviceIpAddressVo extends StringValueObject {
     return this._create.call(this, value, {
       minLength: 1,
       maxLength: 64,
-    });
+    }) as UserDeviceIpAddressVo;
   }
 }

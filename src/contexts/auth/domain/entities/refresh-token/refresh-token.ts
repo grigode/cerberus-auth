@@ -1,5 +1,4 @@
 import { User } from '../user';
-import { UserDevice } from '../user-device/user-device';
 import {
   RefreshTokenCreatedAtVo,
   RefreshTokenExpiresAtVo,
@@ -7,6 +6,7 @@ import {
   RefreshTokenRevokedAtVo,
   RefreshTokenTokenHashVo,
 } from './value-objects';
+import { UserDevice } from '../user-device/user-device';
 
 export interface RefreshTokenI {
   id: RefreshTokenIdVo | null;

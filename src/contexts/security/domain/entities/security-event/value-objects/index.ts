@@ -3,7 +3,7 @@ export * from './actor-type.vo';
 export * from './id.vo';
 export * from './ip-address.vo';
 export * from './metadata.vo';
-export * from './ocurred-at.vo';
+export * from './occurred-at.vo';
 export * from './target-id.vo';
 export * from './target-type.vo';
 export * from './type.vo';

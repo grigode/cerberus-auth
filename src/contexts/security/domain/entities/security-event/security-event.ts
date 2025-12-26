@@ -6,14 +6,14 @@ import {
   SecurityEventIdVo,
   SecurityEventIpAddressVo,
   SecurityEventMetadataVo,
-  SecurityEventOcurredAtVo,
+  SecurityEventOccurredAtVo,
   SecurityEventTargetIdVo,
   SecurityEventTargetTypeVo,
   SecurityEventTypeVo,
   SecurityEventUserAgentVo,
 } from './value-objects';
 
-export interface SecurityEventI {
+export interface SecurityEventProps {
   id: SecurityEventIdVo;
   type: SecurityEventTypeVo;
   actorType: SecurityEventActorTypeVo;
@@ -23,10 +23,13 @@ export interface SecurityEventI {
   ipAddress: SecurityEventIpAddressVo;
   userAgent: SecurityEventUserAgentVo;
   metadata: SecurityEventMetadataVo;
-  occurredAt: SecurityEventOcurredAtVo;
+  occurredAt: SecurityEventOccurredAtVo;
 }
 
-export type SecurityEventCreateI = Omit<SecurityEventI, 'id' | 'ocurredAt'>;
+export type SecurityEventCreateProps = Omit<
+  SecurityEventProps,
+  'id' | 'occurredAt'
+>;
 
 export interface SecurityEventPrimitives {
   id: string;
@@ -41,7 +44,7 @@ export interface SecurityEventPrimitives {
   occurredAt: Date;
 }
 
-export class SecurityEvent implements SecurityEventI {
+export class SecurityEvent implements SecurityEventProps {
   id: SecurityEventIdVo;
   type: SecurityEventTypeVo;
   actorType: SecurityEventActorTypeVo;
@@ -51,9 +54,9 @@ export class SecurityEvent implements SecurityEventI {
   ipAddress: SecurityEventIpAddressVo;
   userAgent: SecurityEventUserAgentVo;
   metadata: SecurityEventMetadataVo;
-  occurredAt: SecurityEventOcurredAtVo;
+  occurredAt: SecurityEventOccurredAtVo;
 
-  constructor(attr: SecurityEventI) {
+  constructor(attr: SecurityEventProps) {
     this.id = attr.id;
     this.type = attr.type;
     this.actorType = attr.actorType;
@@ -66,11 +69,11 @@ export class SecurityEvent implements SecurityEventI {
     this.occurredAt = attr.occurredAt;
   }
 
-  static create(attr: SecurityEventCreateI) {
+  static create(attr: SecurityEventCreateProps) {
     return new SecurityEvent({
       ...attr,
       id: SecurityEventIdVo.generate(),
-      occurredAt: SecurityEventOcurredAtVo.now(),
+      occurredAt: SecurityEventOccurredAtVo.now(),
     });
   }
 

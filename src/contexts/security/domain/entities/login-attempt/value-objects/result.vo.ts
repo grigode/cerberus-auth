@@ -1,3 +1,3 @@
 import { BooleanValueObject } from 'src/contexts/shared/domain';
 
-export class LoginAttemptSuccessVo extends BooleanValueObject {}
+export class LoginAttemptResultVo extends BooleanValueObject {}

@@ -1,3 +1,3 @@
 import { DateValueObject } from 'src/contexts/shared/domain';
 
-export class LoginAttemptAttemptedAtVo extends DateValueObject {}
+export class LoginAttemptedAtVo extends DateValueObject {}

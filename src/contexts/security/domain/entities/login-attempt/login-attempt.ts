@@ -1,59 +1,62 @@
 import {
   LoginAttemptIdVo,
   LoginAttemptEmailVo,
-  LoginAttemptSuccessVo,
+  LoginAttemptResultVo,
   LoginAttemptIpAddressVo,
   LoginAttemptUserAgentVo,
   LoginAttemptFailureReason,
-  LoginAttemptAttemptedAtVo,
+  LoginAttemptedAtVo,
 } from './value-objects';
 
-export interface LoginAttemptI {
+export interface LoginAttemptProps {
   id: LoginAttemptIdVo;
   email: LoginAttemptEmailVo;
-  success: LoginAttemptSuccessVo;
+  result: LoginAttemptResultVo;
   ipAddress: LoginAttemptIpAddressVo;
   userAgent: LoginAttemptUserAgentVo;
-  failureReasons: LoginAttemptFailureReason | null;
-  attemptedAt: LoginAttemptAttemptedAtVo;
+  failureReason: LoginAttemptFailureReason | null;
+  attemptedAt: LoginAttemptedAtVo;
 }
 
-export type LoginAttemptCreateI = Omit<LoginAttemptI, 'id' | 'attemptedAt'>;
+export type LoginAttemptCreateProps = Omit<
+  LoginAttemptProps,
+  'id' | 'attemptedAt'
+>;
 
 export interface LoginAttemptPrimitives {
   id: string;
   email: string;
-  success: boolean;
+  result: boolean;
   ipAddress: string;
   userAgent: string;
-  failureReasons: string | null;
+  failureReason: string | null;
   attemptedAt: Date;
 }
 
-export class LoginAttempt implements LoginAttemptI {
+export class LoginAttempt implements LoginAttemptProps {
   id: LoginAttemptIdVo;
   email: LoginAttemptEmailVo;
-  success: LoginAttemptSuccessVo;
+  result: LoginAttemptResultVo;
   ipAddress: LoginAttemptIpAddressVo;
   userAgent: LoginAttemptUserAgentVo;
-  failureReasons: LoginAttemptFailureReason | null;
-  attemptedAt: LoginAttemptAttemptedAtVo;
+  failureReason: LoginAttemptFailureReason | null;
+  attemptedAt: LoginAttemptedAtVo;
 
-  constructor(attr: LoginAttemptI) {
+  constructor(attr: LoginAttemptProps) {
     this.id = attr.id;
     this.email = attr.email;
-    this.success = attr.success;
+    this.result = attr.result;
     this.ipAddress = attr.ipAddress;
     this.userAgent = attr.userAgent;
-    this.failureReasons = attr.failureReasons;
+    this.failureReason = attr.failureReason;
     this.attemptedAt = attr.attemptedAt;
   }
 
-  static create(attr: LoginAttemptCreateI): LoginAttempt {
+  static create(attr: LoginAttemptCreateProps): LoginAttempt {
     return new LoginAttempt({
       ...attr,
       id: LoginAttemptIdVo.generate(),
-      attemptedAt: LoginAttemptAttemptedAtVo.now(),
+      attemptedAt: LoginAttemptedAtVo.now(),
     });
   }
 
@@ -61,10 +64,10 @@ export class LoginAttempt implements LoginAttemptI {
     return {
       id: this.id.value,
       email: this.email.value,
-      success: this.success.value,
+      result: this.result.value,
       ipAddress: this.ipAddress.value,
       userAgent: this.userAgent.value,
-      failureReasons: this.failureReasons?.value ?? null,
+      failureReason: this.failureReason?.value ?? null,
       attemptedAt: this.attemptedAt.value,
     };
   }

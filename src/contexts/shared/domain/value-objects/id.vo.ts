@@ -1,8 +1,18 @@
 export abstract class IdValueObject {
-  readonly value: string;
+  constructor(readonly value: string) {}
 
-  protected constructor(value: string) {
-    this.value = value;
+  static create<T extends IdValueObject>(
+    this: new (value: string) => T,
+    value: string,
+  ): T {
+    return new this(value);
+  }
+
+  static fromPersistence<T extends IdValueObject>(
+    this: new (value: string) => T,
+    value: string,
+  ): T {
+    return new this(value);
   }
 
   equals(other: IdValueObject): boolean {

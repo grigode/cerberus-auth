@@ -12,11 +12,4 @@ export class UuidValueObject extends IdValueObject {
   ): T {
     return new this(uuidv7());
   }
-
-  static fromPersistence<T extends UuidValueObject>(
-    this: new (value: string) => T,
-    value: string,
-  ): T {
-    return new this(value);
-  }
 }

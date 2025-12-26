@@ -3,7 +3,7 @@ import { ValidationError } from '../errors';
 export class BufferValueObject {
   constructor(readonly value: Buffer) {}
 
-  static _create<T extends BufferValueObject>(
+  static validate<T extends BufferValueObject>(
     this: new (value: Buffer) => T,
     value: Buffer,
     maxLength: number,

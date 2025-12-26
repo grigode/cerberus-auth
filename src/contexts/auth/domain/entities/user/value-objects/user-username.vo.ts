@@ -11,7 +11,7 @@ export class UserUsernameVo extends StringValueObject {
         'Username must contain only lowercase letters and numbers, without spaces.',
       );
 
-    return super._create.call(this, value, {
+    return super.validate.call(this, value, {
       minLength: 3,
       maxLength: 20,
     }) as UserUsernameVo;

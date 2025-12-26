@@ -2,6 +2,6 @@ import { BufferValueObject } from 'src/contexts/shared/domain/value-objects/buff
 
 export class UserMfaAuthTagVo extends BufferValueObject {
   static create(value: Buffer): UserMfaAuthTagVo {
-    return this._create.call(this, value, 16) as UserMfaAuthTagVo;
+    return this.validate.call(this, value, 16) as UserMfaAuthTagVo;
   }
 }

@@ -6,7 +6,7 @@ export class ProfileLastNameVo extends StringValueObject {
   }
 
   static create(value: string): ProfileLastNameVo {
-    return super._create.call(this, value, {
+    return super.validate.call(this, value, {
       minLength: 1,
       maxLength: 32,
     }) as ProfileLastNameVo;

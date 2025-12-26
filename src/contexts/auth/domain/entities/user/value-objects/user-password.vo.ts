@@ -15,7 +15,7 @@ export class UserPasswordVo extends StringValueObject {
     if (!/[0-9]/.test(value))
       throw new ValidationError('Password must contain at least one number');
 
-    return super._create.call(this, value, {
+    return super.validate.call(this, value, {
       minLength: 8,
       maxLength: 128,
     }) as UserPasswordVo;

@@ -6,7 +6,7 @@ export class ProfileProfileImageVo extends StringValueObject {
   }
 
   static create(value: string): ProfileProfileImageVo {
-    return super._create.call(this, value, {
+    return super.validate.call(this, value, {
       minLength: 1,
       maxLength: 255,
     }) as ProfileProfileImageVo;

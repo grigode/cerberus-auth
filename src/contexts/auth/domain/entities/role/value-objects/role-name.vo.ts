@@ -6,7 +6,7 @@ export class RoleNameVo extends StringValueObject {
   }
 
   static create(value: string): RoleNameVo {
-    return super._create.call(this, value, {
+    return super.validate.call(this, value, {
       minLength: 2,
       maxLength: 32,
     }) as RoleNameVo;

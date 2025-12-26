@@ -5,10 +5,10 @@ export class PermissionNameVo extends StringValueObject {
     super(value);
   }
 
-  static create(value: string): PermissionName {
-    return super._create.call(this, value, {
+  static create(value: string): PermissionNameVo {
+    return super.validate.call(this, value, {
       minLength: 1,
       maxLength: 32,
-    }) as PermissionName;
+    }) as PermissionNameVo;
   }
 }

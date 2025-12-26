@@ -6,7 +6,7 @@ export class ConfirmationTokenTokenHashVo extends StringValueObject {
   }
 
   static create(value: string): ConfirmationTokenTokenHashVo {
-    return super._create.call(this, value, {
+    return super.validate.call(this, value, {
       minLength: 64,
       maxLength: 64,
     }) as ConfirmationTokenTokenHashVo;

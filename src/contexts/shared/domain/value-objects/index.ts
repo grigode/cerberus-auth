@@ -6,6 +6,8 @@ export * from './email.vo';
 export * from './id.vo';
 export * from './ip-address.vo';
 export * from './json.vo';
+export * from './limit.vo';
+export * from './page.vo';
 export * from './string';
 export * from './updated-at.vo';
 export * from './uuid.vo';

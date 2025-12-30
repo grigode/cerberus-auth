@@ -7,8 +7,8 @@ export class DateValueObject {
 
   static fromPersistence<T extends DateValueObject>(
     this: new (value: Date) => T,
-    value: string,
+    value: Date,
   ) {
-    return new this(new Date(value));
+    return new this(value);
   }
 }

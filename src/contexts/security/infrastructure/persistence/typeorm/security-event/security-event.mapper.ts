@@ -1,4 +1,17 @@
-import { SecurityEvent } from 'src/contexts/security/domain';
+import {
+  SecurityEvent,
+  SecurityEventActorIdVo,
+  SecurityEventActorTypeVo,
+  SecurityEventIdVo,
+  SecurityEventIpAddressVo,
+  SecurityEventMetadataVo,
+  SecurityEventOccurredAtVo,
+  SecurityEventTargetIdVo,
+  SecurityEventTargetTypeVo,
+  SecurityEventTypeVo,
+  SecurityEventUserAgentVo,
+} from 'src/contexts/security/domain';
+
 import { SecurityEventDbEntity } from './security-event.db-entity';
 
 export class SecurityEventMapper {
@@ -15,5 +28,28 @@ export class SecurityEventMapper {
     e.metadata = entity.metadata.toPersistence();
     e.occurredAt = entity.occurredAt.value;
     return e;
+  }
+
+  static toDomain(dbEntity: SecurityEventDbEntity): SecurityEvent {
+    return new SecurityEvent({
+      id: SecurityEventIdVo.fromPersistence(dbEntity.id),
+      type: SecurityEventTypeVo.fromPersistence(dbEntity.type),
+      actorType: SecurityEventActorTypeVo.fromPersistence(dbEntity.actorType),
+      actorId: dbEntity.actorId
+        ? SecurityEventActorIdVo.fromPersistence(dbEntity.actorId)
+        : null,
+      targetType: dbEntity.targetType
+        ? SecurityEventTargetTypeVo.fromPersistence(dbEntity.targetType)
+        : null,
+      targetId: dbEntity.targetId
+        ? SecurityEventTargetIdVo.fromPersistence(dbEntity.targetId)
+        : null,
+      ipAddress: SecurityEventIpAddressVo.fromPersistence(dbEntity.ipAddress),
+      userAgent: SecurityEventUserAgentVo.fromPersistence(dbEntity.userAgent),
+      metadata: SecurityEventMetadataVo.fromPersistence(dbEntity.metadata),
+      occurredAt: SecurityEventOccurredAtVo.fromPersistence(
+        dbEntity.occurredAt,
+      ),
+    });
   }
 }

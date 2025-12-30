@@ -1,8 +1,10 @@
 import { Inject } from '@nestjs/common';
 import {
   LoginAttempt,
+  LoginAttemptCriteria,
   LoginAttemptRepository,
 } from 'src/contexts/security/domain';
+import { PaginatedResult, Pagination } from 'src/contexts/shared/domain';
 import { Repository } from 'typeorm';
 
 import { LoginAttemptDbEntity } from './login-attempt.db-entity';
@@ -17,5 +19,53 @@ export class TypeOrmLoginAttemptRepository implements LoginAttemptRepository {
   async save(attempt: LoginAttempt): Promise<void> {
     const orm = LoginAttemptMapper.toOrm(attempt);
     await this.repo.save(orm);
+  }
+
+  async search(
+    criteria: LoginAttemptCriteria,
+    pagination: Pagination,
+  ): Promise<PaginatedResult<LoginAttempt>> {
+    const { page, limit } = pagination;
+
+    const qb = this.repo.createQueryBuilder('la');
+
+    if (criteria.email)
+      qb.andWhere('la.email = :email', { email: criteria.email.value });
+
+    if (criteria.result !== undefined)
+      qb.andWhere('la.result = :result', { result: criteria.result.value });
+
+    if (criteria.ip) qb.andWhere('la.ip = :ip', { ip: criteria.ip.value });
+
+    if (criteria.userAgent)
+      qb.andWhere('la.userAgent LIKE :userAgent', {
+        userAgent: `%${criteria.userAgent.value}%`,
+      });
+
+    if (criteria.failureReason)
+      qb.andWhere('la.failureReason = :failureReason', {
+        failureReason: criteria.failureReason.value,
+      });
+
+    if (criteria.attemptedAt?.from)
+      qb.andWhere('la.attemptedAt >= :from', {
+        from: criteria.attemptedAt.from.value,
+      });
+
+    if (criteria.attemptedAt?.to)
+      qb.andWhere('la.attemptedAt <= :to', {
+        to: criteria.attemptedAt.to.value,
+      });
+
+    qb.orderBy(`la.${criteria.sort.field}`, criteria.sort.direction)
+      .skip((page.value - 1) * limit.value)
+      .take(limit.value);
+
+    const [rows, total] = await qb.getManyAndCount();
+
+    return {
+      total,
+      items: rows.map((row) => LoginAttemptMapper.toDomain(row)),
+    };
   }
 }

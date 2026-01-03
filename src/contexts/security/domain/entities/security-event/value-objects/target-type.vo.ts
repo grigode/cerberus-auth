@@ -1,4 +1,4 @@
-import { StringValueObject } from 'src/contexts/shared/domain';
+import { StringValueObject, ValidationError } from 'src/contexts/shared/domain';
 
 export enum TargetTypeE {
   USER = 'USER',
@@ -7,7 +7,14 @@ export enum TargetTypeE {
 }
 
 export class SecurityEventTargetTypeVo extends StringValueObject {
-  static create(value: TargetTypeE) {
-    return new SecurityEventTargetTypeVo(value);
+  constructor(readonly value: TargetTypeE) {
+    super(value);
+  }
+
+  static create(value: string): SecurityEventTargetTypeVo {
+    if (!Object.values(TargetTypeE).includes(value as TargetTypeE))
+      throw new ValidationError(`Invalid SecurityEventTargetType: ${value}`);
+
+    return new SecurityEventTargetTypeVo(value as TargetTypeE);
   }
 }

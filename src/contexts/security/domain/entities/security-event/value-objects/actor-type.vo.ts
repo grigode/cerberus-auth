@@ -1,4 +1,4 @@
-import { StringValueObject } from 'src/contexts/shared/domain';
+import { StringValueObject, ValidationError } from 'src/contexts/shared/domain';
 
 export enum ActorTypeE {
   USER = 'USER',
@@ -7,7 +7,14 @@ export enum ActorTypeE {
 }
 
 export class SecurityEventActorTypeVo extends StringValueObject {
-  static create(value: ActorTypeE) {
-    return new SecurityEventActorTypeVo(value);
+  constructor(readonly value: ActorTypeE) {
+    super(value);
+  }
+
+  static create(value: string): SecurityEventActorTypeVo {
+    if (!Object.values(ActorTypeE).includes(value as ActorTypeE))
+      throw new ValidationError(`Invalid SecurityEventActorType: ${value}`);
+
+    return new SecurityEventActorTypeVo(value as ActorTypeE);
   }
 }

@@ -61,10 +61,12 @@ export class TypeOrmLoginAttemptRepository implements LoginAttemptRepository {
       .skip((page.value - 1) * limit.value)
       .take(limit.value);
 
-    const [rows, total] = await qb.getManyAndCount();
+    const [rows, count] = await qb.getManyAndCount();
 
     return {
-      total,
+      count,
+      pages: Math.ceil(count / limit.value),
+      limit: limit.value,
       items: rows.map((row) => LoginAttemptMapper.toDomain(row)),
     };
   }

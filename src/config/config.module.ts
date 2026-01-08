@@ -5,6 +5,7 @@ import Joi from 'joi';
 import { appConfigSchema } from './app';
 import { AppConfigService } from './app/app-config.service';
 import { databaseConfigSchema, DatabaseConfigService } from './database';
+import { HttpConfigService } from './http';
 import { securityConfigSchema, SecurityConfigService } from './security';
 
 @Module({
@@ -20,7 +21,17 @@ import { securityConfigSchema, SecurityConfigService } from './security';
       }),
     }),
   ],
-  providers: [AppConfigService, DatabaseConfigService, SecurityConfigService],
-  exports: [AppConfigService, DatabaseConfigService, SecurityConfigService],
+  providers: [
+    AppConfigService,
+    DatabaseConfigService,
+    HttpConfigService,
+    SecurityConfigService,
+  ],
+  exports: [
+    AppConfigService,
+    DatabaseConfigService,
+    HttpConfigService,
+    SecurityConfigService,
+  ],
 })
 export class ConfigModule {}

@@ -1,10 +1,58 @@
+import cookie from '@fastify/cookie';
+import helmet from '@fastify/helmet';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
+import { AppConfigService, SecurityConfigService } from './config';
+import { HttpConfigService } from './config/http';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 8000);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+    { bufferLogs: true },
+  );
+
+  const appConfig = app.get(AppConfigService);
+  const securityConfig = app.get(SecurityConfigService);
+  const httpConfig = app.get(HttpConfigService);
+
+  await app.register(helmet, {
+    contentSecurityPolicy: securityConfig.CONTENT_SECURITY_POLICY,
+  });
+
+  app.setGlobalPrefix(httpConfig.GLOBAL_PREFIX);
+
+  app.enableCors({
+    origin: securityConfig.CORS_ORIGINS,
+    credentials: securityConfig.CORS_CREDENTIALS,
+    methods: securityConfig.CORS_METHODS,
+  });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  await app.register(cookie, {
+    secret: securityConfig.COOKIE_KEY,
+    parseOptions: {
+      httpOnly: true,
+      path: '/',
+      sameSite: true,
+      secure: true,
+    },
+  });
+
+  await app.listen(appConfig.PORT);
 }
 
 const handleError = (error: unknown) => {

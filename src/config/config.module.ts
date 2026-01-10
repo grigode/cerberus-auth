@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule as NestJsConfigModule } from '@nestjs/config';
 import Joi from 'joi';
 
-import { appConfigSchema } from './app';
-import { AppConfigService } from './app/app-config.service';
+import { appConfigSchema, AppConfigService } from './app';
 import { databaseConfigSchema, DatabaseConfigService } from './database';
 import { HttpConfigService } from './http';
 import { securityConfigSchema, SecurityConfigService } from './security';

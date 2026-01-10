@@ -2,20 +2,20 @@ import cookie from '@fastify/cookie';
 import helmet from '@fastify/helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
-import { AppConfigService, SecurityConfigService } from './config';
-import { HttpConfigService } from './config/http';
+import {
+  AppConfigService,
+  SecurityConfigService,
+  HttpConfigService,
+} from './config';
+import { createFastifyAdapter, getCookieOptions } from './helpers';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
-    { bufferLogs: true },
+    createFastifyAdapter(),
   );
 
   const appConfig = app.get(AppConfigService);
@@ -44,12 +44,7 @@ async function bootstrap() {
 
   await app.register(cookie, {
     secret: securityConfig.COOKIE_KEY,
-    parseOptions: {
-      httpOnly: true,
-      path: '/',
-      sameSite: true,
-      secure: true,
-    },
+    parseOptions: getCookieOptions(appConfig.IS_HTTPS),
   });
 
   await app.listen(appConfig.PORT);

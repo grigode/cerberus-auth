@@ -16,4 +16,16 @@ export class AppConfigService extends BaseConfigService {
   get PORT(): number {
     return this.getNumber('PORT');
   }
+
+  get IS_HTTPS(): boolean {
+    return this.getBoolean('IS_HTTPS');
+  }
+
+  get HTTPS_KEY_PATH(): string | undefined {
+    return this.configService.get<string>('HTTPS_KEY_PATH');
+  }
+
+  get HTTPS_CERT_PATH(): string | undefined {
+    return this.configService.get<string>('HTTPS_CERT_PATH');
+  }
 }

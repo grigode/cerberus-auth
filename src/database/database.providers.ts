@@ -12,7 +12,7 @@ export const databaseProviders: Provider[] = [
       const config = configService.MAIN_DATABASE_SOURCE;
 
       const dataSource = new DataSource({
-        type: 'mysql',
+        type: 'postgres',
         host: config.host,
         port: config.port,
         username: config.username,

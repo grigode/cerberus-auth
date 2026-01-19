@@ -3,6 +3,8 @@
 This document describes the authentication, authorization, session management,
 and security-related entities used in the system.
 
+You can view db diagram in [dbdiagram.io](https://dbdiagram.io/d/696ab933d6e030a0244aef76)
+
 ---
 
 ## User

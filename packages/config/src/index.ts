@@ -1,2 +1,3 @@
 export * from './config.module';
-export * from './validation.schema';
+export * from './jwt.module';
+export * from './providers.constants';

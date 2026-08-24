@@ -15,17 +15,26 @@
   },
   "scripts": {
     "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
+    "argon2": "catalog:",
     "date-fns": "catalog:",
     "nanoid": "catalog:",
+    "rxjs": "catalog:",
     "uuid": "catalog:"
   },
   "devDependencies": {
+    "@configs/jest": "workspace:*",
     "@configs/typescript": "workspace:*",
+    "@types/jest": "catalog:",
     "@types/node": "catalog:",
     "@types/uuid": "catalog:",
+    "jest": "catalog:",
+    "ts-jest": "catalog:",
     "typescript": "catalog:"
   }
 }

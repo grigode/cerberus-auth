@@ -555,7 +555,7 @@ importers:
         version: 7.2.2(supports-color@8.1.1)
       ts-jest:
         specifier: 'catalog:'
-        version: 29.4.11(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.4.1(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(jest-util@30.4.1)(jest@30.4.2(@types/node@24.12.4)(supports-color@8.1.1)(ts-node@10.9.2(@types/node@24.12.4)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.11(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.4.1(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(jest-util@30.4.1)(jest@30.4.2(@types/node@24.12.4)(supports-color@8.1.1))(typescript@5.9.3)
       ts-loader:
         specifier: 'catalog:'
         version: 9.6.0(typescript@5.9.3)(webpack@5.106.2(uglify-js@3.19.3))
@@ -565,6 +565,8 @@ importers:
       tsconfig-paths:
         specifier: 'catalog:'
         version: 4.2.0
+
+  configs/jest: {}
 
   configs/typescript: {}
 
@@ -638,25 +640,43 @@ importers:
 
   packages/domain:
     dependencies:
+      argon2:
+        specifier: 'catalog:'
+        version: 0.45.1
       date-fns:
         specifier: 'catalog:'
         version: 4.4.0
       nanoid:
         specifier: 'catalog:'
         version: 3.3.12
+      rxjs:
+        specifier: 'catalog:'
+        version: 7.8.2
       uuid:
         specifier: 'catalog:'
         version: 11.1.1
     devDependencies:
+      '@configs/jest':
+        specifier: workspace:*
+        version: link:../../configs/jest
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@types/jest':
+        specifier: 'catalog:'
+        version: 30.0.0
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.4
       '@types/uuid':
         specifier: 'catalog:'
         version: 10.0.0
+      jest:
+        specifier: 'catalog:'
+        version: 30.4.2(@types/node@24.12.4)(supports-color@8.1.1)(ts-node@10.9.2(@types/node@24.12.4)(typescript@5.9.3))
+      ts-jest:
+        specifier: 'catalog:'
+        version: 29.4.11(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.4.1(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(jest-util@30.4.1)(jest@30.4.2(@types/node@24.12.4)(supports-color@8.1.1))(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -8305,7 +8325,7 @@ snapshots:
 
   triple-beam@1.4.1: {}
 
-  ts-jest@29.4.11(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.4.1(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(jest-util@30.4.1)(jest@30.4.2(@types/node@24.12.4)(supports-color@8.1.1)(ts-node@10.9.2(@types/node@24.12.4)(typescript@5.9.3)))(typescript@5.9.3):
+  ts-jest@29.4.11(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.4.1(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(jest-util@30.4.1)(jest@30.4.2(@types/node@24.12.4)(supports-color@8.1.1))(typescript@5.9.3):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0

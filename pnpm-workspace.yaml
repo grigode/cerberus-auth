@@ -4,11 +4,13 @@ packages:
   - packages/*
 
 onlyBuiltDependencies:
+  - '@biomejs/biome'
   - '@nestjs/core'
   - argon2
   - esbuild
 
 allowBuilds:
+  '@biomejs/biome': true
   '@scarf/scarf': true
   argon2: true
   msgpackr-extract: true

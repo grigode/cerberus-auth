@@ -9,9 +9,9 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "lint": "turbo run lint",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint --write .",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
@@ -30,10 +30,8 @@
     }
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/node": "24.12.4",
-    "eslint": "9.39.4",
-    "prettier": "3.4.2",
-    "prettier-plugin-tailwindcss": "0.6.11",
     "turbo": "2.10.11",
     "typescript": "5.9.3"
   }

@@ -34,6 +34,7 @@
     "@nestjs/platform-fastify": "catalog:",
     "@nestjs/swagger": "catalog:",
     "@nestjs/throttler": "catalog:",
+    "@nestjs/typeorm": "catalog:",
     "argon2": "catalog:",
     "bullmq": "catalog:",
     "class-transformer": "catalog:",

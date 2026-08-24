@@ -21,6 +21,7 @@
     "@nestjs/common": "catalog:",
     "@nestjs/config": "catalog:",
     "@nestjs/jwt": "catalog:",
+    "@nestjs/typeorm": "catalog:",
     "joi": "catalog:"
   },
   "devDependencies": {

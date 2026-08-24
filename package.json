@@ -22,7 +22,10 @@
     "db:migration:revert": "pnpm --filter @core/database migration:revert",
     "db:migration:generate": "pnpm --filter @core/database migration:generate",
     "db:migration:create": "pnpm --filter @core/database migration:create",
-    "db:seed": "pnpm --filter @core/database seed"
+    "db:seed": "pnpm --filter @core/database seed",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
   },
   "engines": {
     "name": "pnpm",

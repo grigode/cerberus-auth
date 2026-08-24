@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+echo "🔍 Running pre-commit checks..."
+
+echo "🎨 1/2 Running Formatter..."
+pnpm run format
+
+echo "🧹 2/2 Running Linter..."
+pnpm run lint
+
+echo "✅ Pre-commit checks completed successfully!"

@@ -3,7 +3,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "package.json": "package-lock.json, nest-cli.json, .npmrc, eslint.config.mjs, .prettierrc, .prettierignore, docker-compose.yml, biome.json, pnpm-lock.yaml, pnpm-workspace.yaml, .editorconfig",
+    "package.json": "nest-cli.json, .npmrc, .prettierrc, .prettierignore, pnpm-lock.yaml, pnpm-workspace.yaml, .editorconfig",
     "tsconfig.json": "tsconfig.*.json",
     "jest.config.ts": "jest-e2e.json",
     ".env": ".env.*, .env.example"

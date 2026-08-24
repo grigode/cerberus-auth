@@ -16,6 +16,11 @@
     "typecheck": "turbo run typecheck",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "clean": "turbo run clean",
+    "db:migration:run": "pnpm --filter @core/database migration:run",
+    "db:migration:revert": "pnpm --filter @core/database migration:revert",
+    "db:migration:generate": "pnpm --filter @core/database migration:generate",
+    "db:migration:create": "pnpm --filter @core/database migration:create",
+    "db:seed": "pnpm --filter @core/database seed",
     "prepare": "git config core.hooksPath .githooks"
   },
   "engines": {

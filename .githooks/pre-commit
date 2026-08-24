@@ -3,10 +3,10 @@ set -e
 
 echo "🔍 Running pre-commit checks..."
 
-echo "🎨 1/2 Running Formatter..."
-pnpm run format
+echo "🎨 1/2 Checking Formatter..."
+pnpm run format:check
 
-echo "🧹 2/2 Running Linter..."
-pnpm run lint
+echo "🧹 2/2 Checking Linter..."
+pnpm run lint:check
 
 echo "✅ Pre-commit checks completed successfully!"

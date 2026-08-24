@@ -1,15 +1,8 @@
 #!/bin/sh
 set -e
 
-echo "🔍 Running pre-push checks..."
+echo "🔍 Running full pre-push verification pipeline..."
 
-echo "🧹 1/3 Running Linter (All)..."
-pnpm run lint
-
-echo "🏗️ 2/3 Running Build Verification..."
-pnpm run build
-
-echo "🧪 3/3 Running Unit Tests..."
-pnpm test
+pnpm run check
 
 echo "✅ Pre-push checks completed successfully!"

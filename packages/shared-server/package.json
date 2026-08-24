@@ -1,0 +1,45 @@
+{
+  "name": "@core/shared-server",
+  "version": "0.0.0",
+  "description": "Shared server utilities, middlewares, loggers, and guards",
+  "author": "Griego Code <griegocode@proton.me>",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "@core/config": "workspace:*",
+    "@core/domain": "workspace:*",
+    "@fastify/cookie": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@nestjs/swagger": "catalog:",
+    "@nestjs/throttler": "catalog:",
+    "fastify": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "winston": "catalog:",
+    "winston-daily-rotate-file": "catalog:"
+  },
+  "devDependencies": {
+    "@configs/jest": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "@types/jest": "catalog:",
+    "@types/node": "catalog:",
+    "jest": "catalog:",
+    "ts-jest": "catalog:",
+    "typescript": "catalog:"
+  }
+}

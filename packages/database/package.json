@@ -1,0 +1,41 @@
+{
+  "name": "@core/database",
+  "version": "0.0.0",
+  "description": "Database package for the project",
+  "author": "Griego Code <griegocode@proton.me>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d src/seeders/data-source.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/seeders/data-source.ts",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/seeders/data-source.ts",
+    "migration:create": "typeorm-ts-node-commonjs migration:create",
+    "seed": "typeorm-ts-node-commonjs src/seeders/run-seeder.ts"
+  },
+  "dependencies": {
+    "@core/config": "workspace:*",
+    "@nestjs/common": "catalog:",
+    "@nestjs/config": "catalog:",
+    "@nestjs/typeorm": "catalog:",
+    "argon2": "catalog:",
+    "pg": "catalog:",
+    "reflect-metadata": "catalog:",
+    "typeorm": "catalog:",
+    "uuid": "catalog:"
+  },
+  "devDependencies": {
+    "@configs/typescript": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

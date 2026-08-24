@@ -31,9 +31,9 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/node": "24.12.4",
-    "turbo": "2.10.11",
-    "typescript": "5.9.3"
+    "@biomejs/biome": "catalog:",
+    "@types/node": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
   }
 }

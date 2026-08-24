@@ -1,0 +1,31 @@
+{
+  "name": "config",
+  "version": "0.0.0",
+  "description": "Config package for the project",
+  "author": "Griego Code <griegocode@proton.me>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "catalog:",
+    "@nestjs/config": "catalog:",
+    "@nestjs/jwt": "catalog:",
+    "joi": "catalog:"
+  },
+  "devDependencies": {
+    "@configs/typescript": "workspace:*",
+    "reflect-metadata": "catalog:",
+    "typescript": "catalog:"
+  }
+}

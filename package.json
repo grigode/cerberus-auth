@@ -1,0 +1,40 @@
+{
+  "name": "cerberus-auth",
+  "version": "0.0.0",
+  "author": "Griego Code <griegocode@proton.me>",
+  "license": "MIT",
+  "description": "Authentication template",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "clean": "turbo run clean"
+  },
+  "engines": {
+    "name": "pnpm",
+    "version": "11.18.0",
+    "onFail": "download"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.18.0",
+      "onFail": "download"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "24.12.4",
+    "eslint": "9.39.4",
+    "prettier": "3.4.2",
+    "prettier-plugin-tailwindcss": "0.6.11",
+    "turbo": "2.10.11",
+    "typescript": "5.9.3"
+  }
+}

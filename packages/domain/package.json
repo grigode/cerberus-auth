@@ -1,0 +1,31 @@
+{
+  "name": "@core/domain",
+  "version": "0.0.0",
+  "description": "Domain package for the project",
+  "author": "Griego Code <griegocode@proton.me>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "date-fns": "catalog:",
+    "nanoid": "catalog:",
+    "uuid": "catalog:"
+  },
+  "devDependencies": {
+    "@configs/typescript": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/uuid": "catalog:",
+    "typescript": "catalog:"
+  }
+}

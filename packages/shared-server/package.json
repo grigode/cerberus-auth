@@ -23,6 +23,7 @@
     "@fastify/cookie": "catalog:",
     "@nestjs/common": "catalog:",
     "@nestjs/core": "catalog:",
+    "@nestjs/jwt": "catalog:",
     "@nestjs/platform-fastify": "catalog:",
     "@nestjs/swagger": "catalog:",
     "@nestjs/throttler": "catalog:",

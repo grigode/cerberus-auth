@@ -4,7 +4,7 @@
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
     "package.json": "nest-cli.json, .npmrc, .prettierrc, .prettierignore, pnpm-lock.yaml, pnpm-workspace.yaml, .editorconfig",
-    "tsconfig.json": "tsconfig.*.json",
+    "tsconfig.json": "tsconfig.*",
     "jest.config.ts": "jest-e2e.json",
     ".env": ".env.*, .env.example"
   },

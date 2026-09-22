@@ -7,7 +7,7 @@ import { providers } from './providers.constants';
   imports: [
     NestConfigModule.forRoot({
       cache: true,
-      envFilePath: ['.env.local', '.env'],
+      envFilePath: ['.env.local', '.env', '../../.env.local', '../../.env'],
       isGlobal: true,
       validationSchema: validationSchema,
     }),

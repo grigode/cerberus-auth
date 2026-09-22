@@ -10,3 +10,5 @@ export interface UserDrivenPort {
 
   update: (user: User) => Promise<void>;
 }
+
+export const USER_DRIVEN_PORT_TOKEN = Symbol('USER_DRIVEN_PORT_TOKEN');

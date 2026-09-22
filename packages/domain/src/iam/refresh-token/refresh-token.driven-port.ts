@@ -12,3 +12,7 @@ export interface RefreshTokenDrivenPort {
   revokeById: (id: UuidVo) => Promise<void>;
   revokeAllByUserId: (userId: UuidVo) => Promise<void>;
 }
+
+export const REFRESH_TOKEN_DRIVEN_PORT_TOKEN = Symbol(
+  'REFRESH_TOKEN_DRIVEN_PORT_TOKEN',
+);

@@ -10,3 +10,7 @@ export interface PasswordResetTokenDrivenPort {
 
   update: (passwordResetToken: PasswordResetToken) => Promise<void>;
 }
+
+export const PASSWORD_RESET_TOKEN_DRIVEN_PORT_TOKEN = Symbol(
+  'PASSWORD_RESET_TOKEN_DRIVEN_PORT_TOKEN',
+);

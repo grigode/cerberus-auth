@@ -8,3 +8,5 @@ export interface ProfileDrivenPort {
 
   update: (profile: Profile) => Promise<Profile>;
 }
+
+export const PROFILE_DRIVEN_PORT_TOKEN = Symbol('PROFILE_DRIVEN_PORT_TOKEN');

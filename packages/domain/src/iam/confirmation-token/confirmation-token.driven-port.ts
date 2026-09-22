@@ -8,3 +8,7 @@ export interface ConfirmationTokenDrivenPort {
 
   update: (confirmationToken: ConfirmationToken) => Promise<void>;
 }
+
+export const CONFIRMATION_TOKEN_DRIVEN_PORT_TOKEN = Symbol(
+  'CONFIRMATION_TOKEN_DRIVEN_PORT_TOKEN',
+);

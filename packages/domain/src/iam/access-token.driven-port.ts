@@ -8,3 +8,7 @@ export interface AccessTokenDrivenPort {
   validateAccessToken<T extends object>(token: string): Promise<T>;
   decodeToken<T>(token: string): T;
 }
+
+export const ACCESS_TOKEN_DRIVEN_PORT_TOKEN = Symbol(
+  'ACCESS_TOKEN_DRIVEN_PORT_TOKEN',
+);

@@ -49,3 +49,12 @@ export class InternalServerErrorException extends BaseException {
     super(code, 500, technicalMessage);
   }
 }
+
+export {
+  BadRequestException as BadRequestApplicationException,
+  UnauthorizedException as UnauthorizedApplicationException,
+  ForbiddenException as ForbiddenApplicationException,
+  NotFoundException as NotFoundApplicationException,
+  ConflictException as ConflictApplicationException,
+  InternalServerErrorException as InternalServerErrorApplicationException,
+};

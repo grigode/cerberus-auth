@@ -2,6 +2,8 @@
   "extends": "@configs/typescript/nestjs.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "baseUrl": "./"
-  }
+    "baseUrl": "./",
+    "strictPropertyInitialization": false
+  },
+  "exclude": ["node_modules", "dist", "test"]
 }

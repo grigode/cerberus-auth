@@ -13,6 +13,12 @@ export interface CreateAuditLogDto {
   details?: Record<string, unknown>;
 }
 
+export const AUDIT_STORAGE_DRIVEN_PORT_TOKEN = Symbol(
+  'AUDIT_STORAGE_DRIVEN_PORT_TOKEN',
+);
+
+export const AUDIT_STORAGE_ADAPTER = AUDIT_STORAGE_DRIVEN_PORT_TOKEN;
+
 export interface AuditStorageDrivenPort {
   save(auditLog: CreateAuditLogDto): Promise<void>;
 }

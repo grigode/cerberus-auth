@@ -5,6 +5,8 @@ export interface SendEmailOptions {
   text?: string;
 }
 
+export const EMAIL_SENDER_DRIVEN_PORT_TOKEN = Symbol('EmailSenderDrivenPort');
+
 export interface EmailSenderDrivenPort {
   sendEmail(options: SendEmailOptions): Promise<void>;
 }

@@ -5,3 +5,6 @@ export enum InAppNotificationVo {
   ERROR = 'ERROR',
   SYSTEM = 'SYSTEM',
 }
+
+export const InAppNotificationType = InAppNotificationVo;
+export type InAppNotificationType = InAppNotificationVo;

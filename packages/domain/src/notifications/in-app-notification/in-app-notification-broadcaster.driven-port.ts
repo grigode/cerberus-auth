@@ -9,6 +9,10 @@ export interface NotificationStreamEvent<T = Record<string, unknown> | string> {
   retry?: number;
 }
 
+export const IN_APP_NOTIFICATION_BROADCASTER_DRIVEN_PORT_TOKEN = Symbol(
+  'InAppNotificationBroadcasterDrivenPort',
+);
+
 export interface InAppNotificationBroadcasterDrivenPort {
   publishToUser(userId: string, notification: InAppNotification): void;
   subscribeUser(userId: string): Observable<NotificationStreamEvent>;

@@ -13,6 +13,10 @@ export interface PaginatedNotificationsResult {
   unreadCount: number;
 }
 
+export const IN_APP_NOTIFICATION_REPOSITORY_DRIVEN_PORT_TOKEN = Symbol(
+  'InAppNotificationRepositoryDrivenPort',
+);
+
 export interface InAppNotificationRepositoryDrivenPort {
   findById(id: string): Promise<InAppNotification | null>;
   findAndCountByUserId(

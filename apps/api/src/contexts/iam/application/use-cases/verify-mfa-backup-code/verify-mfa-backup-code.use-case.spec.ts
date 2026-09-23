@@ -35,6 +35,7 @@ describe('VerifyMfaBackupCodeUseCase', () => {
         sub: 'user-1',
         mfaPending: true,
       }),
+      decodeToken: jest.fn(),
     };
 
     hashingPortMock = {

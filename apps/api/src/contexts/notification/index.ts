@@ -1,2 +1,3 @@
-export * from './infrastructure/adapters/bullmq-notification.producer';
+export * from './application';
+export * from './infrastructure';
 export * from './notification.module';

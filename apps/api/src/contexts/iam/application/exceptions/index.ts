@@ -1,3 +1,4 @@
+export * from './cannot-reuse-current-password.exception';
 export * from './confirmation-token-not-found.exception';
 export * from './email-not-verified.exception';
 export * from './invalid-confirmation-token.exception';

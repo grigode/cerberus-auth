@@ -25,7 +25,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({ trustProxy: true }),
     { bufferLogs: true },
   );
 
@@ -42,7 +42,12 @@ async function bootstrap() {
   });
 
   // biome-ignore lint/suspicious/noExplicitAny: Fastify plugin registration typing workaround
-  await app.register(fastifyMultipart as any);
+  await app.register(fastifyMultipart as any, {
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10MB max file size
+      files: 1, // 1 file per request
+    },
+  });
 
   app.setGlobalPrefix(httpConfig.GLOBAL_PREFIX);
 

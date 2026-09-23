@@ -7,7 +7,11 @@ import {
 // biome-ignore lint/style/useImportType: required for NestJS DI reflection
 import { Reflector } from '@nestjs/core';
 import { AuditStatus } from '@core/domain';
-import { AUDIT_METADATA_KEY, type AuditOptions } from '@core/shared-server';
+import {
+  AUDIT_METADATA_KEY,
+  type AuditOptions,
+  sanitizeData,
+} from '@core/shared-server';
 import type { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -52,8 +56,8 @@ export class AuditInterceptor implements NestInterceptor {
             entityId,
             status: AuditStatus.SUCCESS,
             details: {
-              ...(params ? { params } : {}),
-              ...(body ? { body } : {}),
+              ...(params ? { params: sanitizeData(params) } : {}),
+              ...(body ? { body: sanitizeData(body) } : {}),
             },
           });
         },
@@ -68,7 +72,7 @@ export class AuditInterceptor implements NestInterceptor {
             entityId: params?.id,
             status: AuditStatus.FAILURE,
             details: {
-              ...(params ? { params } : {}),
+              ...(params ? { params: sanitizeData(params) } : {}),
               errorMessage: errMsg,
             },
           });

@@ -9,6 +9,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule, SecurityConfigService } from '@core/config';
 import { DatabaseModule } from '@core/database';
 import {
+  CsrfGuard,
   CustomThrottlerGuard,
   HealthController,
   HttpLoggingInterceptor,
@@ -67,6 +68,10 @@ import { StorageModule } from './contexts/storage';
     {
       provide: APP_GUARD,
       useClass: CustomThrottlerGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: CsrfGuard,
     },
     {
       provide: APP_GUARD,

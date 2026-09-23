@@ -113,4 +113,30 @@ describe('RolesGuard', () => {
 
     expect(result).toBe(true);
   });
+
+  it('should allow SUPERADMIN access to an ADMIN required route due to hierarchy', () => {
+    reflector.getAllAndOverride.mockReturnValue([RoleVo.ADMIN]);
+    const context = createMockContext({
+      id: '123',
+      email: 'superadmin@example.com',
+      role: 'SUPERADMIN',
+    });
+
+    const result = guard.canActivate(context);
+
+    expect(result).toBe(true);
+  });
+
+  it('should allow ADMIN access to a STAFF required route due to hierarchy', () => {
+    reflector.getAllAndOverride.mockReturnValue([RoleVo.STAFF]);
+    const context = createMockContext({
+      id: '123',
+      email: 'admin@example.com',
+      role: 'ADMIN',
+    });
+
+    const result = guard.canActivate(context);
+
+    expect(result).toBe(true);
+  });
 });

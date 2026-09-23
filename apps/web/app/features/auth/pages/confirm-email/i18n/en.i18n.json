@@ -1,0 +1,43 @@
+{
+  "head": {
+    "title": "Verifying your email - Arachne"
+  },
+  "verifying": {
+    "title": "Verifying your email",
+    "description": "We are confirming your account. This will only take a moment."
+  },
+  "success": {
+    "title": "Email verified!",
+    "description": "Your account has been successfully activated. You can now sign in.",
+    "action": "Sign in"
+  },
+  "expired": {
+    "title": "This link is no longer valid",
+    "description": "This verification link has expired or has already been used. Request a new one to activate your account."
+  },
+  "error": {
+    "title": "We couldn't verify your email",
+    "description": "Something went wrong while verifying your account. Request a new verification link or contact support."
+  },
+  "resend": {
+    "title": "Need a new link?",
+    "inputs": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email",
+        "error": "Invalid email"
+      }
+    },
+    "submit": "Send new link",
+    "success": "We sent a new verification link to your email."
+  },
+  "errors": {
+    "USER_NOT_FOUND": "We couldn't find an account with that email.",
+    "USER_ALREADY_CONFIRMED": "This email has already been verified. You can now sign in.",
+    "fallback": "An error occurred. If the problem persists, please contact support."
+  },
+  "footer": {
+    "question": "Already verified your email?",
+    "link": "Sign in"
+  }
+}

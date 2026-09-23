@@ -1,0 +1,49 @@
+{
+  "head": {
+    "title": "Restablece tu contraseña - Arachne"
+  },
+  "form": {
+    "title": "Arachne",
+    "description": "Elige una nueva contraseña para tu cuenta.",
+    "inputs": {
+      "password": {
+        "label": "Nueva contraseña",
+        "placeholder": "Ingresa tu nueva contraseña",
+        "errors": {
+          "minLength": "La contraseña debe tener al menos 12 caracteres",
+          "lowercase": "La contraseña debe contener al menos una letra minúscula",
+          "uppercase": "La contraseña debe contener al menos una letra mayúscula",
+          "number": "La contraseña debe contener al menos un número",
+          "symbol": "La contraseña debe contener al menos un símbolo"
+        }
+      },
+      "confirmPassword": {
+        "label": "Confirmar contraseña",
+        "placeholder": "Repite tu nueva contraseña",
+        "error": "Las contraseñas no coinciden"
+      }
+    },
+    "submit": "Restablecer contraseña",
+    "footer": {
+      "question": "¿Recordaste tu contraseña?",
+      "link": "Accede"
+    }
+  },
+  "success": {
+    "title": "Contraseña actualizada",
+    "description": "Tu contraseña se restableció correctamente. Ya puedes acceder con tu nueva contraseña.",
+    "action": "Ir a acceder"
+  },
+  "invalid": {
+    "title": "Enlace inválido o expirado",
+    "description": "Este enlace para restablecer la contraseña es inválido o ha expirado. Solicita uno nuevo para continuar.",
+    "action": "Solicitar un nuevo enlace",
+    "footer": {
+      "question": "¿Recordaste tu contraseña?",
+      "link": "Accede"
+    }
+  },
+  "errors": {
+    "fallback": "Ocurrió un error. Si el error persiste, contáctese con soporte."
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "head": {
+    "title": "Recupera tu contraseña - Arachne"
+  },
+  "form": {
+    "title": "Arachne",
+    "description": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "inputs": {
+      "email": {
+        "label": "Correo electrónico",
+        "placeholder": "Ingresa tu correo electrónico",
+        "error": "Correo electrónico inválido"
+      }
+    },
+    "submit": "Enviar enlace",
+    "footer": {
+      "question": "¿Recordaste tu contraseña?",
+      "link": "Accede"
+    }
+  },
+  "success": {
+    "title": "Revisa tu correo electrónico",
+    "description": "Si existe una cuenta asociada a ese correo electrónico, te enviamos un enlace para restablecer tu contraseña. Revisa tu bandeja de entrada.",
+    "footer": {
+      "question": "¿Ya restableciste tu contraseña?",
+      "link": "Accede"
+    }
+  },
+  "errors": {
+    "fallback": "Ocurrió un error. Si el error persiste, contáctese con soporte."
+  }
+}

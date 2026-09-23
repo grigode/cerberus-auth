@@ -1,0 +1,47 @@
+{
+  "head": {
+    "title": "Accede a tu cuenta - Arachne"
+  },
+  "form": {
+    "title": "Arachne",
+    "description": "Accede a tu cuenta",
+    "providers": {
+      "google": "Google"
+    },
+    "separator": "o",
+    "inputs": {
+      "email": {
+        "label": "Correo electrónico",
+        "placeholder": "Ingresa tu correo electrónico",
+        "error": "Correo electrónico inválido"
+      },
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "Ingresa tu contraseña",
+        "error": "La contraseña es requerida"
+      }
+    },
+    "submit": "Acceder",
+    "footer": {
+      "askOtherConfirmToken": "Solicitar nuevo enlace de verificación",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "question": "¿No tienes una cuenta aún?",
+      "link": "Crea una"
+    }
+  },
+  "oauth": {
+    "cancelled": "El inicio de sesión con Google fue cancelado.",
+    "failed": "No pudimos iniciar sesión con Google. Inténtalo de nuevo."
+  },
+  "resend": {
+    "success": "Te enviamos un nuevo enlace de verificación a tu correo electrónico."
+  },
+  "errors": {
+    "INVALID_CREDENTIALS": "No pudimos iniciar sesión. Verifica tus credenciales.",
+    "USER_INACTIVE": "Tu cuenta está inactiva. Contacta al soporte para más información.",
+    "EMAIL_NOT_VERIFIED": "Tu email no ha sido verificado. Revisa tu bandeja de entrada o solicita un nuevo enlace de verificación.",
+    "USER_NOT_FOUND": "No encontramos una cuenta con ese correo electrónico.",
+    "USER_ALREADY_CONFIRMED": "Este correo electrónico ya fue verificado. Ya puedes iniciar sesión.",
+    "fallback": "Ocurrió un error. Si el error persiste, contáctese con soporte."
+  }
+}

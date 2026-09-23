@@ -1,0 +1,32 @@
+{
+  "head": {
+    "title": "Recover your password - Arachne"
+  },
+  "form": {
+    "title": "Arachne",
+    "description": "Enter your email and we'll send you a link to reset your password.",
+    "inputs": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email",
+        "error": "Invalid email"
+      }
+    },
+    "submit": "Send link",
+    "footer": {
+      "question": "Remembered your password?",
+      "link": "Sign in"
+    }
+  },
+  "success": {
+    "title": "Check your email",
+    "description": "If an account exists for that email, we've sent a link to reset your password. Please check your inbox.",
+    "footer": {
+      "question": "Already reset your password?",
+      "link": "Sign in"
+    }
+  },
+  "errors": {
+    "fallback": "An error occurred. If the issue persists, please contact support."
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "head": {
+    "title": "Two-Factor Verification"
+  },
+  "form": {
+    "title": "Two-Factor Authentication",
+    "description": "Enter the 6-digit code from your authenticator app to complete sign in.",
+    "backupDescription": "Enter one of your emergency recovery backup codes to sign in.",
+    "submit": "Verify & Continue",
+    "inputs": {
+      "code": {
+        "label": "Security Code",
+        "placeholder": "123456",
+        "error": "Please enter a valid 6-digit verification code"
+      },
+      "backupCode": {
+        "label": "Emergency Backup Code",
+        "placeholder": "e.g. ABCD-1234",
+        "error": "Please enter a valid backup code"
+      }
+    },
+    "toggle": {
+      "useBackup": "Lost your device? Use an emergency backup code",
+      "useTotp": "Have your phone? Use authenticator code"
+    },
+    "footer": {
+      "question": "Need help or want to cancel?",
+      "link": "Back to login"
+    }
+  },
+  "errors": {
+    "missingToken": "MFA session token is missing or expired. Please log in again.",
+    "INVALID_MFA_CODE": "Invalid or expired security code. Please try again.",
+    "INVALID_BACKUP_CODE": "Invalid or already consumed backup code.",
+    "MFA_TOKEN_EXPIRED": "Your verification session has expired. Please sign in again.",
+    "fallback": "Failed to verify security code. Please try again."
+  }
+}

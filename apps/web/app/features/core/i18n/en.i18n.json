@@ -1,0 +1,12 @@
+{
+  "layout": {
+    "brand": "Cerberus",
+    "nav": {
+      "dashboard": "Dashboard",
+      "security": "Security"
+    },
+    "userMenu": {
+      "logout": "Sign out"
+    }
+  }
+}

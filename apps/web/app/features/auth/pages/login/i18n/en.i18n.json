@@ -1,0 +1,47 @@
+{
+  "head": {
+    "title": "Sign in to your account - Arachne"
+  },
+  "form": {
+    "title": "Arachne",
+    "description": "Sign in to your account",
+    "providers": {
+      "google": "Google"
+    },
+    "separator": "or",
+    "inputs": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email",
+        "error": "Invalid email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password",
+        "error": "Password is required"
+      }
+    },
+    "submit": "Sign in",
+    "footer": {
+      "askOtherConfirmToken": "Request a new verification link",
+      "forgotPassword": "Forgot your password?",
+      "question": "Don't have an account yet?",
+      "link": "Create one"
+    }
+  },
+  "oauth": {
+    "cancelled": "Google sign-in was cancelled.",
+    "failed": "We couldn't sign you in with Google. Please try again."
+  },
+  "resend": {
+    "success": "We sent a new verification link to your email."
+  },
+  "errors": {
+    "INVALID_CREDENTIALS": "We couldn't sign you in. Please check your credentials.",
+    "USER_INACTIVE": "Your account is inactive. Please contact support for more information.",
+    "EMAIL_NOT_VERIFIED": "Your email has not been verified. Please check your inbox or request a new verification link.",
+    "USER_NOT_FOUND": "We couldn't find an account with that email.",
+    "USER_ALREADY_CONFIRMED": "This email has already been verified. You can now sign in.",
+    "fallback": "An error occurred. If the issue persists, please contact support."
+  }
+}

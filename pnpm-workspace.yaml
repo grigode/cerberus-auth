@@ -13,8 +13,11 @@ allowBuilds:
   '@biomejs/biome': true
   '@scarf/scarf': true
   argon2: true
+  esbuild: true
   msgpackr-extract: true
+  sharp: true
   unrs-resolver: true
+  vue-demi: true
 
 catalog:
   '@aws-sdk/client-s3': 3.1111.0

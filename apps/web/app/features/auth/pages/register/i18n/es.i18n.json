@@ -1,0 +1,61 @@
+{
+  "head": {
+    "title": "Crea tu cuenta - Arachne"
+  },
+  "form": {
+    "title": "Arachne",
+    "description": "Crea tu cuenta",
+    "providers": {
+      "google": "Google"
+    },
+    "separator": "o",
+    "inputs": {
+      "firstName": {
+        "label": "Nombre",
+        "placeholder": "Ingresa tu nombre",
+        "errors": {
+          "required": "El nombre es requerido",
+          "maxLength": "El nombre debe tener como máximo 50 caracteres"
+        }
+      },
+      "lastName": {
+        "label": "Apellido",
+        "placeholder": "Ingresa tu apellido",
+        "errors": {
+          "required": "El apellido es requerido",
+          "maxLength": "El apellido debe tener como máximo 50 caracteres"
+        }
+      },
+      "email": {
+        "label": "Correo electrónico",
+        "placeholder": "Ingresa tu correo electrónico",
+        "error": "Correo electrónico inválido"
+      },
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "Ingresa tu contraseña",
+        "errors": {
+          "minLength": "La contraseña debe tener al menos 12 caracteres",
+          "lowercase": "La contraseña debe contener al menos una minúscula",
+          "uppercase": "La contraseña debe contener al menos una mayúscula",
+          "number": "La contraseña debe contener al menos un número",
+          "symbol": "La contraseña debe contener al menos un símbolo"
+        }
+      },
+      "confirmPassword": {
+        "label": "Confirmar contraseña",
+        "placeholder": "Repite tu contraseña",
+        "error": "Las contraseñas no coinciden"
+      }
+    },
+    "submit": "Crear cuenta",
+    "footer": {
+      "question": "¿Ya tienes una cuenta?",
+      "link": "Accede"
+    }
+  },
+  "errors": {
+    "USER_ALREADY_EXISTS": "Ya existe una cuenta con este correo electrónico. Intenta iniciar sesión.",
+    "fallback": "Ocurrió un error. Si el error persiste, contáctese con soporte."
+  }
+}

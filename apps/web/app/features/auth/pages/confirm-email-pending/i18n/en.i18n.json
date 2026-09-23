@@ -1,0 +1,13 @@
+{
+  "head": {
+    "title": "Confirm your email - Arachne"
+  },
+  "content": {
+    "title": "Confirm your email",
+    "description": "We sent a confirmation link to your email. Please check your inbox to activate your account.",
+    "footer": {
+      "question": "Already confirmed your email?",
+      "link": "Sign in"
+    }
+  }
+}

@@ -2,6 +2,8 @@ node_modules/
 .pnpm-store/
 .turbo/
 dist/
+.output/
+.nuxt/
 coverage/
 *.tsbuildinfo
 docs/RQ.txt

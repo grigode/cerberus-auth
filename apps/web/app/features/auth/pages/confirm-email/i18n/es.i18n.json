@@ -1,0 +1,43 @@
+{
+  "head": {
+    "title": "Verificando tu correo electrónico - Arachne"
+  },
+  "verifying": {
+    "title": "Verificando tu correo electrónico",
+    "description": "Estamos confirmando tu cuenta. Esto tomará solo un momento."
+  },
+  "success": {
+    "title": "¡Correo electrónico verificado!",
+    "description": "Tu cuenta ha sido activada correctamente. Ya puedes iniciar sesión.",
+    "action": "Iniciar sesión"
+  },
+  "expired": {
+    "title": "El enlace ya no es válido",
+    "description": "Este enlace de verificación expiró o ya fue utilizado. Solicita uno nuevo para activar tu cuenta."
+  },
+  "error": {
+    "title": "No pudimos verificar tu correo electrónico",
+    "description": "Ocurrió un problema al verificar tu cuenta. Solicita un nuevo enlace de verificación o contacta a soporte."
+  },
+  "resend": {
+    "title": "¿Necesitas un nuevo enlace?",
+    "inputs": {
+      "email": {
+        "label": "Correo electrónico",
+        "placeholder": "Ingresa tu correo electrónico",
+        "error": "Correo electrónico inválido"
+      }
+    },
+    "submit": "Enviar nuevo enlace",
+    "success": "Te enviamos un nuevo enlace de verificación a tu correo electrónico."
+  },
+  "errors": {
+    "USER_NOT_FOUND": "No encontramos una cuenta con ese correo electrónico.",
+    "USER_ALREADY_CONFIRMED": "Este correo electrónico ya fue verificado. Ya puedes iniciar sesión.",
+    "fallback": "Ocurrió un error. Si el error persiste, contáctese con soporte."
+  },
+  "footer": {
+    "question": "¿Ya verificaste tu correo electrónico?",
+    "link": "Accede"
+  }
+}

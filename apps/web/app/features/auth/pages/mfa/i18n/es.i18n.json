@@ -1,0 +1,38 @@
+{
+  "head": {
+    "title": "Verificación de Dos Pasos"
+  },
+  "form": {
+    "title": "Autenticación de Dos Factores",
+    "description": "Ingresa el código de 6 dígitos de tu aplicación autenticadora para completar el inicio de sesión.",
+    "backupDescription": "Ingresa uno de tus códigos de recuperación de emergencia para iniciar sesión.",
+    "submit": "Verificar y Continuar",
+    "inputs": {
+      "code": {
+        "label": "Código de Seguridad",
+        "placeholder": "123456",
+        "error": "Por favor ingresa un código de verificación de 6 dígitos válido"
+      },
+      "backupCode": {
+        "label": "Código de Recuperación de Emergencia",
+        "placeholder": "ej. ABCD-1234",
+        "error": "Por favor ingresa un código de recuperación válido"
+      }
+    },
+    "toggle": {
+      "useBackup": "¿Perdiste tu dispositivo? Usa un código de recuperación",
+      "useTotp": "¿Tienes tu dispositivo? Usa el código del autenticador"
+    },
+    "footer": {
+      "question": "¿Deseas cancelar o necesitas ayuda?",
+      "link": "Volver al inicio de sesión"
+    }
+  },
+  "errors": {
+    "missingToken": "El token de sesión MFA falta o ha expirado. Por favor inicia sesión de nuevo.",
+    "INVALID_MFA_CODE": "Código de seguridad inválido o expirado. Por favor intenta de nuevo.",
+    "INVALID_BACKUP_CODE": "Código de recuperación inválido o ya utilizado.",
+    "MFA_TOKEN_EXPIRED": "Tu sesión de verificación ha expirado. Por favor inicia sesión nuevamente.",
+    "fallback": "No se pudo verificar el código de seguridad. Por favor intenta de nuevo."
+  }
+}

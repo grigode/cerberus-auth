@@ -1,0 +1,61 @@
+{
+  "head": {
+    "title": "Create your account - Arachne"
+  },
+  "form": {
+    "title": "Arachne",
+    "description": "Create your account",
+    "providers": {
+      "google": "Google"
+    },
+    "separator": "or",
+    "inputs": {
+      "firstName": {
+        "label": "First name",
+        "placeholder": "Enter your first name",
+        "errors": {
+          "required": "First name is required",
+          "maxLength": "First name must be at most 50 characters"
+        }
+      },
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "Enter your last name",
+        "errors": {
+          "required": "Last name is required",
+          "maxLength": "Last name must be at most 50 characters"
+        }
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email",
+        "error": "Invalid email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password",
+        "errors": {
+          "minLength": "Password must be at least 12 characters",
+          "lowercase": "Password must contain at least one lowercase letter",
+          "uppercase": "Password must contain at least one uppercase letter",
+          "number": "Password must contain at least one number",
+          "symbol": "Password must contain at least one symbol"
+        }
+      },
+      "confirmPassword": {
+        "label": "Confirm password",
+        "placeholder": "Repeat your password",
+        "error": "Passwords do not match"
+      }
+    },
+    "submit": "Create account",
+    "footer": {
+      "question": "Already have an account?",
+      "link": "Sign in"
+    }
+  },
+  "errors": {
+    "USER_ALREADY_EXISTS": "An account with this email already exists. Try signing in instead.",
+    "fallback": "An error occurred. If the issue persists, please contact support."
+  }
+}

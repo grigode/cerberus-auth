@@ -9,6 +9,8 @@
     "ignoreUnknown": true,
     "ignore": [
       "**/dist/**",
+      "**/.output/**",
+      "**/.nuxt/**",
       "**/node_modules/**",
       "**/coverage/**",
       "**/.turbo/**",

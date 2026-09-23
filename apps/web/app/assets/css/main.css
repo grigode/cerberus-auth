@@ -1,0 +1,74 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+:root {
+  --primary: #5516e9;
+  --secondary: #21986a;
+  --success: #168d5f;
+  --info: #0066ff;
+  --warning: #c87f09;
+  --error: #ec1313;
+
+  --ui-radius: 0.25rem;
+  --ui-container: 80rem;
+  --ui-header-height: --spacing(24);
+
+  --ui-primary: var(--primary);
+  --ui-secondary: var(--secondary);
+  --ui-success: var(--success);
+  --ui-info: var(--info);
+  --ui-warning: var(--warning);
+  --ui-error: var(--error);
+
+  --ui-text-dimmed: var(--color-slate-500);
+  --ui-text-muted: var(--color-slate-600);
+  --ui-text-toned: var(--color-slate-700);
+  --ui-text: var(--color-slate-800);
+  --ui-text-highlighted: var(--color-slate-950);
+  --ui-text-inverted: var(--color-slate-50);
+
+  --ui-bg: var(--color-slate-50);
+  --ui-bg-muted: var(--color-slate-300);
+  --ui-bg-elevated: var(--color-slate-300);
+  --ui-bg-accented: var(--color-slate-400);
+  --ui-bg-inverted: var(--color-slate-950);
+
+  --ui-border: var(--color-slate-300);
+  --ui-border-muted: var(--color-slate-400);
+  --ui-border-accented: var(--color-slate-400);
+  --ui-border-inverted: var(--color-slate-95);
+}
+
+html[class="dark"] {
+  --primary: #926af1;
+  --secondary: #72e9bb;
+  --success: #1cb57a;
+  --info: #5e9eff;
+  --warning: #f5a623;
+  --error: #f25e5e;
+
+  --ui-primary: var(--primary);
+  --ui-secondary: var(--secondary);
+  --ui-success: var(--success);
+  --ui-info: var(--info);
+  --ui-warning: var(--warning);
+  --ui-error: var(--error);
+
+  --ui-text-dimmed: var(--color-slate-500);
+  --ui-text-muted: var(--color-slate-400);
+  --ui-text-toned: var(--color-slate-300);
+  --ui-text: var(--color-slate-200);
+  --ui-text-inverted: var(--color-slate-900);
+  --ui-text-highlighted: var(--color-white);
+
+  --ui-bg: var(--color-slate-900);
+  --ui-bg-muted: var(--color-slate-800);
+  --ui-bg-elevated: var(--color-slate-800);
+  --ui-bg-accented: var(--color-slate-700);
+  --ui-bg-inverted: var(--color-white);
+
+  --ui-border: var(--color-slate-800);
+  --ui-border-muted: var(--color-slate-700);
+  --ui-border-accented: var(--color-slate-700);
+  --ui-border-inverted: var(--color-white);
+}

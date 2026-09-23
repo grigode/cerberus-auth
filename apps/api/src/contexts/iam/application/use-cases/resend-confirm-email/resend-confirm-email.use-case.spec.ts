@@ -1,12 +1,8 @@
-import { ConfirmationToken } from '@core/domain';
+import { ConfirmationToken, ProviderVo } from '@core/domain';
 
 import type { ResendConfirmEmailDto } from './resend-confirm-email.dto';
 import { ResendConfirmationEmailUseCase } from './resend-confirm-email.use-case';
-import {
-  TokenNotGeneratedException,
-  UserAlreadyConfirmedException,
-  UserNotFoundException,
-} from '../../exceptions';
+import { TokenNotGeneratedException } from '../../exceptions';
 
 const mockConfirmationTokenRepository = {
   verifyIfExistsByToken: jest.fn(),
@@ -60,6 +56,7 @@ describe('ResendConfirmationEmailUseCase', () => {
         id: 'user-id-123',
         email: 'user@example.com',
         isEmailVerified: false,
+        providers: new Set([ProviderVo.EMAIL]),
       },
     };
 
@@ -107,12 +104,10 @@ describe('ResendConfirmationEmailUseCase', () => {
       });
     });
 
-    it('should throw UserNotFoundException when user does not exist', async () => {
+    it('should return silently without throwing when user does not exist (anti-enumeration)', async () => {
       mockUserRepository.findByEmail.mockResolvedValue(null);
 
-      await expect(useCase.execute(defaultDto)).rejects.toThrow(
-        UserNotFoundException,
-      );
+      await expect(useCase.execute(defaultDto)).resolves.toBeUndefined();
 
       expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
         defaultDto.email,
@@ -127,12 +122,10 @@ describe('ResendConfirmationEmailUseCase', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('should throw UserAlreadyConfirmedException when user is already verified', async () => {
+    it('should return silently without throwing when user is already verified (anti-enumeration)', async () => {
       mockUser.data.isEmailVerified = true;
 
-      await expect(useCase.execute(defaultDto)).rejects.toThrow(
-        UserAlreadyConfirmedException,
-      );
+      await expect(useCase.execute(defaultDto)).resolves.toBeUndefined();
 
       expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
         defaultDto.email,
@@ -142,6 +135,16 @@ describe('ResendConfirmationEmailUseCase', () => {
         mockConfirmationTokenRepository.verifyIfExistsByToken,
       ).not.toHaveBeenCalled();
       expect(mockConfirmationTokenRepository.create).not.toHaveBeenCalled();
+      expect(
+        mockNotificationQueue.enqueueVerificationEmail,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should return silently when user does not support email provider', async () => {
+      mockUser.data.providers = new Set();
+
+      await expect(useCase.execute(defaultDto)).resolves.toBeUndefined();
+
       expect(
         mockNotificationQueue.enqueueVerificationEmail,
       ).not.toHaveBeenCalled();

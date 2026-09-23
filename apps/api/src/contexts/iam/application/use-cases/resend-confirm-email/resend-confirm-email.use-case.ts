@@ -12,14 +12,10 @@ import {
   type NotificationQueueDriverPort,
 } from '@core/domain';
 import { Inject, type UseCase } from '@core/shared-server';
-import { LanguageCode } from '@core/domain';
+import { LanguageCode, ProviderVo } from '@core/domain';
 
 import type { ResendConfirmEmailDto } from './resend-confirm-email.dto';
-import {
-  TokenNotGeneratedException,
-  UserAlreadyConfirmedException,
-  UserNotFoundException,
-} from '../../exceptions';
+import { TokenNotGeneratedException } from '../../exceptions';
 
 export class ResendConfirmationEmailUseCase
   implements UseCase<ResendConfirmEmailDto, void>
@@ -38,10 +34,15 @@ export class ResendConfirmationEmailUseCase
   async execute(dto: ResendConfirmEmailDto): Promise<void> {
     const user = await this.userRepository.findByEmail(dto.email);
 
-    if (!user) throw new UserNotFoundException(dto.email);
-
-    if (user.data.isEmailVerified)
-      throw new UserAlreadyConfirmedException(dto.email);
+    // To prevent account enumeration, we do not throw any exceptions
+    // if the user is not found, does not support email provider, or is already verified.
+    if (
+      !user ||
+      !user.data.providers.has(ProviderVo.EMAIL) ||
+      user.data.isEmailVerified
+    ) {
+      return;
+    }
 
     const newConfirmationToken = await this._generateConfirmationToken(
       user.data.id,

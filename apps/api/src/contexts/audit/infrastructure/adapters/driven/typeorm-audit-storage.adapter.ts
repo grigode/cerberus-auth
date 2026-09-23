@@ -3,6 +3,8 @@ import {
   AuditStatus,
   type AuditStorageDrivenPort,
   type CreateAuditLogDto,
+  type FindAuditLogsOptions,
+  type PaginatedAuditLogs,
   generateUuid,
 } from '@core/domain';
 import { sanitizeData } from '@core/shared-server';
@@ -48,5 +50,41 @@ export class TypeOrmAuditStorageAdapter implements AuditStorageDrivenPort {
       );
       throw error;
     }
+  }
+
+  async findAndCount(
+    options: FindAuditLogsOptions,
+  ): Promise<PaginatedAuditLogs> {
+    const where: Record<string, unknown> = {};
+    if (options.userId) where.userId = options.userId;
+    if (options.action) where.action = options.action;
+    if (options.category) where.category = options.category;
+    if (options.entityName) where.entityName = options.entityName;
+    if (options.status) where.status = options.status;
+
+    const [items, total] = await this.repository.findAndCount({
+      where,
+      order: { createdAt: 'DESC' },
+      take: options.limit ?? 50,
+      skip: options.offset ?? 0,
+    });
+
+    return {
+      data: items.map((item) => ({
+        id: item.id,
+        correlationId: item.correlationId,
+        userId: item.userId,
+        action: item.action,
+        category: item.category,
+        entityName: item.entityName,
+        entityId: item.entityId,
+        ipAddress: item.ipAddress,
+        userAgent: item.userAgent,
+        status: item.status as AuditStatus,
+        details: item.details,
+        createdAt: item.createdAt,
+      })),
+      total,
+    };
   }
 }

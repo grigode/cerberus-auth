@@ -8,6 +8,7 @@ describe('LogAuditUseCase', () => {
   beforeEach(() => {
     mockAdapter = {
       save: jest.fn().mockResolvedValue(undefined),
+      findAndCount: jest.fn().mockResolvedValue({ data: [], total: 0 }),
     };
     useCase = new LogAuditUseCase(mockAdapter);
   });

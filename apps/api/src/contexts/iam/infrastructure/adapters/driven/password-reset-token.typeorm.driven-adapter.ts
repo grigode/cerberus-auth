@@ -1,3 +1,4 @@
+import * as crypto from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import type {
   PasswordResetToken,
@@ -24,12 +25,17 @@ export class PasswordResetTokenTypeormAdapter
   }
 
   verifyIfExistsByToken(token: string): Promise<boolean> {
-    return this.passwordResetTokenRepository.existsBy({ token });
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    return this.passwordResetTokenRepository.existsBy([
+      { token: hashedToken },
+      { token },
+    ]);
   }
 
   async findByToken(token: string): Promise<PasswordResetToken | null> {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
     const passwordResetToken = await this.passwordResetTokenRepository.findOne({
-      where: { token },
+      where: [{ token: hashedToken }, { token }],
       relations: { user: true },
     });
     return passwordResetToken
@@ -42,10 +48,12 @@ export class PasswordResetTokenTypeormAdapter
   ): Promise<PasswordResetToken> {
     const passwordResetTokenEntity =
       this.mapper.domainToInfrastructure(passwordResetToken);
-    const newPasswordResetToken = await this.passwordResetTokenRepository.save(
-      passwordResetTokenEntity,
-    );
-    return this.mapper.infrastructureToDomain(newPasswordResetToken);
+    passwordResetTokenEntity.token = crypto
+      .createHash('sha256')
+      .update(passwordResetToken.data.token)
+      .digest('hex');
+    await this.passwordResetTokenRepository.save(passwordResetTokenEntity);
+    return passwordResetToken;
   }
 
   async update(passwordResetToken: PasswordResetToken): Promise<void> {

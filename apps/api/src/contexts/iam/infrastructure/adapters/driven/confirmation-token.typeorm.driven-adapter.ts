@@ -1,3 +1,4 @@
+import * as crypto from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import type {
   ConfirmationToken,
@@ -24,12 +25,17 @@ export class ConfirmationTokenTypeormAdapter
   }
 
   verifyIfExistsByToken(token: string): Promise<boolean> {
-    return this.confirmationTokenRepository.existsBy({ token });
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    return this.confirmationTokenRepository.existsBy([
+      { token: hashedToken },
+      { token },
+    ]);
   }
 
   async findByToken(token: string): Promise<ConfirmationToken | null> {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
     const confirmationToken = await this.confirmationTokenRepository.findOne({
-      where: { token },
+      where: [{ token: hashedToken }, { token }],
       relations: { user: true },
     });
     return confirmationToken
@@ -42,10 +48,12 @@ export class ConfirmationTokenTypeormAdapter
   ): Promise<ConfirmationToken> {
     const confirmationTokenEntity =
       this.mapper.domainToInfrastructure(confirmationToken);
-    const newConfirmationToken = await this.confirmationTokenRepository.save(
-      confirmationTokenEntity,
-    );
-    return this.mapper.infrastructureToDomain(newConfirmationToken);
+    confirmationTokenEntity.token = crypto
+      .createHash('sha256')
+      .update(confirmationToken.data.token)
+      .digest('hex');
+    await this.confirmationTokenRepository.save(confirmationTokenEntity);
+    return confirmationToken;
   }
 
   async update(confirmationToken: ConfirmationToken): Promise<void> {

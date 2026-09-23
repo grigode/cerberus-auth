@@ -15,7 +15,7 @@ export class PasswordResetTokenEntity {
     name: 'token',
     type: 'char',
     unique: true,
-    length: 32,
+    length: 64,
     nullable: false,
   })
   token!: string;

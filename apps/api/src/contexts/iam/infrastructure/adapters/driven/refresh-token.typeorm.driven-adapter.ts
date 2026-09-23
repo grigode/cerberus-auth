@@ -1,3 +1,4 @@
+import * as crypto from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import type { RefreshToken, RefreshTokenDrivenPort } from '@core/domain';
 import { Inject } from '@core/shared-server';
@@ -27,8 +28,10 @@ export class RefreshTokenTypeormAdapter implements RefreshTokenDrivenPort {
   }
 
   async findByToken(token: string): Promise<RefreshToken | null> {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
     const refreshToken = await this.refreshTokenRepository.findOne({
-      where: { token },
+      where: [{ token: hashedToken }, { token }],
       relations: { user: true },
     });
     return refreshToken
@@ -38,9 +41,12 @@ export class RefreshTokenTypeormAdapter implements RefreshTokenDrivenPort {
 
   async create(refreshToken: RefreshToken): Promise<RefreshToken> {
     const refreshTokenEntity = this.mapper.domainToInfrastructure(refreshToken);
-    const newRefreshTokenEntity =
-      await this.refreshTokenRepository.save(refreshTokenEntity);
-    return this.mapper.infrastructureToDomain(newRefreshTokenEntity);
+    refreshTokenEntity.token = crypto
+      .createHash('sha256')
+      .update(refreshToken.data.token)
+      .digest('hex');
+    await this.refreshTokenRepository.save(refreshTokenEntity);
+    return refreshToken;
   }
 
   async update(refreshToken: RefreshToken): Promise<void> {

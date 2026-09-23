@@ -1,4 +1,6 @@
+export * from './audit-log.typeorm.entity';
 export * from './confirmation-token.typeorm.entity';
+export * from './in-app-notification.typeorm.entity';
 export * from './password-reset-token.typeorm.entity';
 export * from './profile.typeorm.entity';
 export * from './provider.typeorm.entity';

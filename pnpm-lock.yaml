@@ -450,9 +450,6 @@ importers:
       '@nestjs/typeorm':
         specifier: 'catalog:'
         version: 11.0.0(@nestjs/common@11.1.29(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@11.1.29)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@1.1.0(ioredis@5.11.1(supports-color@8.1.1))(pg@8.23.0)(supports-color@8.1.1)(ts-node@10.9.2(@types/node@24.12.4)(typescript@5.9.3)))
-      argon2:
-        specifier: 'catalog:'
-        version: 0.45.1
       bullmq:
         specifier: 'catalog:'
         version: 6.0.11(ioredis@5.11.1(supports-color@8.1.1))(pg@8.23.0)
@@ -643,9 +640,6 @@ importers:
 
   packages/domain:
     dependencies:
-      argon2:
-        specifier: 'catalog:'
-        version: 0.45.1
       date-fns:
         specifier: 'catalog:'
         version: 4.4.0
@@ -713,6 +707,9 @@ importers:
       '@nestjs/throttler':
         specifier: 'catalog:'
         version: 6.5.0(@nestjs/common@11.1.29(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@11.1.29)(reflect-metadata@0.2.2)
+      argon2:
+        specifier: 'catalog:'
+        version: 0.45.1
       fastify:
         specifier: 'catalog:'
         version: 5.11.3

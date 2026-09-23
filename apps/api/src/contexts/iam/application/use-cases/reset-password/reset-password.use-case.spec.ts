@@ -19,6 +19,11 @@ const mockRefreshTokenRepository = {
   revokeAllByUserId: jest.fn(),
 };
 
+const mockHashingPort = {
+  hash: jest.fn().mockResolvedValue('hashed-new-password'),
+  compare: jest.fn().mockResolvedValue(true),
+};
+
 describe('ResetPasswordUseCase', () => {
   let useCase: ResetPasswordUseCase;
   let defaultDto: ResetPasswordDto;
@@ -62,6 +67,7 @@ describe('ResetPasswordUseCase', () => {
       mockPasswordResetTokenRepository as any,
       mockUserRepository as any,
       mockRefreshTokenRepository as any,
+      mockHashingPort as any,
     );
   });
 
@@ -74,7 +80,10 @@ describe('ResetPasswordUseCase', () => {
       );
       expect(mockToken.isValid).toHaveBeenCalled();
       expect(mockUserRepository.findById).toHaveBeenCalledWith('user-id-123');
-      expect(mockUser.updatePassword).toHaveBeenCalledWith(defaultDto.password);
+      expect(mockHashingPort.hash).toHaveBeenCalledWith(defaultDto.password);
+      expect(mockUser.updatePassword).toHaveBeenCalledWith(
+        'hashed-new-password',
+      );
       expect(mockToken.markAsUsed).toHaveBeenCalled();
       expect(mockUserRepository.update).toHaveBeenCalledWith(mockUser);
       expect(mockPasswordResetTokenRepository.update).toHaveBeenCalledWith(

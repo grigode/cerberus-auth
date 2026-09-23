@@ -21,7 +21,6 @@
     "test:cov": "jest --coverage"
   },
   "dependencies": {
-    "argon2": "catalog:",
     "date-fns": "catalog:",
     "nanoid": "catalog:",
     "rxjs": "catalog:",

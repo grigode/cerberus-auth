@@ -1,11 +1,13 @@
-import argon2 from 'argon2';
-import { DomainException, generateUuid } from '../../common';
+import {
+  DomainException,
+  generateUuid,
+  type HashingDrivenPort,
+} from '../../common';
 
 import { User, type UserProps } from './user.entity';
 import { ProviderVo } from './provider.vo';
 import { RoleVo } from './role.vo';
 
-jest.mock('argon2');
 jest.mock('../../common', () => {
   const actual = jest.requireActual('../../common');
   return {
@@ -15,7 +17,10 @@ jest.mock('../../common', () => {
   };
 });
 
-const mockArgon2 = argon2 as jest.Mocked<typeof argon2>;
+const mockHashingPort: HashingDrivenPort = {
+  hash: jest.fn().mockResolvedValue('new-hashed-password'),
+  compare: jest.fn().mockResolvedValue(true),
+};
 
 describe('User', () => {
   let defaultProps: UserProps;
@@ -35,8 +40,6 @@ describe('User', () => {
       updatedAt: new Date('2024-01-01T00:00:00Z'),
       lastLoginAt: new Date('2024-01-01T00:00:00Z'),
     };
-
-    mockArgon2.hash.mockResolvedValue('new-hashed-password');
   });
 
   describe('constructor', () => {
@@ -104,13 +107,10 @@ describe('User', () => {
   });
 
   describe('updatePassword', () => {
-    it('should hash and update password', async () => {
+    it('should update password with hashed value', () => {
       const user = new User(defaultProps);
-      const plainPassword = 'newPassword123';
+      user.updatePassword('new-hashed-password');
 
-      await user.updatePassword(plainPassword);
-
-      expect(mockArgon2.hash).toHaveBeenCalledWith(plainPassword);
       expect(user.data.hashedPassword).toBe('new-hashed-password');
     });
 
@@ -119,7 +119,7 @@ describe('User', () => {
       const originalUpdatedAt = user.data.updatedAt;
 
       await new Promise((resolve) => setTimeout(resolve, 10));
-      await user.updatePassword('newPassword123');
+      user.updatePassword('new-hashed-password');
 
       expect(user.data.updatedAt).toBeDefined();
       expect(user.data.updatedAt?.getTime()).toBeGreaterThan(
@@ -127,15 +127,41 @@ describe('User', () => {
       );
     });
 
-    it('should update password even if user had no password before', async () => {
+    it('should update password even if user had no password before', () => {
       const { hashedPassword: _hashedPassword, ...propsWithoutPassword } =
         defaultProps;
       const user = new User(propsWithoutPassword);
 
-      await user.updatePassword('newPassword123');
+      user.updatePassword('new-hashed-password');
 
       expect(user.data.hashedPassword).toBe('new-hashed-password');
       expect(user.data.updatedAt).toBeDefined();
+    });
+  });
+
+  describe('verifyPassword', () => {
+    it('should verify password using HashingDrivenPort', async () => {
+      const user = new User(defaultProps);
+      const result = await user.verifyPassword(
+        'plainPassword123',
+        mockHashingPort,
+      );
+
+      expect(mockHashingPort.compare).toHaveBeenCalledWith(
+        'plainPassword123',
+        'hashed-password-123',
+      );
+      expect(result).toBe(true);
+    });
+
+    it('should throw DomainException if user has no password', async () => {
+      const { hashedPassword: _hashedPassword, ...propsWithoutPassword } =
+        defaultProps;
+      const user = new User(propsWithoutPassword);
+
+      await expect(
+        user.verifyPassword('plainPassword123', mockHashingPort),
+      ).rejects.toThrow(DomainException);
     });
   });
 
@@ -346,9 +372,9 @@ describe('User', () => {
       expect(user.getChanges()).toEqual({});
     });
 
-    it('should track changes when updating password', async () => {
+    it('should track changes when updating password', () => {
       const user = new User(defaultProps);
-      await user.updatePassword('newPassword123');
+      user.updatePassword('new-hashed-password');
       expect(user.hasChanges()).toBe(true);
       expect(user.getChanges()).toHaveProperty(
         'hashedPassword',
@@ -403,9 +429,9 @@ describe('User', () => {
       expect(user.getChanges()).not.toHaveProperty('updatedAt');
     });
 
-    it('should clear changes when committing', async () => {
+    it('should clear changes when committing', () => {
       const user = new User(defaultProps);
-      await user.updatePassword('newPassword123');
+      user.updatePassword('new-hashed-password');
       expect(user.hasChanges()).toBe(true);
 
       user.commitChanges();
@@ -440,10 +466,10 @@ describe('User', () => {
       expect(user.data.lastLoginAt).toBeDefined();
     });
 
-    it('should handle concurrent operations correctly', async () => {
+    it('should handle concurrent operations correctly', () => {
       const user = new User(defaultProps);
 
-      await user.updatePassword('password1');
+      user.updatePassword('new-hashed-password');
       user.addProvider(ProviderVo.GOOGLE);
       user.toggleIsActive();
 

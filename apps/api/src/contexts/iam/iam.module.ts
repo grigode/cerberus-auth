@@ -24,9 +24,11 @@ import { NotificationModule } from '../notification/notification.module';
 import {
   ACCESS_TOKEN_DRIVEN_PORT_TOKEN,
   ENCRYPTION_DRIVEN_PORT_TOKEN,
+  HASHING_DRIVEN_PORT_TOKEN,
 } from '@core/domain';
 import {
   AccessTokenDrivenAdapter,
+  Argon2HashingAdapter,
   CryptoDrivenAdapter,
 } from '@core/shared-server';
 
@@ -62,6 +64,10 @@ import {
       provide: ENCRYPTION_DRIVEN_PORT_TOKEN,
       useClass: CryptoDrivenAdapter,
     },
+    {
+      provide: HASHING_DRIVEN_PORT_TOKEN,
+      useClass: Argon2HashingAdapter,
+    },
     ...useCases,
   ],
   exports: [
@@ -73,6 +79,7 @@ import {
     CONFIRMATION_TOKEN_DRIVEN_PORT_TOKEN,
     REFRESH_TOKEN_DRIVEN_PORT_TOKEN,
     PASSWORD_RESET_TOKEN_DRIVEN_PORT_TOKEN,
+    HASHING_DRIVEN_PORT_TOKEN,
     ...useCases,
   ],
 })

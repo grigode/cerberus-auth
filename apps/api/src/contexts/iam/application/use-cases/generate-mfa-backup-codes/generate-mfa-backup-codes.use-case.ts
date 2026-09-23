@@ -1,6 +1,10 @@
-import argon2 from 'argon2';
 import { nanoid } from 'nanoid';
-import { USER_DRIVEN_PORT_TOKEN, type UserDrivenPort } from '@core/domain';
+import {
+  HASHING_DRIVEN_PORT_TOKEN,
+  USER_DRIVEN_PORT_TOKEN,
+  type HashingDrivenPort,
+  type UserDrivenPort,
+} from '@core/domain';
 import { Inject, type UseCase } from '@core/shared-server';
 
 import type {
@@ -18,6 +22,8 @@ export class GenerateMfaBackupCodesUseCase
   constructor(
     @Inject(USER_DRIVEN_PORT_TOKEN)
     private readonly userRepository: UserDrivenPort,
+    @Inject(HASHING_DRIVEN_PORT_TOKEN)
+    private readonly hashingPort: HashingDrivenPort,
   ) {}
 
   async execute(dto: GenerateMfaBackupCodesDto): Promise<MfaBackupCodesResult> {
@@ -36,7 +42,7 @@ export class GenerateMfaBackupCodesUseCase
     for (let i = 0; i < 8; i++) {
       const code = nanoid(10).toUpperCase();
       plainCodes.push(code);
-      const hashed = await argon2.hash(code);
+      const hashed = await this.hashingPort.hash(code);
       hashedCodes.push(hashed);
     }
 

@@ -15,6 +15,8 @@ import {
   RoleVo,
   User,
   USER_DRIVEN_PORT_TOKEN,
+  HASHING_DRIVEN_PORT_TOKEN,
+  type HashingDrivenPort,
   type ProfileDrivenPort,
   type ConfirmationTokenDrivenPort,
   type UserDrivenPort,
@@ -35,6 +37,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDto, void> {
     private readonly userRepository: UserDrivenPort,
     @Inject(NOTIFICATION_QUEUE_DRIVER_PORT_TOKEN)
     private readonly notificationQueue: NotificationQueueDriverPort,
+    @Inject(HASHING_DRIVEN_PORT_TOKEN)
+    private readonly hashingPort: HashingDrivenPort,
   ) {}
 
   async execute(dto: CreateUserDto): Promise<void> {
@@ -53,7 +57,10 @@ export class CreateUserUseCase implements UseCase<CreateUserDto, void> {
       role: RoleVo.USER,
       isEmailVerified: dto.provider !== ProviderVo.EMAIL,
     });
-    if (dto.password) await newUser.updatePassword(dto.password);
+    if (dto.password) {
+      const hashedPassword = await this.hashingPort.hash(dto.password);
+      newUser.updatePassword(hashedPassword);
+    }
 
     const newProfile = new Profile({
       userId: newUser.data.id,

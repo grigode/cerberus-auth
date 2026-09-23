@@ -1,10 +1,12 @@
-import argon2 from 'argon2';
-import { USER_DRIVEN_PORT_TOKEN, type UserDrivenPort } from '@core/domain';
-import { Inject, type UseCase } from '@core/shared-server';
 import {
+  USER_DRIVEN_PORT_TOKEN,
   ACCESS_TOKEN_DRIVEN_PORT_TOKEN,
+  HASHING_DRIVEN_PORT_TOKEN,
+  type UserDrivenPort,
   type AccessTokenDrivenPort,
+  type HashingDrivenPort,
 } from '@core/domain';
+import { Inject, type UseCase } from '@core/shared-server';
 
 import type { VerifyMfaBackupCodeDto } from './verify-mfa-backup-code.dto';
 import {
@@ -23,6 +25,8 @@ export class VerifyMfaBackupCodeUseCase
     private readonly userRepository: UserDrivenPort,
     @Inject(ACCESS_TOKEN_DRIVEN_PORT_TOKEN)
     private readonly accessTokenService: AccessTokenDrivenPort,
+    @Inject(HASHING_DRIVEN_PORT_TOKEN)
+    private readonly hashingPort: HashingDrivenPort,
     private readonly createSessionUseCase: CreateSessionUseCase,
   ) {}
 
@@ -59,7 +63,7 @@ export class VerifyMfaBackupCodeUseCase
     let matchingIndex = -1;
 
     for (let i = 0; i < backupCodes.length; i++) {
-      const match = await argon2.verify(backupCodes[i], dto.code);
+      const match = await this.hashingPort.compare(dto.code, backupCodes[i]);
       if (match) {
         matchingIndex = i;
         break;

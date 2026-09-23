@@ -20,6 +20,11 @@ const mockCreateSessionUseCase = {
   execute: jest.fn(),
 };
 
+const mockHashingPort = {
+  hash: jest.fn(),
+  compare: jest.fn(),
+};
+
 let mockUserInstance: any;
 
 jest.mock('@core/domain', () => ({
@@ -65,6 +70,7 @@ describe('EmailLoginUseCase', () => {
     useCase = new EmailLoginUseCase(
       mockUserRepository as any,
       mockAccessTokenService as any,
+      mockHashingPort as any,
       mockCreateSessionUseCase as any,
     );
   });
@@ -78,6 +84,7 @@ describe('EmailLoginUseCase', () => {
       );
       expect(mockUserInstance.verifyPassword).toHaveBeenCalledWith(
         defaultDto.password,
+        mockHashingPort,
       );
       expect(mockUserInstance.updateLastLoginAt).toHaveBeenCalled();
       expect(mockUserRepository.update).toHaveBeenCalledWith(mockUserInstance);
@@ -159,6 +166,7 @@ describe('EmailLoginUseCase', () => {
 
       expect(mockUserInstance.verifyPassword).toHaveBeenCalledWith(
         defaultDto.password,
+        mockHashingPort,
       );
       expect(mockUserInstance.incrementFailedLogin).toHaveBeenCalled();
       expect(mockUserRepository.update).toHaveBeenCalledWith(mockUserInstance);

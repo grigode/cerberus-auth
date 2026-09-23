@@ -1,8 +1,8 @@
-import argon2 from 'argon2';
 import {
   BaseEntity,
   DomainException,
   generateUuid,
+  type HashingDrivenPort,
   type UuidVo,
 } from '../../common';
 
@@ -157,19 +157,23 @@ export class User extends BaseEntity {
     return this.#lockoutUntil.getTime() > Date.now();
   }
 
-  async updatePassword(plainPassword: string) {
+  updatePassword(hashedPassword: string) {
     const oldValue = this.#hashedPassword;
-    this.#hashedPassword = await argon2.hash(plainPassword);
+    this.#hashedPassword = hashedPassword;
     this.trackChange('hashedPassword', this.#hashedPassword, oldValue);
     this.#updateTimestamp();
   }
 
-  async verifyPassword(plainPassword: string) {
-    if (!this.#hashedPassword)
+  async verifyPassword(
+    plainPassword: string,
+    hashingPort: HashingDrivenPort,
+  ): Promise<boolean> {
+    if (!this.#hashedPassword) {
       throw new DomainException(
         'Password is required to login with email. The password can be set during the first login.',
       );
-    return await argon2.verify(this.#hashedPassword, plainPassword);
+    }
+    return await hashingPort.compare(plainPassword, this.#hashedPassword);
   }
 
   addProvider(provider: ProviderVo) {

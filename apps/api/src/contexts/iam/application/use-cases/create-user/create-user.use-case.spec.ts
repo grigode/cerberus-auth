@@ -34,6 +34,11 @@ const mockNotificationQueue = {
   enqueuePasswordResetEmail: jest.fn().mockResolvedValue(undefined),
 };
 
+const mockHashingPort = {
+  hash: jest.fn().mockResolvedValue('hashed-password-123'),
+  compare: jest.fn().mockResolvedValue(true),
+};
+
 jest.mock('nanoid', () => ({
   nanoid: jest.fn(() => 'mocked-token-123'),
 }));
@@ -44,7 +49,6 @@ jest.mock('date-fns', () => ({
     return result;
   }),
 }));
-jest.mock('argon2');
 jest.mock('@core/domain', () => {
   const actual = jest.requireActual('@core/domain');
   return {
@@ -112,6 +116,7 @@ describe('CreateUserUseCase', () => {
       mockProfileRepository as any,
       mockUserRepository as any,
       mockNotificationQueue as any,
+      mockHashingPort as any,
     );
 
     jest.spyOn(console, 'log').mockImplementation();
@@ -133,8 +138,9 @@ describe('CreateUserUseCase', () => {
       });
 
       const mockUserInstance = (User as jest.Mock).mock.results[0]?.value;
+      expect(mockHashingPort.hash).toHaveBeenCalledWith(defaultDto.password);
       expect(mockUserInstance?.updatePassword).toHaveBeenCalledWith(
-        defaultDto.password,
+        'hashed-password-123',
       );
 
       expect(Profile).toHaveBeenCalledWith({

@@ -27,6 +27,7 @@
     "@nestjs/platform-fastify": "catalog:",
     "@nestjs/swagger": "catalog:",
     "@nestjs/throttler": "catalog:",
+    "argon2": "catalog:",
     "fastify": "catalog:",
     "reflect-metadata": "catalog:",
     "rxjs": "catalog:",

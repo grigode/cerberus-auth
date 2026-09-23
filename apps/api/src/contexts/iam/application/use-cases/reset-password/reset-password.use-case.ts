@@ -4,10 +4,12 @@ import type { ResetPasswordDto } from './reset-password.dto';
 import {
   PASSWORD_RESET_TOKEN_DRIVEN_PORT_TOKEN,
   REFRESH_TOKEN_DRIVEN_PORT_TOKEN,
+  USER_DRIVEN_PORT_TOKEN,
+  HASHING_DRIVEN_PORT_TOKEN,
   type PasswordResetTokenDrivenPort,
   type RefreshTokenDrivenPort,
-  USER_DRIVEN_PORT_TOKEN,
   type UserDrivenPort,
+  type HashingDrivenPort,
 } from '@core/domain';
 import {
   InvalidResetTokenException,
@@ -22,6 +24,8 @@ export class ResetPasswordUseCase implements UseCase<ResetPasswordDto, void> {
     private readonly userRepository: UserDrivenPort,
     @Inject(REFRESH_TOKEN_DRIVEN_PORT_TOKEN)
     private readonly refreshTokenRepository: RefreshTokenDrivenPort,
+    @Inject(HASHING_DRIVEN_PORT_TOKEN)
+    private readonly hashingPort: HashingDrivenPort,
   ) {}
 
   async execute(dto: ResetPasswordDto): Promise<void> {
@@ -47,7 +51,8 @@ export class ResetPasswordUseCase implements UseCase<ResetPasswordDto, void> {
       throw new UserInactiveException(user.data.email);
     }
 
-    await user.updatePassword(dto.password);
+    const hashedPassword = await this.hashingPort.hash(dto.password);
+    user.updatePassword(hashedPassword);
     resetToken.markAsUsed();
 
     await Promise.all([

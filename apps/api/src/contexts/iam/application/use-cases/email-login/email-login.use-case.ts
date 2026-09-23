@@ -6,7 +6,9 @@ import {
 import { Inject, type UseCase } from '@core/shared-server';
 import {
   ACCESS_TOKEN_DRIVEN_PORT_TOKEN,
+  HASHING_DRIVEN_PORT_TOKEN,
   type AccessTokenDrivenPort,
+  type HashingDrivenPort,
 } from '@core/domain';
 
 import type { EmailLoginDto } from './email-login.dto';
@@ -29,6 +31,8 @@ export class EmailLoginUseCase
     private readonly userRepository: UserDrivenPort,
     @Inject(ACCESS_TOKEN_DRIVEN_PORT_TOKEN)
     private readonly accessTokenService: AccessTokenDrivenPort,
+    @Inject(HASHING_DRIVEN_PORT_TOKEN)
+    private readonly hashingPort: HashingDrivenPort,
     private readonly createSessionUseCase: CreateSessionUseCase,
   ) {}
 
@@ -52,7 +56,10 @@ export class EmailLoginUseCase
     if (!userData.providers.has(ProviderVo.EMAIL))
       throw new InvalidCredentialsException();
 
-    const isPasswordValid = await user.verifyPassword(dto.password);
+    const isPasswordValid = await user.verifyPassword(
+      dto.password,
+      this.hashingPort,
+    );
     if (!isPasswordValid) {
       user.incrementFailedLogin();
       await this.userRepository.update(user);

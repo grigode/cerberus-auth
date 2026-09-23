@@ -3,7 +3,9 @@ import { Inject, type UseCase } from '@core/shared-server';
 import type { ResetPasswordDto } from './reset-password.dto';
 import {
   PASSWORD_RESET_TOKEN_DRIVEN_PORT_TOKEN,
+  REFRESH_TOKEN_DRIVEN_PORT_TOKEN,
   type PasswordResetTokenDrivenPort,
+  type RefreshTokenDrivenPort,
   USER_DRIVEN_PORT_TOKEN,
   type UserDrivenPort,
 } from '@core/domain';
@@ -18,6 +20,8 @@ export class ResetPasswordUseCase implements UseCase<ResetPasswordDto, void> {
     private readonly passwordResetTokenRepository: PasswordResetTokenDrivenPort,
     @Inject(USER_DRIVEN_PORT_TOKEN)
     private readonly userRepository: UserDrivenPort,
+    @Inject(REFRESH_TOKEN_DRIVEN_PORT_TOKEN)
+    private readonly refreshTokenRepository: RefreshTokenDrivenPort,
   ) {}
 
   async execute(dto: ResetPasswordDto): Promise<void> {
@@ -49,6 +53,7 @@ export class ResetPasswordUseCase implements UseCase<ResetPasswordDto, void> {
     await Promise.all([
       this.userRepository.update(user),
       this.passwordResetTokenRepository.update(resetToken),
+      this.refreshTokenRepository.revokeAllByUserId(user.data.id),
     ]);
   }
 }

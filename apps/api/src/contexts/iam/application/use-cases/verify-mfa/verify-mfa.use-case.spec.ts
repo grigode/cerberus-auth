@@ -108,6 +108,7 @@ describe('VerifyMfaUseCase', () => {
     });
     const userMock = {
       data: { isActive: true, isMfaEnabled: false, email: 'test@example.com' },
+      isLockedOut: jest.fn().mockReturnValue(false),
     } as unknown as User;
 
     userRepositoryMock.findById.mockResolvedValue(userMock);
@@ -129,6 +130,9 @@ describe('VerifyMfaUseCase', () => {
         mfaSecret: 'encrypted-secret',
         email: 'test@example.com',
       },
+      isLockedOut: jest.fn().mockReturnValue(false),
+      incrementFailedLogin: jest.fn(),
+      resetFailedLogin: jest.fn(),
       updateLastLoginAt: jest.fn(),
     } as unknown as User;
 
@@ -149,10 +153,64 @@ describe('VerifyMfaUseCase', () => {
     });
 
     expect(session).toEqual(expectedSession);
+    expect(userMock.resetFailedLogin).toHaveBeenCalled();
     expect(userMock.updateLastLoginAt).toHaveBeenCalled();
     expect(userRepositoryMock.update).toHaveBeenCalledWith(userMock);
     expect(createSessionUseCaseMock.execute).toHaveBeenCalledWith({
       user: userMock,
     });
+  });
+
+  it('should throw InvalidMfaCodeException and increment failed login when code is invalid', async () => {
+    accessTokenServiceMock.validateAccessToken.mockResolvedValue({
+      sub: 'user-1',
+      mfaPending: true,
+    });
+    const userMock = {
+      data: {
+        isActive: true,
+        isMfaEnabled: true,
+        mfaSecret: 'encrypted-secret',
+        email: 'test@example.com',
+      },
+      isLockedOut: jest.fn().mockReturnValue(false),
+      incrementFailedLogin: jest.fn(),
+      resetFailedLogin: jest.fn(),
+      updateLastLoginAt: jest.fn(),
+    } as unknown as User;
+
+    userRepositoryMock.findById.mockResolvedValue(userMock);
+    encryptionPortMock.decrypt.mockReturnValue('plain-secret');
+    (speakeasy.totp.verify as jest.Mock).mockReturnValue(false);
+    userRepositoryMock.update.mockResolvedValue(undefined);
+
+    await expect(
+      useCase.execute({ mfaToken: 'valid-token', code: '000000' }),
+    ).rejects.toThrow(InvalidMfaCodeException);
+
+    expect(userMock.incrementFailedLogin).toHaveBeenCalled();
+    expect(userRepositoryMock.update).toHaveBeenCalledWith(userMock);
+  });
+
+  it('should throw InvalidMfaCodeException if account is locked out', async () => {
+    accessTokenServiceMock.validateAccessToken.mockResolvedValue({
+      sub: 'user-1',
+      mfaPending: true,
+    });
+    const userMock = {
+      data: {
+        isActive: true,
+        isMfaEnabled: true,
+        mfaSecret: 'encrypted-secret',
+        email: 'test@example.com',
+      },
+      isLockedOut: jest.fn().mockReturnValue(true),
+    } as unknown as User;
+
+    userRepositoryMock.findById.mockResolvedValue(userMock);
+
+    await expect(
+      useCase.execute({ mfaToken: 'valid-token', code: '123456' }),
+    ).rejects.toThrow(InvalidMfaCodeException);
   });
 });

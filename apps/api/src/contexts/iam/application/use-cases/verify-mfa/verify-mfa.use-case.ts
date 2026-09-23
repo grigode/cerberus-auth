@@ -47,6 +47,12 @@ export class VerifyMfaUseCase implements UseCase<VerifyMfaDto, Session> {
     if (!user) throw new UserNotFoundException(payload.sub);
     if (!user.data.isActive) throw new UserInactiveException(user.data.email);
 
+    if (user.isLockedOut()) {
+      throw new InvalidMfaCodeException(
+        'Account locked due to consecutive failed attempts. Please try again later.',
+      );
+    }
+
     if (!user.data.isMfaEnabled || !user.data.mfaSecret) {
       throw new MfaNotEnabledException();
     }
@@ -61,9 +67,12 @@ export class VerifyMfaUseCase implements UseCase<VerifyMfaDto, Session> {
     });
 
     if (!verified) {
+      user.incrementFailedLogin();
+      await this.userRepository.update(user);
       throw new InvalidMfaCodeException();
     }
 
+    user.resetFailedLogin();
     user.updateLastLoginAt();
     await this.userRepository.update(user);
 

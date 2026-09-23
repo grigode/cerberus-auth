@@ -1,4 +1,9 @@
-import { USER_DRIVEN_PORT_TOKEN, type UserDrivenPort } from '@core/domain';
+import {
+  USER_DRIVEN_PORT_TOKEN,
+  REFRESH_TOKEN_DRIVEN_PORT_TOKEN,
+  type UserDrivenPort,
+  type RefreshTokenDrivenPort,
+} from '@core/domain';
 import { Inject, type UseCase } from '@core/shared-server';
 
 import type { ChangePasswordDto } from './change-password.dto';
@@ -11,6 +16,8 @@ export class ChangePasswordUseCase implements UseCase<ChangePasswordDto, void> {
   constructor(
     @Inject(USER_DRIVEN_PORT_TOKEN)
     private readonly userRepository: UserDrivenPort,
+    @Inject(REFRESH_TOKEN_DRIVEN_PORT_TOKEN)
+    private readonly refreshTokenRepository: RefreshTokenDrivenPort,
   ) {}
 
   async execute(dto: ChangePasswordDto): Promise<void> {
@@ -26,5 +33,6 @@ export class ChangePasswordUseCase implements UseCase<ChangePasswordDto, void> {
 
     await user.updatePassword(dto.newPassword);
     await this.userRepository.update(user);
+    await this.refreshTokenRepository.revokeAllByUserId(dto.userId);
   }
 }

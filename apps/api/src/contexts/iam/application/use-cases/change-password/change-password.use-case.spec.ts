@@ -1,5 +1,9 @@
 import { ChangePasswordUseCase } from './change-password.use-case';
-import type { User, UserDrivenPort } from '@core/domain';
+import type {
+  RefreshTokenDrivenPort,
+  User,
+  UserDrivenPort,
+} from '@core/domain';
 import {
   InvalidCredentialsException,
   UserNotFoundException,
@@ -8,6 +12,7 @@ import {
 describe('ChangePasswordUseCase', () => {
   let useCase: ChangePasswordUseCase;
   let userRepositoryMock: jest.Mocked<UserDrivenPort>;
+  let refreshTokenRepositoryMock: jest.Mocked<RefreshTokenDrivenPort>;
 
   beforeEach(() => {
     userRepositoryMock = {
@@ -18,7 +23,20 @@ describe('ChangePasswordUseCase', () => {
       update: jest.fn(),
     };
 
-    useCase = new ChangePasswordUseCase(userRepositoryMock);
+    refreshTokenRepositoryMock = {
+      findById: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      findByToken: jest.fn(),
+      findAllActiveByUserId: jest.fn(),
+      revokeById: jest.fn(),
+      revokeAllByUserId: jest.fn(),
+    };
+
+    useCase = new ChangePasswordUseCase(
+      userRepositoryMock,
+      refreshTokenRepositoryMock,
+    );
   });
 
   it('should throw UserNotFoundException if user is not found', async () => {
@@ -50,7 +68,7 @@ describe('ChangePasswordUseCase', () => {
     ).rejects.toThrow(InvalidCredentialsException);
   });
 
-  it('should update password when current password is valid', async () => {
+  it('should update password and revoke all sessions when current password is valid', async () => {
     const userMock = {
       verifyPassword: jest.fn().mockResolvedValue(true),
       updatePassword: jest.fn().mockResolvedValue(undefined),
@@ -58,6 +76,7 @@ describe('ChangePasswordUseCase', () => {
 
     userRepositoryMock.findById.mockResolvedValue(userMock);
     userRepositoryMock.update.mockResolvedValue(undefined);
+    refreshTokenRepositoryMock.revokeAllByUserId.mockResolvedValue(undefined);
 
     await useCase.execute({
       userId: 'user-123',
@@ -69,5 +88,8 @@ describe('ChangePasswordUseCase', () => {
       'NewStrongPassword123!',
     );
     expect(userRepositoryMock.update).toHaveBeenCalledWith(userMock);
+    expect(refreshTokenRepositoryMock.revokeAllByUserId).toHaveBeenCalledWith(
+      'user-123',
+    );
   });
 });

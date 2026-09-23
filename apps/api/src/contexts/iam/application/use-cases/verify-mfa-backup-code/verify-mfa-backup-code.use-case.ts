@@ -45,6 +45,12 @@ export class VerifyMfaBackupCodeUseCase
     if (!user) throw new UserNotFoundException(payload.sub);
     if (!user.data.isActive) throw new UserInactiveException(user.data.email);
 
+    if (user.isLockedOut()) {
+      throw new InvalidMfaCodeException(
+        'Account locked due to consecutive failed attempts. Please try again later.',
+      );
+    }
+
     if (!user.data.isMfaEnabled) {
       throw new MfaNotEnabledException();
     }
@@ -61,10 +67,13 @@ export class VerifyMfaBackupCodeUseCase
     }
 
     if (matchingIndex === -1) {
+      user.incrementFailedLogin();
+      await this.userRepository.update(user);
       throw new InvalidMfaCodeException();
     }
 
     user.consumeBackupCode(matchingIndex);
+    user.resetFailedLogin();
     user.updateLastLoginAt();
     await this.userRepository.update(user);
 

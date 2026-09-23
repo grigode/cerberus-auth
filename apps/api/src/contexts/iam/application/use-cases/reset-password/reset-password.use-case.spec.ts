@@ -15,6 +15,10 @@ const mockUserRepository = {
   update: jest.fn(),
 };
 
+const mockRefreshTokenRepository = {
+  revokeAllByUserId: jest.fn(),
+};
+
 describe('ResetPasswordUseCase', () => {
   let useCase: ResetPasswordUseCase;
   let defaultDto: ResetPasswordDto;
@@ -52,10 +56,12 @@ describe('ResetPasswordUseCase', () => {
     mockUserRepository.findById.mockResolvedValue(mockUser);
     mockUserRepository.update.mockResolvedValue(undefined);
     mockPasswordResetTokenRepository.update.mockResolvedValue(undefined);
+    mockRefreshTokenRepository.revokeAllByUserId.mockResolvedValue(undefined);
 
     useCase = new ResetPasswordUseCase(
       mockPasswordResetTokenRepository as any,
       mockUserRepository as any,
+      mockRefreshTokenRepository as any,
     );
   });
 
@@ -73,6 +79,9 @@ describe('ResetPasswordUseCase', () => {
       expect(mockUserRepository.update).toHaveBeenCalledWith(mockUser);
       expect(mockPasswordResetTokenRepository.update).toHaveBeenCalledWith(
         mockToken,
+      );
+      expect(mockRefreshTokenRepository.revokeAllByUserId).toHaveBeenCalledWith(
+        'user-id-123',
       );
     });
 

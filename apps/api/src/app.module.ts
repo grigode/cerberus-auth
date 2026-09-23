@@ -16,6 +16,7 @@ import {
   RequestContextMiddleware,
 } from '@core/shared-server';
 
+import { AuditModule } from './contexts/audit';
 import { IamModule } from './contexts/iam';
 import {
   AuthGuard,
@@ -23,12 +24,15 @@ import {
   RolesGuard,
 } from './contexts/iam/infrastructure';
 import { NotificationModule } from './contexts/notification';
+import { StorageModule } from './contexts/storage';
 
 @Module({
   imports: [
     ConfigModule,
     DatabaseModule,
     LoggerModule,
+    AuditModule,
+    StorageModule,
     IamModule,
     NotificationModule,
 

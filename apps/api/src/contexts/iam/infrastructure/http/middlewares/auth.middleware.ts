@@ -40,9 +40,10 @@ export class AuthMiddleware implements NestMiddleware {
       try {
         const payload = await this.accessTokenPort.validateAccessToken<{
           sub: string;
+          mfaPending?: boolean;
         }>(token);
 
-        if (payload?.sub) {
+        if (payload?.sub && !payload.mfaPending) {
           const user = await this.userDrivenPort.findById(payload.sub);
 
           if (user?.data.isActive) {

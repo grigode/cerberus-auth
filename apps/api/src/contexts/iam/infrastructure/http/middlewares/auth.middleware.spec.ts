@@ -182,6 +182,27 @@ describe('AuthMiddleware', () => {
     expect(next).toHaveBeenCalled();
   });
 
+  it('should not inject user if token has mfaPending flag set', async () => {
+    accessTokenPort.validateAccessToken.mockResolvedValue({
+      sub: mockUserId.toString(),
+      mfaPending: true,
+    });
+
+    const req: any = {
+      headers: {
+        authorization: 'Bearer mfa.challenge.token',
+      },
+    };
+    const res: any = {};
+    const next = jest.fn();
+
+    await middleware.use(req, res, next);
+
+    expect(req.user).toBeUndefined();
+    expect(userDrivenPort.findById).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
+  });
+
   it('should call next without error if no token is provided', async () => {
     const req: any = {
       headers: {},

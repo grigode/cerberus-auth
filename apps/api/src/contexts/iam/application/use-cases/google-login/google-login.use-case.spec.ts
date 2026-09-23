@@ -17,6 +17,12 @@ const mockCreateSessionUseCase = {
   execute: jest.fn(),
 };
 
+const mockAccessTokenService = {
+  generateAccessToken: jest.fn(),
+  validateAccessToken: jest.fn(),
+  decodeToken: jest.fn(),
+};
+
 // We mock the User entity behavior. We need to track which methods are called.
 const _mockUserInstance = {
   data: {
@@ -94,11 +100,15 @@ describe('GoogleLoginUseCase', () => {
       accessToken: 'access-token-123',
       refreshToken: 'refresh-token-123',
     });
+    mockAccessTokenService.generateAccessToken.mockResolvedValue(
+      'mfa-challenge-token',
+    );
 
     useCase = new GoogleLoginUseCase(
       mockUserRepository as any,
       mockProfileRepository as any,
       mockCreateSessionUseCase as any,
+      mockAccessTokenService as any,
     );
   });
 
@@ -206,6 +216,30 @@ describe('GoogleLoginUseCase', () => {
       expect(result).toEqual({
         accessToken: 'access-token-123',
         refreshToken: 'refresh-token-123',
+      });
+    });
+
+    it('should return mfaRequired and mfaToken if user has MFA enabled', async () => {
+      const mfaUser = new User({
+        email: defaultDto.email,
+        providers: new Set([ProviderVo.GOOGLE]),
+        role: RoleVo.USER,
+        isEmailVerified: true,
+        isActive: true,
+      });
+      (mfaUser.data as any).isMfaEnabled = true;
+      mockUserRepository.findByEmail.mockResolvedValue(mfaUser);
+
+      const result = await useCase.execute(defaultDto);
+
+      expect(mockAccessTokenService.generateAccessToken).toHaveBeenCalledWith(
+        mfaUser.data.id,
+        { mfaPending: true },
+      );
+      expect(mockCreateSessionUseCase.execute).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        mfaRequired: true,
+        mfaToken: 'mfa-challenge-token',
       });
     });
   });

@@ -7,23 +7,33 @@ import {
   Profile,
   USER_DRIVEN_PORT_TOKEN,
   PROFILE_DRIVEN_PORT_TOKEN,
+  ACCESS_TOKEN_DRIVEN_PORT_TOKEN,
   type UserDrivenPort,
   type ProfileDrivenPort,
+  type AccessTokenDrivenPort,
 } from '@core/domain';
 import { UserInactiveException } from '../../exceptions';
 import type { CreateSessionUseCase, Session } from '../create-session';
 import type { GoogleLoginDto } from './google-login.dto';
 
-export class GoogleLoginUseCase implements UseCase<GoogleLoginDto, Session> {
+export type GoogleLoginResult =
+  | Session
+  | { mfaRequired: true; mfaToken: string };
+
+export class GoogleLoginUseCase
+  implements UseCase<GoogleLoginDto, GoogleLoginResult>
+{
   constructor(
     @Inject(USER_DRIVEN_PORT_TOKEN)
     private readonly userRepository: UserDrivenPort,
     @Inject(PROFILE_DRIVEN_PORT_TOKEN)
     private readonly profileRepository: ProfileDrivenPort,
     private readonly createSessionUseCase: CreateSessionUseCase,
+    @Inject(ACCESS_TOKEN_DRIVEN_PORT_TOKEN)
+    private readonly accessTokenService: AccessTokenDrivenPort,
   ) {}
 
-  async execute(dto: GoogleLoginDto): Promise<Session> {
+  async execute(dto: GoogleLoginDto): Promise<GoogleLoginResult> {
     let user = await this.userRepository.findByEmail(dto.email);
 
     if (user) {
@@ -63,6 +73,14 @@ export class GoogleLoginUseCase implements UseCase<GoogleLoginDto, Session> {
 
     user.updateLastLoginAt();
     await this.userRepository.update(user);
+
+    if (user.data.isMfaEnabled) {
+      const mfaToken = await this.accessTokenService.generateAccessToken(
+        user.data.id,
+        { mfaPending: true },
+      );
+      return { mfaRequired: true, mfaToken };
+    }
 
     return await this.createSessionUseCase.execute({ user });
   }

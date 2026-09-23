@@ -62,7 +62,7 @@ export class GoogleAuthCallbackController
 
       // CSRF State validation (OWASP ASVS V3 / NIST SP 800-63B)
       const savedState = req.cookies?.oauth_state;
-      if (savedState && savedState !== state) {
+      if (!savedState || !state || savedState !== state) {
         throw new Error('Invalid OAuth state parameter (Possible CSRF attack)');
       }
 
@@ -117,19 +117,27 @@ export class GoogleAuthCallbackController
       }
 
       // 3. Login or link account or create user
-      const session = await this.googleLogin.execute({
+      const result = await this.googleLogin.execute({
         email,
         firstName: given_name || 'Google',
         lastName: family_name || 'User',
       });
 
+      if ('mfaRequired' in result) {
+        return res
+          .status(302)
+          .redirect(
+            `${frontendUrl}/auth/mfa?token=${encodeURIComponent(result.mfaToken)}`,
+          );
+      }
+
       // 4. Set cookies
-      res.setCookie('access_token', session.accessToken, {
+      res.setCookie('access_token', result.accessToken, {
         ...defaultCookieOpts,
         maxAge: 60 * 15,
       });
 
-      res.setCookie('refresh_token', session.refreshToken, {
+      res.setCookie('refresh_token', result.refreshToken, {
         ...defaultCookieOpts,
         maxAge: 60 * 60 * 24 * 7,
       });

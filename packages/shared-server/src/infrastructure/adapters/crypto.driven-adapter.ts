@@ -1,6 +1,6 @@
 import * as crypto from 'node:crypto';
 import { Injectable } from '@nestjs/common';
-import type { SecurityConfigService } from '@core/config';
+import { SecurityConfigService } from '@core/config';
 import type { EncryptionDrivenPort } from '@core/domain';
 
 @Injectable()

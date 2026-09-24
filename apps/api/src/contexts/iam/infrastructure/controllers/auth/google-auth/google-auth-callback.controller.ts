@@ -4,10 +4,10 @@ import { Throttle } from '@nestjs/throttler';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { getCookieOptions } from '@core/shared-server';
 import {
-  type AppConfigService,
+  AppConfigService,
   DEFAULT_THROTTLE_AUTH_LIMIT,
   DEFAULT_THROTTLE_AUTH_TTL_MS,
-  type SecurityConfigService,
+  SecurityConfigService,
 } from '@core/config';
 import { GoogleLoginUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';

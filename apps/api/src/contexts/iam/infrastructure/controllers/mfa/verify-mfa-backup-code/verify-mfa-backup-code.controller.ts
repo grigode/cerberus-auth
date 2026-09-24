@@ -12,7 +12,7 @@ import { Throttle } from '@nestjs/throttler';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { getCookieOptions } from '@core/shared-server';
 import {
-  type AppConfigService,
+  AppConfigService,
   DEFAULT_THROTTLE_AUTH_LIMIT,
   DEFAULT_THROTTLE_AUTH_TTL_MS,
 } from '@core/config';

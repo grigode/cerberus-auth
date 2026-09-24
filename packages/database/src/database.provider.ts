@@ -1,6 +1,29 @@
 import type { Provider } from '@nestjs/common';
 import { DatabaseConfigService } from '@core/config';
 import { DataSource } from 'typeorm';
+import {
+  AuditLogTypeOrmEntity,
+  ConfirmationTokenEntity,
+  InAppNotificationTypeOrmEntity,
+  PasswordResetTokenEntity,
+  ProfileEntity,
+  ProviderEntity,
+  RefreshTokenEntity,
+  RoleEntity,
+  UserEntity,
+} from './entities';
+
+export const entities = [
+  AuditLogTypeOrmEntity,
+  ConfirmationTokenEntity,
+  InAppNotificationTypeOrmEntity,
+  PasswordResetTokenEntity,
+  ProfileEntity,
+  ProviderEntity,
+  RefreshTokenEntity,
+  RoleEntity,
+  UserEntity,
+];
 
 export const MAIN_DATA_SOURCE = Symbol('MAIN_DATA_SOURCE');
 
@@ -18,8 +41,7 @@ export const databaseProviders: Provider[] = [
         username: config.username,
         password: config.password,
         database: config.database,
-        entities: [`${__dirname}/../**/*.typeorm.entity{.ts,.js}`],
-        migrations: [`${__dirname}/migrations/*{.ts,.js}`],
+        entities,
         synchronize: config.synchronize,
       });
 

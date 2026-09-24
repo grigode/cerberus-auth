@@ -17,11 +17,20 @@ export default defineNuxtConfig({
         process.env.NUXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api',
     },
   },
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ['zod'],
+    },
+  },
   css: ['~/assets/css/main.css'],
   i18n: {
     locales: ['en', 'es'],
     defaultLocale: 'en',
+    strategy: 'no_prefix',
     vueI18n: '~/i18n/i18n.config.ts',
+    experimental: {
+      nitroContextDetection: false,
+    },
   },
 });

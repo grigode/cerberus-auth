@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import type { AccessTokenDrivenPort, UuidVo } from '@core/domain';
 
 @Injectable()

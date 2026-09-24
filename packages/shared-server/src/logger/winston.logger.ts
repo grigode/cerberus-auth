@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 
-import type { AppConfigService } from '@core/config';
+import { AppConfigService } from '@core/config';
 import { Injectable, type LoggerService, Scope } from '@nestjs/common';
 import * as winston from 'winston';
 

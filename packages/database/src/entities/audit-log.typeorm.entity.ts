@@ -6,10 +6,12 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 
-export enum AuditStatus {
-  SUCCESS = 'SUCCESS',
-  FAILURE = 'FAILURE',
-}
+export const AuditStatus = {
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
+} as const;
+
+export type AuditStatus = (typeof AuditStatus)[keyof typeof AuditStatus];
 
 @Entity('audit_logs')
 export class AuditLogTypeOrmEntity {

@@ -5,10 +5,10 @@ import type { FastifyReply } from 'fastify';
 import { nanoid } from 'nanoid';
 import { getCookieOptions } from '@core/shared-server';
 import {
-  type AppConfigService,
+  AppConfigService,
   DEFAULT_THROTTLE_AUTH_LIMIT,
   DEFAULT_THROTTLE_AUTH_TTL_MS,
-  type SecurityConfigService,
+  SecurityConfigService,
 } from '@core/config';
 import type { Controller as BaseController } from '@core/shared-server';
 

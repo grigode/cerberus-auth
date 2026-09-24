@@ -25,5 +25,6 @@ Thumbs.db
 !.vscode/extensions.json
 !.vscode/settings.json
 
+logs/
 *.log
 pnpm-debug.log*

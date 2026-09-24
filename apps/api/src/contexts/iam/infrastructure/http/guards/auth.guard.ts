@@ -32,7 +32,10 @@ export class AuthGuard implements CanActivate {
     >();
     const user = request.user || request.raw?.user;
     if (!user) {
-      throw new UnauthorizedException('Authentication required');
+      throw new UnauthorizedException(
+        'UNAUTHORIZED',
+        'Authentication required',
+      );
     }
 
     return true;

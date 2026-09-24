@@ -1,9 +1,9 @@
 {
   "head": {
-    "title": "Create your account - Arachne"
+    "title": "Create your account - Cerberus"
   },
   "form": {
-    "title": "Arachne",
+    "title": "Cerberus",
     "description": "Create your account",
     "providers": {
       "google": "Google"

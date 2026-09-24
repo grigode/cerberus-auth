@@ -1,9 +1,9 @@
 {
   "head": {
-    "title": "Reset your password - Arachne"
+    "title": "Reset your password - Cerberus"
   },
   "form": {
-    "title": "Arachne",
+    "title": "Cerberus",
     "description": "Choose a new password for your account.",
     "inputs": {
       "password": {

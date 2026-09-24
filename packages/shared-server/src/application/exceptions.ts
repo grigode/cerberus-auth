@@ -1,14 +1,8 @@
-export class BaseException extends Error {
-  public readonly code: string;
-  public readonly statusCode: number;
-  public readonly technicalMessage?: string; // For logs
+import { ApplicationException } from '../exceptions/application.exception';
 
+export class BaseException extends ApplicationException {
   constructor(code: string, statusCode = 500, technicalMessage?: string) {
-    super(technicalMessage || code);
-
-    this.code = code;
-    this.statusCode = statusCode;
-    this.technicalMessage = technicalMessage;
+    super(technicalMessage || code, statusCode, code, technicalMessage);
 
     Error.captureStackTrace(this, this.constructor);
   }

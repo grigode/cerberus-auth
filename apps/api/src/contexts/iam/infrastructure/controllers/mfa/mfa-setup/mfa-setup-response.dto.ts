@@ -6,7 +6,7 @@ export class MfaSetupResponseDto {
 
   @ApiProperty({
     example:
-      'otpauth://totp/Arachne:user@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Arachne',
+      'otpauth://totp/Cerberus:user@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Cerberus',
   })
   qrCodeUrl: string;
 }

@@ -1,9 +1,9 @@
 {
   "head": {
-    "title": "Recupera tu contraseña - Arachne"
+    "title": "Recupera tu contraseña - Cerberus"
   },
   "form": {
-    "title": "Arachne",
+    "title": "Cerberus",
     "description": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
     "inputs": {
       "email": {

@@ -3,7 +3,7 @@ const { locale } = useI18n();
 
 useHead({
   htmlAttrs: { lang: locale.value },
-  title: 'Arachne',
+  title: 'Cerberus',
 });
 </script>
 

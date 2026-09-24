@@ -6,7 +6,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuditAction } from '@core/shared-server';
-import type { EnableMfaUseCase } from '../../../../application';
+import { EnableMfaUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { MfaEnableResponseDto } from './mfa-enable-response.dto';

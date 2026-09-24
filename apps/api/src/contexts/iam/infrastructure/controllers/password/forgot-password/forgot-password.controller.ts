@@ -5,7 +5,7 @@ import {
   DEFAULT_THROTTLE_EMAIL_LIMIT,
   DEFAULT_THROTTLE_EMAIL_TTL_MS,
 } from '@core/config';
-import type { ForgotPasswordUseCase } from '../../../../application';
+import { ForgotPasswordUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ForgotPasswordResponseDto } from './forgot-password-response.dto';

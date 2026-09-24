@@ -12,7 +12,7 @@ import {
 } from '@core/shared-server';
 
 import { CurrentUser } from '../../../../iam/infrastructure/http/decorators/current-user.decorator';
-import type { MarkNotificationAsReadUseCase } from '../../../application';
+import { MarkNotificationAsReadUseCase } from '../../../application';
 import { MarkNotificationAsReadResponseDto } from './mark-notification-as-read-response.dto';
 
 @ApiTags('Notifications - In-App & Realtime SSE')

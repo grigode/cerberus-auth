@@ -9,7 +9,7 @@ import {
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { CurrentUser } from '../../../../iam/infrastructure/http/decorators/current-user.decorator';
-import type { GetNotificationHistoryUseCase } from '../../../application';
+import { GetNotificationHistoryUseCase } from '../../../application';
 import {
   InAppNotificationResponseDto,
   PaginatedNotificationsResponseDto,

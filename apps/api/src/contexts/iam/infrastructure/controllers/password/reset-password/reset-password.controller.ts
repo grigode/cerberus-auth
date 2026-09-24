@@ -5,7 +5,7 @@ import {
   DEFAULT_THROTTLE_AUTH_LIMIT,
   DEFAULT_THROTTLE_AUTH_TTL_MS,
 } from '@core/config';
-import type { ResetPasswordUseCase } from '../../../../application';
+import { ResetPasswordUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ResetPasswordResponseDto } from './reset-password-response.dto';

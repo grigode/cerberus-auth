@@ -6,7 +6,7 @@ import {
   DEFAULT_THROTTLE_AUTH_TTL_MS,
 } from '@core/config';
 import { AuditAction } from '@core/shared-server';
-import type { CreateUserUseCase } from '../../../../application';
+import { CreateUserUseCase } from '../../../../application';
 import { ProviderVo } from '@core/domain';
 import type { Controller as BaseController } from '@core/shared-server';
 

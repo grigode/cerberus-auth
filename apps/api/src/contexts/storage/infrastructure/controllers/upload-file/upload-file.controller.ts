@@ -12,7 +12,7 @@ import {
 } from '@core/shared-server';
 import type { FastifyRequest } from 'fastify';
 
-import type { UploadFileUseCase } from '../../../application';
+import { UploadFileUseCase } from '../../../application';
 import { StorageFileResponseDto } from './storage-file-response.dto';
 
 interface MultipartFile {

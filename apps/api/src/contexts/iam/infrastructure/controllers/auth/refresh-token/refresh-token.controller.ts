@@ -20,7 +20,7 @@ import {
   DEFAULT_THROTTLE_AUTH_LIMIT,
   DEFAULT_THROTTLE_AUTH_TTL_MS,
 } from '@core/config';
-import type { RotateSessionUseCase } from '../../../../application';
+import { RotateSessionUseCase } from '../../../../application';
 import { InvalidRefreshTokenException } from '../../../../application/exceptions';
 import type { Controller as BaseController } from '@core/shared-server';
 

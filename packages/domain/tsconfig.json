@@ -1,5 +1,5 @@
 {
-  "extends": "@configs/typescript/base.json",
+  "extends": "@configs/typescript/nestjs.json",
   "compilerOptions": {
     "target": "ES2023",
     "useDefineForClassFields": true,

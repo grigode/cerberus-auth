@@ -13,7 +13,7 @@ import {
   type AccessTokenDrivenPort,
 } from '@core/domain';
 import { UserInactiveException } from '../../exceptions';
-import type { CreateSessionUseCase, Session } from '../create-session';
+import { CreateSessionUseCase, Session } from '../create-session';
 import type { GoogleLoginDto } from './google-login.dto';
 
 export type GoogleLoginResult =

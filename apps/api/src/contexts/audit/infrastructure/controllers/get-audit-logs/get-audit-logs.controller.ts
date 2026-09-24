@@ -10,7 +10,6 @@ import { RoleVo } from '@core/domain';
 import type { Controller as BaseController } from '@core/shared-server';
 import { Roles } from '../../../../iam/infrastructure/http/decorators/roles.decorator';
 import type { GetAuditLogsDto } from '../../../application';
-// biome-ignore lint/style/useImportType: Needed as runtime value for NestJS DI metadata
 import { GetAuditLogsUseCase } from '../../../application';
 
 @ApiTags('Audit')

@@ -6,7 +6,7 @@ import {
   DEFAULT_THROTTLE_EMAIL_TTL_MS,
 } from '@core/config';
 import { AuditAction } from '@core/shared-server';
-import type { ConfirmEmailUseCase } from '../../../../application';
+import { ConfirmEmailUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ConfirmEmailResponseDto } from './confirm-email-response.dto';

@@ -5,7 +5,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import type { GenerateMfaBackupCodesUseCase } from '../../../../application';
+import { GenerateMfaBackupCodesUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { MfaBackupCodesResponseDto } from './generate-mfa-backup-codes-response.dto';

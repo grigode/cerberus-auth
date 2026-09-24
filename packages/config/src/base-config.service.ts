@@ -1,4 +1,4 @@
-import type { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 export abstract class BaseConfigService {
   constructor(protected readonly configService: ConfigService) {}

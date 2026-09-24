@@ -5,7 +5,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import type { GetProfileUseCase } from '../../../../application';
+import { GetProfileUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { UserProfileResponseDto } from './user-profile-response.dto';

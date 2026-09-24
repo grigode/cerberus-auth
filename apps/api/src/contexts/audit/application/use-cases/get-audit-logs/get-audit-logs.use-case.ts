@@ -4,7 +4,7 @@ import {
   type AuditStorageDrivenPort,
   type PaginatedAuditLogs,
 } from '@core/domain';
-import type { UseCase } from '@core/shared-server';
+import { UseCase } from '@core/shared-server';
 import type { GetAuditLogsDto } from './get-audit-logs.dto';
 
 @Injectable()

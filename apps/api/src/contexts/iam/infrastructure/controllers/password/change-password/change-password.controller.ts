@@ -6,7 +6,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuditAction } from '@core/shared-server';
-import type { ChangePasswordUseCase } from '../../../../application';
+import { ChangePasswordUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ChangePasswordResponseDto } from './change-password-response.dto';

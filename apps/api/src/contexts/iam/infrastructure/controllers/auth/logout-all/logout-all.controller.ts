@@ -7,8 +7,8 @@ import {
 } from '@nestjs/swagger';
 import type { FastifyReply } from 'fastify';
 import { getCookieOptions } from '@core/shared-server';
-import type { AppConfigService } from '@core/config';
-import type { LogoutAllUseCase } from '../../../../application';
+import { AppConfigService } from '@core/config';
+import { LogoutAllUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { CurrentUser } from '../../../http';

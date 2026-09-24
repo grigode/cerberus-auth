@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { DatabaseModule } from '@core/database';
 import { AUDIT_STORAGE_DRIVEN_PORT_TOKEN } from '@core/domain';
 
 import { GetAuditLogsUseCase, LogAuditUseCase } from './application';
@@ -11,6 +12,7 @@ import {
 
 @Global()
 @Module({
+  imports: [DatabaseModule],
   controllers: [...auditControllers],
   providers: [
     LogAuditUseCase,

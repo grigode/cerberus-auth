@@ -12,7 +12,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import type { RevokeSessionUseCase } from '../../../../application';
+import { RevokeSessionUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { CurrentUser } from '../../../http';

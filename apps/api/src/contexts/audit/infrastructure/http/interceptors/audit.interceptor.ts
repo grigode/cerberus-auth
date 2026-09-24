@@ -4,7 +4,6 @@ import {
   Injectable,
   type NestInterceptor,
 } from '@nestjs/common';
-// biome-ignore lint/style/useImportType: required for NestJS DI reflection
 import { Reflector } from '@nestjs/core';
 import { AuditStatus } from '@core/domain';
 import {
@@ -15,7 +14,7 @@ import {
 import type { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import type { LogAuditUseCase } from '../../../application';
+import { LogAuditUseCase } from '../../../application';
 
 interface HttpPayload {
   params?: Record<string, string>;

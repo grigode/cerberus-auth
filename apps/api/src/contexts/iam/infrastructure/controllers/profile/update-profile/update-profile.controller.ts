@@ -5,7 +5,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import type { UpdateProfileUseCase } from '../../../../application';
+import { UpdateProfileUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { UpdateProfileResponseDto } from './update-profile-response.dto';

@@ -5,7 +5,7 @@ import {
   DEFAULT_THROTTLE_EMAIL_LIMIT,
   DEFAULT_THROTTLE_EMAIL_TTL_MS,
 } from '@core/config';
-import type { ResendConfirmationEmailUseCase } from '../../../../application';
+import { ResendConfirmationEmailUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ResendConfirmEmailResponseDto } from './resend-confirm-email-response.dto';

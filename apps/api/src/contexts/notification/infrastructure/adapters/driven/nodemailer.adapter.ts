@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import type { MailConfigService } from '@core/config';
+import { MailConfigService } from '@core/config';
 import type { EmailSenderDrivenPort, SendEmailOptions } from '@core/domain';
 import * as nodemailer from 'nodemailer';
 

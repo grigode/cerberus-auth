@@ -11,7 +11,7 @@ import type { Controller as BaseController } from '@core/shared-server';
 import type { Observable } from 'rxjs';
 
 import { CurrentUser } from '../../../../iam/infrastructure/http/decorators/current-user.decorator';
-import type { StreamInAppNotificationsUseCase } from '../../../application';
+import { StreamInAppNotificationsUseCase } from '../../../application';
 import { NotificationStreamEventResponseDto } from './notification-stream-event-response.dto';
 
 @ApiTags('Notifications - In-App & Realtime SSE')

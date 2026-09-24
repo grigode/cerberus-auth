@@ -14,8 +14,8 @@ import {
 } from '@nestjs/swagger';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { getCookieOptions } from '@core/shared-server';
-import type { AppConfigService } from '@core/config';
-import type { LogoutUseCase } from '../../../../application';
+import { AppConfigService } from '@core/config';
+import { LogoutUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { Public } from '../../../http';

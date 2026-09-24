@@ -17,7 +17,7 @@ import {
   InvalidCredentialsException,
   UserInactiveException,
 } from '../../exceptions';
-import type { CreateSessionUseCase, Session } from '../create-session';
+import { CreateSessionUseCase, Session } from '../create-session';
 
 export type EmailLoginResult =
   | Session

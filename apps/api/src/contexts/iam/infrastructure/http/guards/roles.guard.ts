@@ -4,7 +4,6 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-// biome-ignore lint/style/useImportType: Needed as runtime value for NestJS DI metadata
 import { Reflector } from '@nestjs/core';
 import type { FastifyRequest } from 'fastify';
 import { RoleVo } from '@core/domain';

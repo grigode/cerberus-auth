@@ -12,7 +12,7 @@ import {
   type Controller as BaseController,
 } from '@core/shared-server';
 
-import type { DeleteFileUseCase } from '../../../application';
+import { DeleteFileUseCase } from '../../../application';
 import { DeleteFileResponseDto } from './delete-file-response.dto';
 
 @ApiTags('Storage')

@@ -16,7 +16,7 @@ import {
   DEFAULT_THROTTLE_AUTH_LIMIT,
   DEFAULT_THROTTLE_AUTH_TTL_MS,
 } from '@core/config';
-import type { VerifyMfaBackupCodeUseCase } from '../../../../application';
+import { VerifyMfaBackupCodeUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import type { VerifyMfaBackupCodeRequestDto } from './verify-mfa-backup-code.dto';

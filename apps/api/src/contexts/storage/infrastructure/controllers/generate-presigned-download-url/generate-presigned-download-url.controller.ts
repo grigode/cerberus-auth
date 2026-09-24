@@ -5,7 +5,7 @@ import {
   type Controller as BaseController,
 } from '@core/shared-server';
 
-import type { GeneratePresignedDownloadUrlUseCase } from '../../../application';
+import { GeneratePresignedDownloadUrlUseCase } from '../../../application';
 import { PresignedDownloadUrlResponseDto } from './presigned-download-url-response.dto';
 
 @ApiTags('Storage')

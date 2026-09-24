@@ -6,7 +6,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import type { FastifyRequest } from 'fastify';
-import type { GetActiveSessionsUseCase } from '../../../../application';
+import { GetActiveSessionsUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { UserSessionResponseDto } from './get-active-sessions-response.dto';

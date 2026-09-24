@@ -16,7 +16,7 @@ import {
   DEFAULT_THROTTLE_AUTH_TTL_MS,
 } from '@core/config';
 import { AuditAction } from '@core/shared-server';
-import type { VerifyMfaUseCase } from '../../../../application';
+import { VerifyMfaUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { MfaVerifyResponseDto } from './mfa-verify-response.dto';

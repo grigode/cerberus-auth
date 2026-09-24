@@ -1,4 +1,4 @@
-import type { AppConfigService } from '@core/config';
+import { AppConfigService } from '@core/config';
 import {
   EMAIL_SENDER_DRIVEN_PORT_TOKEN,
   type EmailSenderDrivenPort,

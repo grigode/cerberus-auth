@@ -4,7 +4,6 @@ import {
   Injectable,
 } from '@nestjs/common';
 import type { FastifyRequest } from 'fastify';
-// biome-ignore lint/style/useImportType: Needed as runtime value for NestJS DI metadata
 import { SecurityConfigService } from '@core/config';
 import { ForbiddenApplicationException } from '../application/exceptions';
 

@@ -9,7 +9,7 @@ import {
   DEFAULT_THROTTLE_AUTH_TTL_MS,
   type SecurityConfigService,
 } from '@core/config';
-import type { GoogleLoginUseCase } from '../../../../application';
+import { GoogleLoginUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { GOOGLE_ENDPOINTS } from './constants';

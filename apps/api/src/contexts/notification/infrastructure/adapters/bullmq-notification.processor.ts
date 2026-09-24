@@ -7,7 +7,7 @@ import type {
 } from '@core/domain';
 import type { Job } from 'bullmq';
 
-import type {
+import {
   CreateInAppNotificationUseCase,
   SendPasswordResetEmailUseCase,
   SendVerificationEmailUseCase,

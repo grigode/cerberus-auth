@@ -3,7 +3,6 @@ import {
   type ExecutionContext,
   Injectable,
 } from '@nestjs/common';
-// biome-ignore lint/style/useImportType: Needed as runtime value for NestJS DI metadata
 import { Reflector } from '@nestjs/core';
 import type { FastifyRequest } from 'fastify';
 import { UnauthorizedException } from '@core/shared-server';

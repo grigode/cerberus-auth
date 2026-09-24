@@ -16,7 +16,7 @@ import {
   DEFAULT_THROTTLE_AUTH_TTL_MS,
 } from '@core/config';
 import { AuditAction } from '@core/shared-server';
-import type { EmailLoginUseCase } from '../../../../application';
+import { EmailLoginUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { EmailLoginResponseDto } from './email-login-response.dto';

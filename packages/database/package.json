@@ -4,7 +4,6 @@
   "description": "Database package for the project",
   "author": "Griego Code <griegocode@proton.me>",
   "license": "MIT",
-  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

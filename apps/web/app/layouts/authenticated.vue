@@ -11,12 +11,15 @@ const route = useRoute();
 // shown disabled with a "Soon" badge so the layout reflects the app's full
 // information architecture without shipping broken links. Each feature PR
 // (Tasks, Calendar, Notes, ...) flips its entry to a real `to` route.
+const { navigation: featureNavigation } = useFeatureRegistry();
+
 const links = computed<NavigationMenuItem[]>(() => [
   {
     label: ts('nav.dashboard'),
     icon: 'i-lucide-layout-dashboard',
     to: '/dashboard',
   },
+  ...featureNavigation,
 ]);
 
 // Navbar title tracks the active section, falling back to the brand.

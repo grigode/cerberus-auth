@@ -1,7 +1,7 @@
 import type { RouterConfig } from 'nuxt/schema';
 import type { RouteRecordRaw } from 'vue-router';
 
-import { router as authRouter } from '~/features/auth/auth.router';
+import { getFeatureRoutes } from '~/features/registry';
 
 const appRoutes: RouteRecordRaw[] = [
   {
@@ -16,5 +16,5 @@ const appRoutes: RouteRecordRaw[] = [
 ];
 
 export default {
-  routes: (_routes) => [...authRouter, ...appRoutes],
+  routes: (_routes) => [...getFeatureRoutes(), ...appRoutes],
 } satisfies RouterConfig;

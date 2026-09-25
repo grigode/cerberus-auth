@@ -21,6 +21,12 @@ mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
   ts: (key: string) => key,
 }));
+mockNuxtImport('useRouter', () => () => ({
+  push: mockRouterPush,
+  replace: vi.fn(),
+  afterEach: vi.fn(),
+  beforeResolve: vi.fn(),
+}));
 mockNuxtImport('useRoute', () => () => mockRoute);
 mockNuxtImport('useAuth', () => () => ({
   fetchSession: mockFetchSession,
@@ -31,14 +37,9 @@ mockNuxtImport('useAuthFeedback', () => () => ({
 }));
 
 describe('useMfa Composable (TOTP & Backup Codes)', () => {
-  let mockRouterPush: any;
-
   beforeEach(() => {
     vi.clearAllMocks();
     mockRoute.query = { token: 'valid-mfa-token' };
-    mockRouterPush = vi
-      .spyOn(useRouter(), 'push')
-      .mockResolvedValue(undefined as any);
   });
 
   it('should redirect to /login if mfa challenge token is missing', async () => {

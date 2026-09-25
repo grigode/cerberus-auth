@@ -23,6 +23,12 @@ mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
   ts: (key: string) => key,
 }));
+mockNuxtImport('useRouter', () => () => ({
+  push: mockRouterPush,
+  replace: vi.fn(),
+  afterEach: vi.fn(),
+  beforeResolve: vi.fn(),
+}));
 mockNuxtImport('useRoute', () => () => mockRoute);
 mockNuxtImport('useAuth', () => () => ({
   fetchSession: mockFetchSession,
@@ -38,13 +44,8 @@ mockNuxtImport('useGoogleAuth', () => () => ({
 }));
 
 describe('useLogin Composable & Schema Validation', () => {
-  let mockRouterPush: any;
-
   beforeEach(() => {
     vi.clearAllMocks();
-    mockRouterPush = vi
-      .spyOn(useRouter(), 'push')
-      .mockResolvedValue(undefined as any);
   });
 
   it('should validate valid email and password format in schema', () => {

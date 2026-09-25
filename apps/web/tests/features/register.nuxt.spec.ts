@@ -12,6 +12,12 @@ mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
   ts: (key: string) => key,
 }));
+mockNuxtImport('useRouter', () => () => ({
+  push: mockRouterPush,
+  replace: vi.fn(),
+  afterEach: vi.fn(),
+  beforeResolve: vi.fn(),
+}));
 mockNuxtImport('useAuthFeedback', () => () => ({
   notifyApiError: vi.fn(),
 }));
@@ -21,13 +27,8 @@ mockNuxtImport('useGoogleAuth', () => () => ({
 }));
 
 describe('useRegister Composable & Password Policy', () => {
-  let mockRouterPush: any;
-
   beforeEach(() => {
     vi.clearAllMocks();
-    mockRouterPush = vi
-      .spyOn(useRouter(), 'push')
-      .mockResolvedValue(undefined as any);
   });
 
   it('should reject passwords under 12 characters or missing character classes', () => {

@@ -1,13 +1,16 @@
 import type { SessionUser } from '~/types/session-user';
-import type { UserProfileResponseDto } from '~/types/api-contracts';
-import { useApiClient } from './use-api';
+import {
+  useAuthRepository,
+  useProfileRepository,
+} from './use-repositories.composable';
 
 export const useAuth = () => {
   // useState keeps the authenticated user in Nuxt's shared, SSR-friendly
   // state so it survives across pages (and hydration) within a load.
   const user = useState<SessionUser | null>('auth.user', () => null);
   const isAuthenticated = computed(() => !!user.value);
-  const api = useApiClient();
+  const authRepo = useAuthRepository();
+  const profileRepo = useProfileRepository();
 
   const setUser = (value: SessionUser | null) => {
     user.value = value;
@@ -18,21 +21,14 @@ export const useAuth = () => {
   };
 
   const refreshSession = async (): Promise<boolean> => {
-    try {
-      await api('/iam/refresh-token', { method: 'POST' });
-      return true;
-    } catch {
-      return false;
-    }
+    return authRepo.refreshToken();
   };
 
   // Restores authenticated state from the backend. The API client
   // automatically handles mutex silent token refresh if 401 occurs.
   const fetchSession = async () => {
     try {
-      const data = await api<UserProfileResponseDto>('/iam/me', {
-        method: 'GET',
-      });
+      const data = await profileRepo.getProfile();
       setUser({
         id: data.id,
         email: data.email,
@@ -52,9 +48,7 @@ export const useAuth = () => {
   // state, and redirects to login.
   const logout = async () => {
     try {
-      await api('/iam/logout', { method: 'POST' });
-    } catch {
-      // ignore
+      await authRepo.logout();
     } finally {
       clear();
       await navigateTo('/login');
@@ -64,9 +58,7 @@ export const useAuth = () => {
   // Revokes all sessions on all devices for the current user
   const logoutAll = async () => {
     try {
-      await api('/iam/auth/logout-all', { method: 'POST' });
-    } catch {
-      // ignore
+      await authRepo.logoutAll();
     } finally {
       clear();
       await navigateTo('/login');

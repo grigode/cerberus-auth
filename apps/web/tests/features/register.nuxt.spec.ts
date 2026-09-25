@@ -1,0 +1,107 @@
+import { mockNuxtImport } from '@nuxt/test-utils/runtime';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { useRegister } from '../../app/features/auth/pages/register/register.composable';
+
+const { mockUseAPI, mockRouterPush } = vi.hoisted(() => ({
+  mockUseAPI: vi.fn(),
+  mockRouterPush: vi.fn(),
+}));
+
+mockNuxtImport('useAPI', () => mockUseAPI);
+mockNuxtImport('useI18nShorter', () => () => ({
+  t: (key: string) => key,
+  ts: (key: string) => key,
+}));
+mockNuxtImport('useAuthFeedback', () => () => ({
+  notifyApiError: vi.fn(),
+}));
+mockNuxtImport('useGoogleAuth', () => () => ({
+  redirecting: { value: false },
+  loginWithGoogle: vi.fn(),
+}));
+
+describe('useRegister Composable & Password Policy', () => {
+  let mockRouterPush: any;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockRouterPush = vi
+      .spyOn(useRouter(), 'push')
+      .mockResolvedValue(undefined as any);
+  });
+
+  it('should reject passwords under 12 characters or missing character classes', () => {
+    const { schema } = useRegister();
+
+    // Less than 12 chars
+    const shortPassword = schema.safeParse({
+      firstName: 'Alice',
+      lastName: 'Doe',
+      email: 'alice@example.com',
+      password: 'Short1!',
+      confirmPassword: 'Short1!',
+    });
+    expect(shortPassword.success).toBe(false);
+
+    // Missing symbol
+    const noSymbol = schema.safeParse({
+      firstName: 'Alice',
+      lastName: 'Doe',
+      email: 'alice@example.com',
+      password: 'Password12345',
+      confirmPassword: 'Password12345',
+    });
+    expect(noSymbol.success).toBe(false);
+  });
+
+  it('should reject when confirmPassword does not match password', () => {
+    const { schema } = useRegister();
+
+    const mismatch = schema.safeParse({
+      firstName: 'Alice',
+      lastName: 'Doe',
+      email: 'alice@example.com',
+      password: 'ValidPassword123!',
+      confirmPassword: 'DifferentPassword123!',
+    });
+    expect(mismatch.success).toBe(false);
+  });
+
+  it('should accept compliant registrations matching OWASP & NIST standards', () => {
+    const { schema } = useRegister();
+
+    const valid = schema.safeParse({
+      firstName: 'Alice',
+      lastName: 'Smith',
+      email: 'alice.smith@example.com',
+      password: 'CorrectHorseBatteryStaple123!',
+      confirmPassword: 'CorrectHorseBatteryStaple123!',
+    });
+    expect(valid.success).toBe(true);
+  });
+
+  it('should call register-user and redirect to /confirm-email-pending on success', async () => {
+    mockUseAPI.mockResolvedValueOnce({
+      status: { value: 'success' },
+    });
+
+    const { onSubmit } = useRegister();
+    await onSubmit({
+      data: {
+        firstName: 'Alice',
+        lastName: 'Smith',
+        email: 'alice@example.com',
+        password: 'ValidPassword123!',
+        confirmPassword: 'ValidPassword123!',
+      },
+    } as any);
+
+    expect(mockUseAPI).toHaveBeenCalledWith(
+      '/iam/register-user',
+      expect.objectContaining({
+        method: 'POST',
+      }),
+    );
+    expect(mockRouterPush).toHaveBeenCalledWith('/confirm-email-pending');
+  });
+});

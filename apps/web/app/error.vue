@@ -9,10 +9,13 @@ const { locale } = useI18n();
 
 useHead({
   htmlAttrs: { lang: locale.value },
-  title: `${props.error?.statusCode || 500} - Cerberus`,
 });
 
-const is404 = computed(() => props.error?.statusCode === 404);
+useSeoMeta({
+  title: `${props.error?.status || 500} - Cerberus`,
+});
+
+const is404 = computed(() => props.error?.status === 404);
 
 const handleError = () => clearError({ redirect: '/dashboard' });
 </script>
@@ -34,7 +37,7 @@ const handleError = () => clearError({ redirect: '/dashboard' });
 
           <div class="flex flex-col gap-2">
             <span class="font-mono text-xs text-muted uppercase tracking-widest">
-              Error {{ error?.statusCode || 500 }}
+              Error {{ error?.status || 500 }}
             </span>
             <h1 class="text-2xl font-bold tracking-tight text-foreground">
               {{ is404 ? 'Page Not Found' : 'Something Went Wrong' }}
@@ -43,7 +46,9 @@ const handleError = () => clearError({ redirect: '/dashboard' });
               {{
                 is404
                   ? 'The page you are looking for does not exist or has been moved.'
-                  : error?.message || 'An unexpected error occurred while processing your request.'
+                  : error?.message ||
+                    error?.statusText ||
+                    'An unexpected error occurred while processing your request.'
               }}
             </p>
           </div>

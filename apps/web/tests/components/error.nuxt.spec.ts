@@ -5,8 +5,9 @@ import ErrorPage from '../../app/error.vue';
 describe('Root Error Page (error.vue)', () => {
   it('should render 404 page with appropriate title and description', async () => {
     const error404 = {
+      status: 404,
       statusCode: 404,
-      statusMessage: 'Not Found',
+      statusText: 'Not Found',
       message: 'Page not found',
     };
 
@@ -23,8 +24,9 @@ describe('Root Error Page (error.vue)', () => {
 
   it('should render 500 error page with error message', async () => {
     const error500 = {
+      status: 500,
       statusCode: 500,
-      statusMessage: 'Internal Server Error',
+      statusText: 'Internal Server Error',
       message: 'Database connection failed',
     };
 

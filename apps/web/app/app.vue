@@ -3,6 +3,9 @@ const { locale } = useI18n();
 
 useHead({
   htmlAttrs: { lang: locale.value },
+});
+
+useSeoMeta({
   title: 'Cerberus',
 });
 </script>

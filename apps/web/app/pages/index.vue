@@ -1,12 +1,11 @@
 <script setup lang="ts">
-const { isAuthenticated } = useAuth();
-
-onMounted(() => {
-  if (isAuthenticated.value) {
-    navigateTo('/dashboard');
-  } else {
-    navigateTo('/login');
-  }
+definePageMeta({
+  middleware: [
+    () => {
+      const { isAuthenticated } = useAuth();
+      return navigateTo(isAuthenticated.value ? '/dashboard' : '/login');
+    },
+  ],
 });
 </script>
 

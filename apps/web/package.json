@@ -15,6 +15,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@core/domain": "workspace:*",
     "@nuxt/a11y": "1.0.0-alpha.1",
     "@nuxt/hints": "1.1.2",
     "@nuxt/image": "2.0.0",

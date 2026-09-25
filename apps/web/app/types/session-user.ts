@@ -1,4 +1,6 @@
-export type UserRole = 'SUPERADMIN' | 'ADMIN' | 'STAFF' | 'USER';
+import type { UserRole } from './api-contracts';
+
+export type { UserRole };
 
 export interface SessionUser {
   id: string;

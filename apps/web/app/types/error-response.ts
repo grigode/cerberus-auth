@@ -1,6 +1,3 @@
-export interface ErrorResponse {
-  code?: string;
-  statusCode?: number;
-  message?: string | string[];
-  correlationId?: string;
-}
+import type { ApiErrorResponse } from './api-contracts';
+
+export type ErrorResponse = ApiErrorResponse;

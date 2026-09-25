@@ -13,7 +13,7 @@ const errorMessage = computed(() => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center p-6 w-full min-h-[300px]">
+  <div class="flex items-center justify-center p-6 w-full min-h-75">
     <UCard class="max-w-md w-full border-error/20 bg-error/5 shadow-lg">
       <div class="flex flex-col items-center text-center gap-4 py-4">
         <div class="rounded-full bg-error/10 p-3 text-error">

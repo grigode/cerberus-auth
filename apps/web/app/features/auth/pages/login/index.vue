@@ -24,7 +24,6 @@ useSeoMeta({ title: tsHead('title') });
       <UAuthForm
         :description="ts('description')"
         :providers="providers"
-        :separator="ts('separator')"
         :fields="fields"
         :schema="schema"
         :submit="{
@@ -42,6 +41,10 @@ useSeoMeta({ title: tsHead('title') });
 
         <template #title>
           <h1>{{ ts("title") }}</h1>
+        </template>
+
+        <template #separator>
+          <USeparator :label="ts('separator')" />
         </template>
 
         <template #footer>

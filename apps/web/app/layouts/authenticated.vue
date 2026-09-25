@@ -122,7 +122,13 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
       </template>
 
       <template #body>
-        <slot />
+        <NuxtErrorBoundary>
+          <slot />
+
+          <template #error="{ error, clearError }">
+            <AppErrorBoundary :error="error" :clear-error="clearError" />
+          </template>
+        </NuxtErrorBoundary>
       </template>
     </UDashboardPanel>
   </UDashboardGroup>

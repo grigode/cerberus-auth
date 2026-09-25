@@ -14,6 +14,7 @@ describe('Feature Registry Architecture', () => {
     const names = features.map((f) => f.name);
     expect(names).toContain('auth');
     expect(names).toContain('core');
+    expect(names).toContain('security');
   });
 
   it('should aggregate feature routes correctly', () => {
@@ -32,6 +33,8 @@ describe('Feature Registry Architecture', () => {
     expect(i18n).toHaveProperty('es');
     expect(i18n.en).toHaveProperty('auth');
     expect(i18n.es).toHaveProperty('auth');
+    expect(i18n.en).toHaveProperty('security');
+    expect(i18n.es).toHaveProperty('security');
   });
 
   it('should return aggregated navigation items', () => {

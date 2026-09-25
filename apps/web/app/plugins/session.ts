@@ -13,7 +13,11 @@ export default defineNuxtPlugin(async () => {
     return;
   }
 
+  // Track if SSR has already evaluated cookie presence
+  const sessionChecked = useState<boolean>('auth.session_checked', () => false);
+
   if (import.meta.server) {
+    sessionChecked.value = true;
     const headers = useRequestHeaders(['cookie']);
     const rawCookies = headers.cookie || '';
     if (
@@ -23,9 +27,12 @@ export default defineNuxtPlugin(async () => {
       await fetchSession();
     }
   } else {
-    // Client-side: only fetch if SSR didn't already populate the session
-    if (!user.value) {
-      await fetchSession();
+    // If SSR ran and determined there were no session cookies, don't execute a redundant fetch
+    if (sessionChecked.value) {
+      return;
     }
+
+    // Client-side only execution (e.g. SPA mode where SSR did not run)
+    await fetchSession();
   }
 });

@@ -1,11 +1,9 @@
 <script setup lang="ts">
-definePageMeta({
-  middleware: [
-    () => {
-      const { isAuthenticated } = useAuth();
-      return navigateTo(isAuthenticated.value ? '/dashboard' : '/login');
-    },
-  ],
+const { isAuthenticated } = useAuth();
+
+await navigateTo(isAuthenticated.value ? '/dashboard' : '/login', {
+  replace: true,
+  redirectCode: 302,
 });
 </script>
 

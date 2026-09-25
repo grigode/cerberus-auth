@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useAuth } from '~/composables/use-auth.composable';
 import { useAuthFeedback } from '~/composables/use-auth-feedback.composable';
+import { useApiClient } from '~/composables/use-api';
 
 const { user, fetchSession, logout, logoutAll } = useAuth();
 const { notifySuccess, notifyError, notifyApiError } = useAuthFeedback();
+const api = useApiClient();
 
 useSeoMeta({ title: 'Security & Dashboard - Cerberus' });
 
@@ -34,15 +36,10 @@ const openSetupMfa = async () => {
   isSetupModalOpen.value = true;
 
   try {
-    const data = await $fetch<{ secret: string; qrCodeUrl: string }>(
+    const data = await api<{ secret: string; qrCodeUrl: string }>(
       '/iam/mfa/setup',
       {
-        baseURL: useRuntimeConfig().public.apiBaseUrl,
-        credentials: 'include',
         method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
       },
     );
     setupData.value = data;
@@ -60,13 +57,8 @@ const confirmEnableMfa = async () => {
   actionLoading.value = true;
 
   try {
-    await $fetch('/iam/mfa/enable', {
-      baseURL: useRuntimeConfig().public.apiBaseUrl,
-      credentials: 'include',
+    await api('/iam/mfa/enable', {
       method: 'POST',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-      },
       body: {
         secret: setupData.value.secret,
         code: verificationCode.value.trim(),
@@ -94,13 +86,8 @@ const confirmDisableMfa = async () => {
   actionLoading.value = true;
 
   try {
-    await $fetch('/iam/mfa/disable', {
-      baseURL: useRuntimeConfig().public.apiBaseUrl,
-      credentials: 'include',
+    await api('/iam/mfa/disable', {
       method: 'POST',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-      },
       body: {
         code: disableCode.value.trim(),
       },
@@ -121,15 +108,10 @@ const confirmDisableMfa = async () => {
 const regenerateBackupCodes = async (notify = true) => {
   actionLoading.value = true;
   try {
-    const res = await $fetch<{ backupCodes: string[] }>(
+    const res = await api<{ backupCodes: string[] }>(
       '/iam/mfa/backup-codes/regenerate',
       {
-        baseURL: useRuntimeConfig().public.apiBaseUrl,
-        credentials: 'include',
         method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
       },
     );
     backupCodes.value = res.backupCodes || [];
@@ -180,13 +162,8 @@ const onChangePassword = async () => {
 
   passwordLoading.value = true;
   try {
-    await $fetch('/iam/auth/change-password', {
-      baseURL: useRuntimeConfig().public.apiBaseUrl,
-      credentials: 'include',
+    await api('/iam/auth/change-password', {
       method: 'POST',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-      },
       body: {
         currentPassword: currentPassword.value,
         newPassword: newPassword.value,
@@ -342,7 +319,7 @@ const onRevokeOtherSessions = async () => {
               icon="i-lucide-shield-off"
               label="Disable 2FA"
               class="cursor-pointer"
-              @click="isDisableModalOpen = true"
+              @click="isDisableModalOpen = true;"
             />
           </div>
         </div>
@@ -499,7 +476,7 @@ const onRevokeOtherSessions = async () => {
             variant="ghost"
             label="Cancel"
             class="cursor-pointer"
-            @click="isSetupModalOpen = false"
+            @click="isSetupModalOpen = false;"
           />
           <UButton
             color="primary"
@@ -542,7 +519,7 @@ const onRevokeOtherSessions = async () => {
             variant="ghost"
             label="Cancel"
             class="cursor-pointer"
-            @click="isDisableModalOpen = false"
+            @click="isDisableModalOpen = false;"
           />
           <UButton
             color="error"
@@ -590,7 +567,7 @@ const onRevokeOtherSessions = async () => {
             color="primary"
             label="I Have Saved These Codes"
             class="cursor-pointer"
-            @click="isBackupCodesModalOpen = false"
+            @click="isBackupCodesModalOpen = false;"
           />
         </div>
       </template>

@@ -1,14 +1,12 @@
 import { useAuth } from '~/composables/use-auth.composable';
 import { useAuthFeedback } from '~/composables/use-auth-feedback.composable';
 import { useI18nShorter } from '~/composables/use-i18n-shorter.composable';
-import type {
-  MfaVerifyRequestDto,
-  MfaVerifyBackupCodeRequestDto,
-} from '~/types/api-contracts';
+import { useMfaRepository } from '~/composables/use-repositories.composable';
 
 export const useMfa = () => {
   const route = useRoute();
   const router = useRouter();
+  const mfaRepo = useMfaRepository();
   const { fetchSession } = useAuth();
   const { notifyApiError, notifyError } = useAuthFeedback();
 
@@ -48,28 +46,26 @@ export const useMfa = () => {
 
     loading.value = true;
 
-    const endpoint = useBackupCode.value
-      ? '/iam/mfa/verify-backup-code'
-      : '/iam/mfa/verify';
+    try {
+      if (useBackupCode.value) {
+        await mfaRepo.verifyBackupCode({
+          mfaToken: mfaToken.value,
+          code: code.value.trim(),
+        });
+      } else {
+        await mfaRepo.verify({
+          mfaToken: mfaToken.value,
+          code: code.value.trim(),
+        });
+      }
 
-    const requestBody: MfaVerifyRequestDto | MfaVerifyBackupCodeRequestDto = {
-      mfaToken: mfaToken.value,
-      code: code.value.trim(),
-    };
-
-    const { status } = await useAPI(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      cache: 'no-cache',
-      onResponseError: ({ response }) => notifyApiError(response, tsE),
-    });
-
-    if (status.value === 'success') {
       await fetchSession();
       await router.push('/dashboard');
+    } catch (err: unknown) {
+      notifyApiError(err, tsE);
+    } finally {
+      loading.value = false;
     }
-
-    loading.value = false;
   };
 
   return {

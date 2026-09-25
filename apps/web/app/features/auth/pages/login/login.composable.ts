@@ -1,10 +1,13 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
-import { ApiErrorCode, type EmailLoginResponseDto } from '~/types/contracts';
+import { ApiErrorCode } from '~/types/contracts';
+import { useAuthRepository } from '~/composables/use-repositories.composable';
+import { createEmailValidation } from '~/utils/validators';
 
 export const useLogin = () => {
   const route = useRoute();
   const router = useRouter();
+  const authRepo = useAuthRepository();
   const showAskOtheConfirmTokenButton = ref(false);
   const resendingConfirmation = ref(false);
   const loading = ref(false);
@@ -51,7 +54,7 @@ export const useLogin = () => {
   ]);
 
   const schema = z.object({
-    email: z.email(ts('inputs.email.error')),
+    email: createEmailValidation(ts('inputs.email.error')),
     password: z.string(ts('inputs.password.error')),
   });
 
@@ -62,69 +65,56 @@ export const useLogin = () => {
     lastEmail.value = payload.data.email;
     loading.value = true;
 
-    const { status, data } = await useAPI<EmailLoginResponseDto>('/iam/login', {
-      method: 'POST',
-      body: JSON.stringify(payload.data),
-      cache: 'no-cache',
-      onResponseError({ response }) {
-        const code = notifyApiError(response, tsE);
+    try {
+      const data = await authRepo.login(payload.data);
 
-        if (code === ApiErrorCode.EMAIL_NOT_VERIFIED)
-          showAskOtheConfirmTokenButton.value = true;
-      },
-    });
-
-    if (status.value === 'success') {
-      if (data.value?.mfaRequired && data.value?.mfaToken) {
+      if (data?.mfaRequired && data?.mfaToken) {
         await router.push({
           path: '/auth/mfa',
-          query: { token: data.value.mfaToken },
+          query: { token: data.mfaToken },
         });
         loading.value = false;
         return;
       }
 
-      // Populate the authenticated state right away so /dashboard has the
-      // user without waiting for a refresh to re-run the session plugin.
+      // Populate authenticated state immediately
       await fetchSession();
       router.push('/dashboard');
+    } catch (err: unknown) {
+      const code = notifyApiError(err, tsE);
+
+      if (code === ApiErrorCode.EMAIL_NOT_VERIFIED) {
+        showAskOtheConfirmTokenButton.value = true;
+      }
+    } finally {
+      loading.value = false;
     }
-    loading.value = false;
   };
 
-  // Resends the confirmation email for the address the user just tried to log
-  // in with. Surfaced only after an EMAIL_NOT_VERIFIED error, so lastEmail is
-  // always set by the time this runs.
+  // Resends the confirmation email for the address the user just tried to log in with
   const resendConfirmation = async () => {
     if (!lastEmail.value) return;
 
     resendingConfirmation.value = true;
 
-    const { status } = await useAPI('/iam/resend-confirm-email', {
-      method: 'POST',
-      body: JSON.stringify({ email: lastEmail.value }),
-      cache: 'no-cache',
-      onResponseError: ({ response }) => notifyApiError(response, tsE),
-    });
-
-    if (status.value === 'success') {
+    try {
+      await authRepo.resendConfirmEmail({ email: lastEmail.value });
       notifySuccess(tsR('success'), 'i-lucide-mail-check');
       showAskOtheConfirmTokenButton.value = false;
+    } catch (err: unknown) {
+      notifyApiError(err, tsE);
+    } finally {
+      resendingConfirmation.value = false;
     }
-
-    resendingConfirmation.value = false;
   };
 
-  // The backend redirects failed/cancelled Google logins back to
-  // /login?error=<code>. Surface it as a toast and strip the query so it
-  // doesn't re-trigger on refresh.
+  // Handles Google OAuth errors surfaced via /login?error=<code>
   const handleOAuthError = () => {
     const value = route.query.error;
     const code = Array.isArray(value) ? value[0] : value;
     if (!code) return;
 
     notifyError(code === 'access_denied' ? tsO('cancelled') : tsO('failed'));
-
     router.replace({ query: {} });
   };
 

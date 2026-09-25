@@ -1,13 +1,12 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
-import type {
-  ForgotPasswordRequestDto,
-  ForgotPasswordResponseDto,
-} from '~/types/api-contracts';
+import { useAuthRepository } from '~/composables/use-repositories.composable';
+import { createEmailValidation } from '~/utils/validators';
 
 export const useForgotPassword = () => {
   const loading = ref(false);
   const submitted = ref(false);
+  const authRepo = useAuthRepository();
 
   const { ts } = useI18nShorter('auth.forgotPassword.form');
   const { ts: tsE } = useI18nShorter('auth.forgotPassword.errors');
@@ -26,7 +25,7 @@ export const useForgotPassword = () => {
   });
 
   const schema = z.object({
-    email: z.email(ts('inputs.email.error')),
+    email: createEmailValidation(ts('inputs.email.error')),
   });
 
   type Schema = z.output<typeof schema>;
@@ -34,22 +33,16 @@ export const useForgotPassword = () => {
   const onSubmit = async (payload: FormSubmitEvent<Schema>) => {
     loading.value = true;
 
-    const requestBody: ForgotPasswordRequestDto = {
-      email: payload.data.email,
-    };
-
-    const { status } = await useAPI<ForgotPasswordResponseDto>(
-      '/iam/forgot-password',
-      {
-        method: 'POST',
-        body: JSON.stringify(requestBody),
-        cache: 'no-cache',
-        onResponseError: ({ response }) => notifyApiError(response, tsE),
-      },
-    );
-
-    if (status.value === 'success') submitted.value = true;
-    loading.value = false;
+    try {
+      await authRepo.forgotPassword({
+        email: payload.data.email,
+      });
+      submitted.value = true;
+    } catch (err: unknown) {
+      notifyApiError(err, tsE);
+    } finally {
+      loading.value = false;
+    }
   };
 
   return {

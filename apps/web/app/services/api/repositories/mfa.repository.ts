@@ -42,7 +42,7 @@ export class MfaRepository extends BaseRepository implements IMfaRepository {
     payload: MfaVerifyBackupCodeRequestDto,
   ): Promise<{ message: string }> {
     return this.post<{ message: string }>(
-      '/iam/mfa/backup-code/verify',
+      '/iam/mfa/verify-backup-code',
       payload,
     );
   }

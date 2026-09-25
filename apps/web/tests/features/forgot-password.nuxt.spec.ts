@@ -2,11 +2,13 @@ import { mockNuxtImport } from '@nuxt/test-utils/runtime';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useForgotPassword } from '../../app/features/auth/pages/forgot-password/forgot-password.composable';
 
-const { mockUseAPI } = vi.hoisted(() => ({
-  mockUseAPI: vi.fn(),
+const { mockForgotPassword } = vi.hoisted(() => ({
+  mockForgotPassword: vi.fn(),
 }));
 
-mockNuxtImport('useAPI', () => mockUseAPI);
+mockNuxtImport('useAuthRepository', () => () => ({
+  forgotPassword: mockForgotPassword,
+}));
 mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
   ts: (key: string) => key,
@@ -28,8 +30,8 @@ describe('useForgotPassword Composable', () => {
   });
 
   it('should call forgot-password endpoint and set submitted state on success', async () => {
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
+    mockForgotPassword.mockResolvedValueOnce({
+      message: 'Reset link sent',
     });
 
     const { onSubmit, submitted } = useForgotPassword();
@@ -39,13 +41,9 @@ describe('useForgotPassword Composable', () => {
       data: { email: 'user@example.com' },
     } as any);
 
-    expect(mockUseAPI).toHaveBeenCalledWith(
-      '/iam/forgot-password',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({ email: 'user@example.com' }),
-      }),
-    );
+    expect(mockForgotPassword).toHaveBeenCalledWith({
+      email: 'user@example.com',
+    });
     expect(submitted.value).toBe(true);
   });
 });

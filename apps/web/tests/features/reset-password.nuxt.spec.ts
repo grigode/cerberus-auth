@@ -2,15 +2,17 @@ import { mockNuxtImport } from '@nuxt/test-utils/runtime';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useResetPassword } from '../../app/features/auth/pages/reset-password/reset-password.composable';
 
-const { mockUseAPI, mockNotifyError, mockRoute } = vi.hoisted(() => ({
-  mockUseAPI: vi.fn(),
+const { mockResetPassword, mockNotifyError, mockRoute } = vi.hoisted(() => ({
+  mockResetPassword: vi.fn(),
   mockNotifyError: vi.fn(),
   mockRoute: {
     query: { token: 'valid-reset-token' } as Record<string, any>,
   },
 }));
 
-mockNuxtImport('useAPI', () => mockUseAPI);
+mockNuxtImport('useAuthRepository', () => () => ({
+  resetPassword: mockResetPassword,
+}));
 mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
   ts: (key: string) => key,
@@ -49,8 +51,8 @@ describe('useResetPassword Composable', () => {
   });
 
   it('should call reset-password and set submitted to true on success', async () => {
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
+    mockResetPassword.mockResolvedValueOnce({
+      message: 'Password reset successful',
     });
 
     const { onSubmit, submitted } = useResetPassword();
@@ -61,31 +63,18 @@ describe('useResetPassword Composable', () => {
       },
     } as any);
 
-    expect(mockUseAPI).toHaveBeenCalledWith(
-      '/iam/reset-password',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({
-          token: 'valid-reset-token',
-          password: 'SuperSecretPassword123!',
-        }),
-      }),
-    );
+    expect(mockResetPassword).toHaveBeenCalledWith({
+      token: 'valid-reset-token',
+      password: 'SuperSecretPassword123!',
+    });
     expect(submitted.value).toBe(true);
   });
 
   it('should set invalidToken to true when server returns token expired or invalid', async () => {
-    mockUseAPI.mockImplementationOnce(
-      async (_url: string, opts: { onResponseError: (ctx: any) => void }) => {
-        opts.onResponseError({
-          response: {
-            status: 400,
-            _data: { code: 'RESET_TOKEN_EXPIRED' },
-          },
-        });
-        return { status: { value: 'error' } };
-      },
-    );
+    const errorWithCode = {
+      data: { code: 'RESET_TOKEN_EXPIRED' },
+    };
+    mockResetPassword.mockRejectedValueOnce(errorWithCode);
 
     const { onSubmit, invalidToken } = useResetPassword();
     await onSubmit({

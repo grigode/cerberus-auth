@@ -23,17 +23,28 @@ export const useAuthFeedback = () => {
       icon,
     });
 
-  // Maps a failed response to a translated error toast and returns the backend
-  // error code (or undefined). A 5xx — or any response without a mapped code —
-  // shows the generic fallback; otherwise the per-code message. Returning the
-  // code lets callers react to specific ones (e.g. EMAIL_NOT_VERIFIED).
+  // Maps a failed response or thrown FetchError to a translated error toast and returns
+  // the backend error code (or undefined). A 5xx — or any response without a mapped code —
+  // shows the generic fallback; otherwise the per-code message.
   const notifyApiError = (
-    response: { status: number; _data?: unknown },
+    errorOrResponse: unknown,
     translate?: (key: string) => string,
   ): ApiErrorCode | string | undefined => {
-    const error = response._data as ApiErrorResponse | undefined;
+    const err = errorOrResponse as {
+      status?: number;
+      statusCode?: number;
+      data?: unknown;
+      response?: { status: number; _data?: unknown };
+      _data?: unknown;
+    };
 
-    if (response.status >= 500) {
+    const status =
+      err?.response?.status || err?.status || err?.statusCode || 500;
+    const errorData = (err?.response?._data || err?.data || err?._data) as
+      | ApiErrorResponse
+      | undefined;
+
+    if (status >= 500) {
       notifyError(
         translate
           ? translate('fallback')
@@ -42,26 +53,26 @@ export const useAuthFeedback = () => {
       return undefined;
     }
 
-    if (error?.code && translate) {
-      const translated = translate(error.code);
-      if (translated && translated !== error.code) {
+    if (errorData?.code && translate) {
+      const translated = translate(errorData.code);
+      if (translated && translated !== errorData.code) {
         notifyError(translated);
-        return error.code;
+        return errorData.code;
       }
     }
 
-    if (typeof error?.message === 'string') {
-      notifyError(error.message);
-      return error.code;
+    if (typeof errorData?.message === 'string') {
+      notifyError(errorData.message);
+      return errorData.code;
     }
 
-    if (Array.isArray(error?.message) && error.message.length > 0) {
-      notifyError(error.message.join(', '));
-      return error.code;
+    if (Array.isArray(errorData?.message) && errorData.message.length > 0) {
+      notifyError(errorData.message.join(', '));
+      return errorData.code;
     }
 
     notifyError(translate ? translate('fallback') : 'An error occurred.');
-    return error?.code;
+    return errorData?.code;
   };
 
   return { notifyError, notifySuccess, notifyApiError };

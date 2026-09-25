@@ -1,14 +1,12 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
-import {
-  ApiErrorCode,
-  type ResetPasswordRequestDto,
-  type ResetPasswordResponseDto,
-  type ApiErrorResponse,
-} from '~/types/contracts';
+import { ApiErrorCode, type ApiErrorResponse } from '~/types/contracts';
+import { useAuthRepository } from '~/composables/use-repositories.composable';
+import { createPasswordValidation } from '~/utils/validators';
 
 export const useResetPassword = () => {
   const route = useRoute();
+  const authRepo = useAuthRepository();
   const loading = ref(false);
   const submitted = ref(false);
 
@@ -46,13 +44,13 @@ export const useResetPassword = () => {
 
   const schema = z
     .object({
-      password: z
-        .string(ts('inputs.password.errors.minLength'))
-        .min(12, ts('inputs.password.errors.minLength'))
-        .regex(/[a-z]/, ts('inputs.password.errors.lowercase'))
-        .regex(/[A-Z]/, ts('inputs.password.errors.uppercase'))
-        .regex(/[0-9]/, ts('inputs.password.errors.number'))
-        .regex(/[^A-Za-z0-9]/, ts('inputs.password.errors.symbol')),
+      password: createPasswordValidation({
+        minLength: ts('inputs.password.errors.minLength'),
+        lowercase: ts('inputs.password.errors.lowercase'),
+        uppercase: ts('inputs.password.errors.uppercase'),
+        number: ts('inputs.password.errors.number'),
+        symbol: ts('inputs.password.errors.symbol'),
+      }),
       confirmPassword: z.string(ts('inputs.confirmPassword.error')),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -70,39 +68,32 @@ export const useResetPassword = () => {
 
     loading.value = true;
 
-    const requestBody: ResetPasswordRequestDto = {
-      token: token.value,
-      password: payload.data.password,
-    };
+    try {
+      await authRepo.resetPassword({
+        token: token.value,
+        password: payload.data.password,
+      });
+      submitted.value = true;
+    } catch (error: unknown) {
+      const err = error as {
+        data?: ApiErrorResponse;
+        response?: { _data?: ApiErrorResponse };
+      };
+      const errorData = err?.response?._data || err?.data;
 
-    const { status } = await useAPI<ResetPasswordResponseDto>(
-      '/iam/reset-password',
-      {
-        method: 'POST',
-        body: JSON.stringify(requestBody),
-        cache: 'no-cache',
-        onResponseError({ response }) {
-          const error = response._data as ApiErrorResponse | undefined;
+      if (
+        errorData?.code === ApiErrorCode.INVALID_RESET_TOKEN ||
+        errorData?.code === ApiErrorCode.RESET_TOKEN_NOT_FOUND ||
+        errorData?.code === ApiErrorCode.RESET_TOKEN_EXPIRED
+      ) {
+        invalidToken.value = true;
+        return;
+      }
 
-          if (
-            error?.code === ApiErrorCode.INVALID_RESET_TOKEN ||
-            error?.code === ApiErrorCode.RESET_TOKEN_NOT_FOUND ||
-            error?.code === ApiErrorCode.RESET_TOKEN_EXPIRED
-          ) {
-            invalidToken.value = true;
-            return;
-          }
-
-          // Any other failure (5xx, network, or an unmapped server code) shows
-          // the generic message. Reset password has no per-code copy, so never
-          // pass a raw code to the translator or it would render the key itself.
-          notifyError(tsE('fallback'));
-        },
-      },
-    );
-
-    if (status.value === 'success') submitted.value = true;
-    loading.value = false;
+      notifyError(tsE('fallback'));
+    } finally {
+      loading.value = false;
+    }
   };
 
   return {

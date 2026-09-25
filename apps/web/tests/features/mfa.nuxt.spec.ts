@@ -3,20 +3,25 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useMfa } from '../../app/features/auth/pages/mfa/mfa.composable';
 
 const {
-  mockUseAPI,
+  mockVerify,
+  mockVerifyBackupCode,
   mockRouterPush,
   mockFetchSession,
   mockNotifyError,
   mockRoute,
 } = vi.hoisted(() => ({
-  mockUseAPI: vi.fn(),
+  mockVerify: vi.fn(),
+  mockVerifyBackupCode: vi.fn(),
   mockRouterPush: vi.fn(),
   mockFetchSession: vi.fn(),
   mockNotifyError: vi.fn(),
   mockRoute: { query: { token: 'valid-mfa-token' } as Record<string, any> },
 }));
 
-mockNuxtImport('useAPI', () => mockUseAPI);
+mockNuxtImport('useMfaRepository', () => () => ({
+  verify: mockVerify,
+  verifyBackupCode: mockVerifyBackupCode,
+}));
 mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
   ts: (key: string) => key,
@@ -50,7 +55,8 @@ describe('useMfa Composable (TOTP & Backup Codes)', () => {
 
     expect(mockNotifyError).toHaveBeenCalled();
     expect(mockRouterPush).toHaveBeenCalledWith('/login');
-    expect(mockUseAPI).not.toHaveBeenCalled();
+    expect(mockVerify).not.toHaveBeenCalled();
+    expect(mockVerifyBackupCode).not.toHaveBeenCalled();
   });
 
   it('should prevent submission when code is empty', async () => {
@@ -60,37 +66,28 @@ describe('useMfa Composable (TOTP & Backup Codes)', () => {
     await onSubmit();
 
     expect(mockNotifyError).toHaveBeenCalled();
-    expect(mockUseAPI).not.toHaveBeenCalled();
+    expect(mockVerify).not.toHaveBeenCalled();
+    expect(mockVerifyBackupCode).not.toHaveBeenCalled();
   });
 
   it('should verify TOTP code and redirect to /dashboard on success', async () => {
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
-    });
+    mockVerify.mockResolvedValueOnce({ message: 'Verified' });
 
     const { onSubmit, code } = useMfa();
     code.value = '123456';
 
     await onSubmit();
 
-    expect(mockUseAPI).toHaveBeenCalledWith(
-      '/iam/mfa/verify',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({
-          mfaToken: 'valid-mfa-token',
-          code: '123456',
-        }),
-      }),
-    );
+    expect(mockVerify).toHaveBeenCalledWith({
+      mfaToken: 'valid-mfa-token',
+      code: '123456',
+    });
     expect(mockFetchSession).toHaveBeenCalled();
     expect(mockRouterPush).toHaveBeenCalledWith('/dashboard');
   });
 
   it('should toggle between TOTP and backup code mode and use backup endpoint', async () => {
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
-    });
+    mockVerifyBackupCode.mockResolvedValueOnce({ message: 'Verified' });
 
     const { onSubmit, toggleBackupCode, useBackupCode, code } = useMfa();
     toggleBackupCode();
@@ -99,16 +96,10 @@ describe('useMfa Composable (TOTP & Backup Codes)', () => {
     code.value = 'BACKUP-CODE-1';
     await onSubmit();
 
-    expect(mockUseAPI).toHaveBeenCalledWith(
-      '/iam/mfa/verify-backup-code',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({
-          mfaToken: 'valid-mfa-token',
-          code: 'BACKUP-CODE-1',
-        }),
-      }),
-    );
+    expect(mockVerifyBackupCode).toHaveBeenCalledWith({
+      mfaToken: 'valid-mfa-token',
+      code: 'BACKUP-CODE-1',
+    });
     expect(mockFetchSession).toHaveBeenCalled();
     expect(mockRouterPush).toHaveBeenCalledWith('/dashboard');
   });

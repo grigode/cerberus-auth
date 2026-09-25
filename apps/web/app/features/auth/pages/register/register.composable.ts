@@ -1,13 +1,16 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
-import type {
-  RegisterUserRequestDto,
-  RegisterUserResponseDto,
-} from '~/types/api-contracts';
+import { useAuthRepository } from '~/composables/use-repositories.composable';
+import {
+  createEmailValidation,
+  createNameValidation,
+  createPasswordValidation,
+} from '~/utils/validators';
 
 export const useRegister = () => {
   const router = useRouter();
   const loading = ref(false);
+  const authRepo = useAuthRepository();
 
   const { ts } = useI18nShorter('auth.register.form');
   const { ts: tsE } = useI18nShorter('auth.register.errors');
@@ -66,22 +69,22 @@ export const useRegister = () => {
 
   const schema = z
     .object({
-      firstName: z
-        .string(ts('inputs.firstName.errors.required'))
-        .min(1, ts('inputs.firstName.errors.required'))
-        .max(50, ts('inputs.firstName.errors.maxLength')),
-      lastName: z
-        .string(ts('inputs.lastName.errors.required'))
-        .min(1, ts('inputs.lastName.errors.required'))
-        .max(50, ts('inputs.lastName.errors.maxLength')),
-      email: z.email(ts('inputs.email.error')),
-      password: z
-        .string(ts('inputs.password.errors.minLength'))
-        .min(12, ts('inputs.password.errors.minLength'))
-        .regex(/[a-z]/, ts('inputs.password.errors.lowercase'))
-        .regex(/[A-Z]/, ts('inputs.password.errors.uppercase'))
-        .regex(/[0-9]/, ts('inputs.password.errors.number'))
-        .regex(/[^A-Za-z0-9]/, ts('inputs.password.errors.symbol')),
+      firstName: createNameValidation({
+        required: ts('inputs.firstName.errors.required'),
+        maxLength: ts('inputs.firstName.errors.maxLength'),
+      }),
+      lastName: createNameValidation({
+        required: ts('inputs.lastName.errors.required'),
+        maxLength: ts('inputs.lastName.errors.maxLength'),
+      }),
+      email: createEmailValidation(ts('inputs.email.error')),
+      password: createPasswordValidation({
+        minLength: ts('inputs.password.errors.minLength'),
+        lowercase: ts('inputs.password.errors.lowercase'),
+        uppercase: ts('inputs.password.errors.uppercase'),
+        number: ts('inputs.password.errors.number'),
+        symbol: ts('inputs.password.errors.symbol'),
+      }),
       confirmPassword: z.string(ts('inputs.confirmPassword.error')),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -93,26 +96,19 @@ export const useRegister = () => {
 
   const onSubmit = async (payload: FormSubmitEvent<Schema>) => {
     loading.value = true;
-
-    const requestBody: RegisterUserRequestDto = {
-      firstName: payload.data.firstName,
-      lastName: payload.data.lastName,
-      email: payload.data.email,
-      password: payload.data.password,
-    };
-
-    const { status } = await useAPI<RegisterUserResponseDto>(
-      '/iam/register-user',
-      {
-        method: 'POST',
-        body: JSON.stringify(requestBody),
-        cache: 'no-cache',
-        onResponseError: ({ response }) => notifyApiError(response, tsE),
-      },
-    );
-
-    if (status.value === 'success') router.push('/confirm-email-pending');
-    loading.value = false;
+    try {
+      await authRepo.register({
+        firstName: payload.data.firstName,
+        lastName: payload.data.lastName,
+        email: payload.data.email,
+        password: payload.data.password,
+      });
+      router.push('/confirm-email-pending');
+    } catch (err: unknown) {
+      notifyApiError(err, tsE);
+    } finally {
+      loading.value = false;
+    }
   };
 
   return {

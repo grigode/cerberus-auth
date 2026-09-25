@@ -2,12 +2,14 @@ import { mockNuxtImport } from '@nuxt/test-utils/runtime';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useRegister } from '../../app/features/auth/pages/register/register.composable';
 
-const { mockUseAPI, mockRouterPush } = vi.hoisted(() => ({
-  mockUseAPI: vi.fn(),
+const { mockRegister, mockRouterPush } = vi.hoisted(() => ({
+  mockRegister: vi.fn(),
   mockRouterPush: vi.fn(),
 }));
 
-mockNuxtImport('useAPI', () => mockUseAPI);
+mockNuxtImport('useAuthRepository', () => () => ({
+  register: mockRegister,
+}));
 mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
   ts: (key: string) => key,
@@ -82,8 +84,9 @@ describe('useRegister Composable & Password Policy', () => {
   });
 
   it('should call register-user and redirect to /confirm-email-pending on success', async () => {
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
+    mockRegister.mockResolvedValueOnce({
+      message: 'User registered',
+      id: 'usr-new',
     });
 
     const { onSubmit } = useRegister();
@@ -97,12 +100,12 @@ describe('useRegister Composable & Password Policy', () => {
       },
     } as any);
 
-    expect(mockUseAPI).toHaveBeenCalledWith(
-      '/iam/register-user',
-      expect.objectContaining({
-        method: 'POST',
-      }),
-    );
+    expect(mockRegister).toHaveBeenCalledWith({
+      firstName: 'Alice',
+      lastName: 'Smith',
+      email: 'alice@example.com',
+      password: 'ValidPassword123!',
+    });
     expect(mockRouterPush).toHaveBeenCalledWith('/confirm-email-pending');
   });
 });

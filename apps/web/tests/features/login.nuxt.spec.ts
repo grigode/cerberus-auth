@@ -3,14 +3,16 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useLogin } from '../../app/features/auth/pages/login/login.composable';
 
 const {
-  mockUseAPI,
+  mockLogin,
+  mockResendConfirmEmail,
   mockRouterPush,
   mockFetchSession,
   mockNotifyApiError,
   mockNotifySuccess,
   mockRoute,
 } = vi.hoisted(() => ({
-  mockUseAPI: vi.fn(),
+  mockLogin: vi.fn(),
+  mockResendConfirmEmail: vi.fn(),
   mockRouterPush: vi.fn(),
   mockFetchSession: vi.fn(),
   mockNotifyApiError: vi.fn(),
@@ -18,7 +20,10 @@ const {
   mockRoute: { query: {} },
 }));
 
-mockNuxtImport('useAPI', () => mockUseAPI);
+mockNuxtImport('useAuthRepository', () => () => ({
+  login: mockLogin,
+  resendConfirmEmail: mockResendConfirmEmail,
+}));
 mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
   ts: (key: string) => key,
@@ -65,9 +70,8 @@ describe('useLogin Composable & Schema Validation', () => {
   });
 
   it('should redirect to dashboard and fetch session on successful login', async () => {
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
-      data: { value: { message: 'Logged in successfully' } },
+    mockLogin.mockResolvedValueOnce({
+      message: 'Logged in successfully',
     });
 
     const { onSubmit } = useLogin();
@@ -75,26 +79,19 @@ describe('useLogin Composable & Schema Validation', () => {
       data: { email: 'alice@example.com', password: 'Password123!' },
     } as any);
 
-    expect(mockUseAPI).toHaveBeenCalledWith(
-      '/iam/login',
-      expect.objectContaining({
-        method: 'POST',
-      }),
-    );
+    expect(mockLogin).toHaveBeenCalledWith({
+      email: 'alice@example.com',
+      password: 'Password123!',
+    });
     expect(mockFetchSession).toHaveBeenCalled();
     expect(mockRouterPush).toHaveBeenCalledWith('/dashboard');
   });
 
   it('should redirect to /auth/mfa when mfaRequired is returned', async () => {
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
-      data: {
-        value: {
-          message: 'MFA required',
-          mfaRequired: true,
-          mfaToken: 'temp-mfa-jwt',
-        },
-      },
+    mockLogin.mockResolvedValueOnce({
+      message: 'MFA required',
+      mfaRequired: true,
+      mfaToken: 'temp-mfa-jwt',
     });
 
     const { onSubmit } = useLogin();
@@ -110,16 +107,8 @@ describe('useLogin Composable & Schema Validation', () => {
   });
 
   it('should show resend verification button when EMAIL_NOT_VERIFIED is returned', async () => {
-    mockUseAPI.mockImplementationOnce(
-      async (_url: string, opts: { onResponseError: (ctx: any) => void }) => {
-        mockNotifyApiError.mockReturnValueOnce('EMAIL_NOT_VERIFIED');
-        opts.onResponseError({ response: { status: 403 } });
-        return {
-          status: { value: 'error' },
-          data: { value: null },
-        };
-      },
-    );
+    mockLogin.mockRejectedValueOnce(new Error('Unverified'));
+    mockNotifyApiError.mockReturnValueOnce('EMAIL_NOT_VERIFIED');
 
     const { onSubmit, showAskOtheConfirmTokenButton } = useLogin();
     await onSubmit({
@@ -130,14 +119,8 @@ describe('useLogin Composable & Schema Validation', () => {
   });
 
   it('should successfully resend confirmation email using remembered lastEmail', async () => {
-    // First simulate failed login to remember lastEmail
-    mockUseAPI.mockImplementationOnce(
-      async (_url: string, opts: { onResponseError: (ctx: any) => void }) => {
-        mockNotifyApiError.mockReturnValueOnce('EMAIL_NOT_VERIFIED');
-        opts.onResponseError({ response: { status: 403 } });
-        return { status: { value: 'error' }, data: { value: null } };
-      },
-    );
+    mockLogin.mockRejectedValueOnce(new Error('Unverified'));
+    mockNotifyApiError.mockReturnValueOnce('EMAIL_NOT_VERIFIED');
 
     const { onSubmit, resendConfirmation, showAskOtheConfirmTokenButton } =
       useLogin();
@@ -145,19 +128,15 @@ describe('useLogin Composable & Schema Validation', () => {
       data: { email: 'unverified@example.com', password: 'Password123!' },
     } as any);
 
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
+    mockResendConfirmEmail.mockResolvedValueOnce({
+      message: 'Email sent',
     });
 
     await resendConfirmation();
 
-    expect(mockUseAPI).toHaveBeenLastCalledWith(
-      '/iam/resend-confirm-email',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({ email: 'unverified@example.com' }),
-      }),
-    );
+    expect(mockResendConfirmEmail).toHaveBeenCalledWith({
+      email: 'unverified@example.com',
+    });
     expect(showAskOtheConfirmTokenButton.value).toBe(false);
   });
 });

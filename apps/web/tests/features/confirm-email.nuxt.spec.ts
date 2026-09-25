@@ -3,15 +3,24 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { useConfirmEmail } from '../../app/features/auth/pages/confirm-email/confirm-email.composable';
 
-const { mockUseAPI, mockUseRoute, mockNotifySuccess } = vi.hoisted(() => ({
-  mockUseAPI: vi.fn(),
+const {
+  mockConfirmEmail,
+  mockResendConfirmEmail,
+  mockUseRoute,
+  mockNotifySuccess,
+} = vi.hoisted(() => ({
+  mockConfirmEmail: vi.fn(),
+  mockResendConfirmEmail: vi.fn(),
   mockUseRoute: vi.fn(() => ({
     query: { token: 'valid-test-token' },
   })),
   mockNotifySuccess: vi.fn(),
 }));
 
-mockNuxtImport('useAPI', () => mockUseAPI);
+mockNuxtImport('useAuthRepository', () => () => ({
+  confirmEmail: mockConfirmEmail,
+  resendConfirmEmail: mockResendConfirmEmail,
+}));
 mockNuxtImport('useRoute', () => mockUseRoute);
 mockNuxtImport('useI18nShorter', () => () => ({
   t: (key: string) => key,
@@ -39,9 +48,7 @@ describe('useConfirmEmail Composable', () => {
   });
 
   it('should call resend endpoint on resend submit', async () => {
-    mockUseAPI.mockResolvedValueOnce({
-      status: { value: 'success' },
-    });
+    mockResendConfirmEmail.mockResolvedValueOnce({ message: 'Success' });
 
     const { onResend, resending } = useConfirmEmail();
     expect(resending.value).toBe(false);
@@ -52,13 +59,9 @@ describe('useConfirmEmail Composable', () => {
 
     await onResend(submitEvent);
 
-    expect(mockUseAPI).toHaveBeenCalledWith(
-      '/iam/resend-confirm-email',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({ email: 'user@example.com' }),
-      }),
-    );
+    expect(mockResendConfirmEmail).toHaveBeenCalledWith({
+      email: 'user@example.com',
+    });
     expect(mockNotifySuccess).toHaveBeenCalled();
     expect(resending.value).toBe(false);
   });

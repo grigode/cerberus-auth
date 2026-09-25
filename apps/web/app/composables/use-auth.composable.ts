@@ -1,10 +1,12 @@
 import type { SessionUser } from '~/types/session-user';
+import { useApiClient } from './use-api';
 
 export const useAuth = () => {
   // useState keeps the authenticated user in Nuxt's shared, SSR-friendly
   // state so it survives across pages (and hydration) within a load.
   const user = useState<SessionUser | null>('auth.user', () => null);
   const isAuthenticated = computed(() => !!user.value);
+  const api = useApiClient();
 
   const setUser = (value: SessionUser | null) => {
     user.value = value;
@@ -15,75 +17,32 @@ export const useAuth = () => {
   };
 
   const refreshSession = async (): Promise<boolean> => {
-    const config = useRuntimeConfig();
     try {
-      await $fetch('/iam/refresh-token', {
-        baseURL: config.public.apiBaseUrl,
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      });
+      await api('/iam/refresh-token', { method: 'POST' });
       return true;
     } catch {
       return false;
     }
   };
 
-  // Restores the authenticated state from the backend using the session
-  // cookie. If expired, attempts a silent refresh before failing.
-  //
-  // Uses $fetch (not useAPI/useFetch) on purpose: this is an imperative,
-  // on-demand call that must hit the backend every time (e.g. again right
-  // after login). useFetch caches by key and would return the stale result.
+  // Restores authenticated state from the backend. The API client
+  // automatically handles mutex silent token refresh if 401 occurs.
   const fetchSession = async () => {
-    const config = useRuntimeConfig();
-
     try {
-      const data = await $fetch<SessionUser>('/iam/me', {
-        baseURL: config.public.apiBaseUrl,
-        credentials: 'include',
-        method: 'GET',
-      });
-
+      const data = await api<SessionUser>('/iam/me', { method: 'GET' });
       setUser(data);
     } catch {
-      const refreshed = await refreshSession();
-      if (refreshed) {
-        try {
-          const data = await $fetch<SessionUser>('/iam/me', {
-            baseURL: config.public.apiBaseUrl,
-            credentials: 'include',
-            method: 'GET',
-          });
-          setUser(data);
-          return;
-        } catch {
-          // fall through to clear
-        }
-      }
       clear();
     }
   };
 
   // Ends the session: tells the backend to invalidate it, clears the local
-  // state, and redirects to login. The server call is best-effort — even if
-  // it fails we still clear locally so the user is logged out on this device.
+  // state, and redirects to login.
   const logout = async () => {
-    const config = useRuntimeConfig();
-
     try {
-      await $fetch('/iam/logout', {
-        baseURL: config.public.apiBaseUrl,
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      });
+      await api('/iam/logout', { method: 'POST' });
     } catch {
-      // ignore — fall through to clearing local state regardless
+      // ignore
     } finally {
       clear();
       await navigateTo('/login');
@@ -92,17 +51,8 @@ export const useAuth = () => {
 
   // Revokes all sessions on all devices for the current user
   const logoutAll = async () => {
-    const config = useRuntimeConfig();
-
     try {
-      await $fetch('/iam/auth/logout-all', {
-        baseURL: config.public.apiBaseUrl,
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      });
+      await api('/iam/auth/logout-all', { method: 'POST' });
     } catch {
       // ignore
     } finally {

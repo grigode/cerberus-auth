@@ -1,5 +1,9 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
+import type {
+  ForgotPasswordRequestDto,
+  ForgotPasswordResponseDto,
+} from '~/types/api-contracts';
 
 export const useForgotPassword = () => {
   const loading = ref(false);
@@ -30,12 +34,19 @@ export const useForgotPassword = () => {
   const onSubmit = async (payload: FormSubmitEvent<Schema>) => {
     loading.value = true;
 
-    const { status } = await useAPI('/iam/forgot-password', {
-      method: 'POST',
-      body: JSON.stringify({ email: payload.data.email }),
-      cache: 'no-cache',
-      onResponseError: ({ response }) => notifyApiError(response, tsE),
-    });
+    const requestBody: ForgotPasswordRequestDto = {
+      email: payload.data.email,
+    };
+
+    const { status } = await useAPI<ForgotPasswordResponseDto>(
+      '/iam/forgot-password',
+      {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        cache: 'no-cache',
+        onResponseError: ({ response }) => notifyApiError(response, tsE),
+      },
+    );
 
     if (status.value === 'success') submitted.value = true;
     loading.value = false;

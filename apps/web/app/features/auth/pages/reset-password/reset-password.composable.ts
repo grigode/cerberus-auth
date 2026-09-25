@@ -1,6 +1,11 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
-import type { ErrorResponse } from '~/types/error-response';
+import {
+  ApiErrorCode,
+  type ResetPasswordRequestDto,
+  type ResetPasswordResponseDto,
+  type ApiErrorResponse,
+} from '~/types/contracts';
 
 export const useResetPassword = () => {
   const route = useRoute();
@@ -65,31 +70,36 @@ export const useResetPassword = () => {
 
     loading.value = true;
 
-    const { status } = await useAPI('/iam/reset-password', {
-      method: 'POST',
-      body: JSON.stringify({
-        token: token.value,
-        password: payload.data.password,
-      }),
-      cache: 'no-cache',
-      onResponseError({ response }) {
-        const error = response._data as ErrorResponse | undefined;
+    const requestBody: ResetPasswordRequestDto = {
+      token: token.value,
+      password: payload.data.password,
+    };
 
-        if (
-          error?.code === 'INVALID_RESET_TOKEN' ||
-          error?.code === 'RESET_TOKEN_NOT_FOUND' ||
-          error?.code === 'RESET_TOKEN_EXPIRED'
-        ) {
-          invalidToken.value = true;
-          return;
-        }
+    const { status } = await useAPI<ResetPasswordResponseDto>(
+      '/iam/reset-password',
+      {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        cache: 'no-cache',
+        onResponseError({ response }) {
+          const error = response._data as ApiErrorResponse | undefined;
 
-        // Any other failure (5xx, network, or an unmapped server code) shows
-        // the generic message. Reset password has no per-code copy, so never
-        // pass a raw code to the translator or it would render the key itself.
-        notifyError(tsE('fallback'));
+          if (
+            error?.code === ApiErrorCode.INVALID_RESET_TOKEN ||
+            error?.code === ApiErrorCode.RESET_TOKEN_NOT_FOUND ||
+            error?.code === ApiErrorCode.RESET_TOKEN_EXPIRED
+          ) {
+            invalidToken.value = true;
+            return;
+          }
+
+          // Any other failure (5xx, network, or an unmapped server code) shows
+          // the generic message. Reset password has no per-code copy, so never
+          // pass a raw code to the translator or it would render the key itself.
+          notifyError(tsE('fallback'));
+        },
       },
-    });
+    );
 
     if (status.value === 'success') submitted.value = true;
     loading.value = false;

@@ -1,5 +1,9 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
+import type {
+  RegisterUserRequestDto,
+  RegisterUserResponseDto,
+} from '~/types/api-contracts';
 
 export const useRegister = () => {
   const router = useRouter();
@@ -90,17 +94,22 @@ export const useRegister = () => {
   const onSubmit = async (payload: FormSubmitEvent<Schema>) => {
     loading.value = true;
 
-    const { status } = await useAPI('/iam/register-user', {
-      method: 'POST',
-      body: JSON.stringify({
-        firstName: payload.data.firstName,
-        lastName: payload.data.lastName,
-        email: payload.data.email,
-        password: payload.data.password,
-      }),
-      cache: 'no-cache',
-      onResponseError: ({ response }) => notifyApiError(response, tsE),
-    });
+    const requestBody: RegisterUserRequestDto = {
+      firstName: payload.data.firstName,
+      lastName: payload.data.lastName,
+      email: payload.data.email,
+      password: payload.data.password,
+    };
+
+    const { status } = await useAPI<RegisterUserResponseDto>(
+      '/iam/register-user',
+      {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        cache: 'no-cache',
+        onResponseError: ({ response }) => notifyApiError(response, tsE),
+      },
+    );
 
     if (status.value === 'success') router.push('/confirm-email-pending');
     loading.value = false;

@@ -1,5 +1,6 @@
 import * as z from 'zod';
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui';
+import { ApiErrorCode, type EmailLoginResponseDto } from '~/types/contracts';
 
 export const useLogin = () => {
   const route = useRoute();
@@ -61,20 +62,14 @@ export const useLogin = () => {
     lastEmail.value = payload.data.email;
     loading.value = true;
 
-    interface LoginResponse {
-      message: string;
-      mfaRequired?: boolean;
-      mfaToken?: string;
-    }
-
-    const { status, data } = await useAPI<LoginResponse>('/iam/login', {
+    const { status, data } = await useAPI<EmailLoginResponseDto>('/iam/login', {
       method: 'POST',
       body: JSON.stringify(payload.data),
       cache: 'no-cache',
       onResponseError({ response }) {
         const code = notifyApiError(response, tsE);
 
-        if (code === 'EMAIL_NOT_VERIFIED')
+        if (code === ApiErrorCode.EMAIL_NOT_VERIFIED)
           showAskOtheConfirmTokenButton.value = true;
       },
     });

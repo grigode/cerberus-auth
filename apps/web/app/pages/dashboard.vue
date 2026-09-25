@@ -2,6 +2,14 @@
 import { useAuth } from '~/composables/use-auth.composable';
 import { useAuthFeedback } from '~/composables/use-auth-feedback.composable';
 import { useApiClient } from '~/composables/use-api';
+import type {
+  MfaSetupResponseDto,
+  MfaEnableRequestDto,
+  MfaEnableResponseDto,
+  MfaDisableRequestDto,
+  GenerateBackupCodesResponseDto,
+  ChangePasswordRequestDto,
+} from '~/types/api-contracts';
 
 const { user, fetchSession, logout, logoutAll } = useAuth();
 const { notifySuccess, notifyError, notifyApiError } = useAuthFeedback();
@@ -21,7 +29,7 @@ const isDisableModalOpen = ref(false);
 const isBackupCodesModalOpen = ref(false);
 
 const setupLoading = ref(false);
-const setupData = ref<{ secret: string; qrCodeUrl: string } | null>(null);
+const setupData = ref<MfaSetupResponseDto | null>(null);
 const verificationCode = ref('');
 const disableCode = ref('');
 const actionLoading = ref(false);
@@ -36,12 +44,9 @@ const openSetupMfa = async () => {
   isSetupModalOpen.value = true;
 
   try {
-    const data = await api<{ secret: string; qrCodeUrl: string }>(
-      '/iam/mfa/setup',
-      {
-        method: 'POST',
-      },
-    );
+    const data = await api<MfaSetupResponseDto>('/iam/mfa/setup', {
+      method: 'POST',
+    });
     setupData.value = data;
   } catch (err: unknown) {
     notifyError('Could not initialize 2FA setup. Please try again.');
@@ -57,12 +62,13 @@ const confirmEnableMfa = async () => {
   actionLoading.value = true;
 
   try {
-    await api('/iam/mfa/enable', {
+    const enableBody: MfaEnableRequestDto = {
+      secret: setupData.value.secret,
+      code: verificationCode.value.trim(),
+    };
+    await api<MfaEnableResponseDto>('/iam/mfa/enable', {
       method: 'POST',
-      body: {
-        secret: setupData.value.secret,
-        code: verificationCode.value.trim(),
-      },
+      body: enableBody,
     });
 
     notifySuccess('Two-Factor Authentication enabled successfully!');
@@ -86,11 +92,12 @@ const confirmDisableMfa = async () => {
   actionLoading.value = true;
 
   try {
+    const disableBody: MfaDisableRequestDto = {
+      code: disableCode.value.trim(),
+    };
     await api('/iam/mfa/disable', {
       method: 'POST',
-      body: {
-        code: disableCode.value.trim(),
-      },
+      body: disableBody,
     });
 
     notifySuccess('Two-Factor Authentication has been disabled.');
@@ -108,7 +115,7 @@ const confirmDisableMfa = async () => {
 const regenerateBackupCodes = async (notify = true) => {
   actionLoading.value = true;
   try {
-    const res = await api<{ backupCodes: string[] }>(
+    const res = await api<GenerateBackupCodesResponseDto>(
       '/iam/mfa/backup-codes/regenerate',
       {
         method: 'POST',
@@ -162,12 +169,13 @@ const onChangePassword = async () => {
 
   passwordLoading.value = true;
   try {
+    const passwordBody: ChangePasswordRequestDto = {
+      currentPassword: currentPassword.value,
+      newPassword: newPassword.value,
+    };
     await api('/iam/auth/change-password', {
       method: 'POST',
-      body: {
-        currentPassword: currentPassword.value,
-        newPassword: newPassword.value,
-      },
+      body: passwordBody,
     });
 
     notifySuccess('Password updated successfully. Other sessions revoked.');

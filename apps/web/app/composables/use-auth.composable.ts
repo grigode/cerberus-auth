@@ -1,4 +1,5 @@
 import type { SessionUser } from '~/types/session-user';
+import type { UserProfileResponseDto } from '~/types/api-contracts';
 import { useApiClient } from './use-api';
 
 export const useAuth = () => {
@@ -29,8 +30,19 @@ export const useAuth = () => {
   // automatically handles mutex silent token refresh if 401 occurs.
   const fetchSession = async () => {
     try {
-      const data = await api<SessionUser>('/iam/me', { method: 'GET' });
-      setUser(data);
+      const data = await api<UserProfileResponseDto>('/iam/me', {
+        method: 'GET',
+      });
+      setUser({
+        id: data.id,
+        email: data.email,
+        firstName: data.profile?.firstName || '',
+        lastName: data.profile?.lastName || '',
+        role: data.role,
+        isMfaEnabled: data.isMfaEnabled,
+        avatarUrl: data.profile?.avatarUrl,
+        language: data.profile?.language,
+      });
     } catch {
       clear();
     }

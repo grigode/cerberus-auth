@@ -1,6 +1,10 @@
 import { useAuth } from '~/composables/use-auth.composable';
 import { useAuthFeedback } from '~/composables/use-auth-feedback.composable';
 import { useI18nShorter } from '~/composables/use-i18n-shorter.composable';
+import type {
+  MfaVerifyRequestDto,
+  MfaVerifyBackupCodeRequestDto,
+} from '~/types/api-contracts';
 
 export const useMfa = () => {
   const route = useRoute();
@@ -48,12 +52,14 @@ export const useMfa = () => {
       ? '/iam/mfa/verify-backup-code'
       : '/iam/mfa/verify';
 
+    const requestBody: MfaVerifyRequestDto | MfaVerifyBackupCodeRequestDto = {
+      mfaToken: mfaToken.value,
+      code: code.value.trim(),
+    };
+
     const { status } = await useAPI(endpoint, {
       method: 'POST',
-      body: JSON.stringify({
-        mfaToken: mfaToken.value,
-        code: code.value.trim(),
-      }),
+      body: JSON.stringify(requestBody),
       cache: 'no-cache',
       onResponseError: ({ response }) => notifyApiError(response, tsE),
     });

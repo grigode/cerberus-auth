@@ -1,6 +1,12 @@
 import * as z from 'zod';
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { ErrorResponse } from '~/types/error-response';
+import {
+  ApiErrorCode,
+  type ConfirmEmailResponseDto,
+  type ResendConfirmEmailRequestDto,
+  type ResendConfirmEmailResponseDto,
+  type ApiErrorResponse,
+} from '~/types/contracts';
 
 export type ConfirmEmailStatus = 'verifying' | 'success' | 'expired' | 'error';
 
@@ -28,21 +34,24 @@ export const useConfirmEmail = () => {
 
     status.value = 'verifying';
 
-    const { status: reqStatus } = await useAPI('/iam/confirm-email', {
-      method: 'GET',
-      query: { token: token.value },
-      cache: 'no-cache',
-      onResponseError({ response }) {
-        const error = response._data as ErrorResponse | undefined;
+    const { status: reqStatus } = await useAPI<ConfirmEmailResponseDto>(
+      '/iam/confirm-email',
+      {
+        method: 'GET',
+        query: { token: token.value },
+        cache: 'no-cache',
+        onResponseError({ response }) {
+          const error = response._data as ApiErrorResponse | undefined;
 
-        if (
-          error?.code === 'INVALID_CONFIRMATION_TOKEN' ||
-          error?.code === 'CONFIRMATION_TOKEN_NOT_FOUND'
-        ) {
-          status.value = 'expired';
-        }
+          if (
+            error?.code === ApiErrorCode.INVALID_CONFIRMATION_TOKEN ||
+            error?.code === ApiErrorCode.CONFIRMATION_TOKEN_NOT_FOUND
+          ) {
+            status.value = 'expired';
+          }
+        },
       },
-    });
+    );
 
     if (reqStatus.value === 'success') status.value = 'success';
     // Any failure not classified as expired above (network error, 5xx,
@@ -59,12 +68,19 @@ export const useConfirmEmail = () => {
   const onResend = async (payload: FormSubmitEvent<ResendSchema>) => {
     resending.value = true;
 
-    const { status: reqStatus } = await useAPI('/iam/resend-confirm-email', {
-      method: 'POST',
-      body: JSON.stringify({ email: payload.data.email }),
-      cache: 'no-cache',
-      onResponseError: ({ response }) => notifyApiError(response, tsE),
-    });
+    const requestBody: ResendConfirmEmailRequestDto = {
+      email: payload.data.email,
+    };
+
+    const { status: reqStatus } = await useAPI<ResendConfirmEmailResponseDto>(
+      '/iam/resend-confirm-email',
+      {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        cache: 'no-cache',
+        onResponseError: ({ response }) => notifyApiError(response, tsE),
+      },
+    );
 
     if (reqStatus.value === 'success') {
       notifySuccess(tsR('success'), 'i-lucide-mail-check');

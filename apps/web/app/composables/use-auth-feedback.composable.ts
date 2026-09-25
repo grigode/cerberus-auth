@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '~/types/error-response';
+import type { ApiErrorResponse, ApiErrorCode } from '~/types/api-contracts';
 
 // Centralizes the auth feedback toasts so every flow reports errors and
 // successes the same way — same colors and icons, and the same rule for
@@ -30,8 +30,8 @@ export const useAuthFeedback = () => {
   const notifyApiError = (
     response: { status: number; _data?: unknown },
     translate?: (key: string) => string,
-  ) => {
-    const error = response._data as ErrorResponse | undefined;
+  ): ApiErrorCode | string | undefined => {
+    const error = response._data as ApiErrorResponse | undefined;
 
     if (response.status >= 500) {
       notifyError(

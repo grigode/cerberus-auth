@@ -9,7 +9,10 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@nuxt/a11y": "1.0.0-alpha.1",
@@ -29,6 +32,11 @@
     "@golar/vue": "0.1.10",
     "@iconify-json/lucide": "1.2.111",
     "@iconify-json/simple-icons": "1.2.86",
-    "golar": "0.1.10"
+    "@nuxt/test-utils": "^4.3.2",
+    "@playwright/test": "^1.63.0",
+    "@vue/test-utils": "^2.5.1",
+    "golar": "0.1.10",
+    "happy-dom": "^20.14.5",
+    "vitest": "^5.0.1"
   }
 }

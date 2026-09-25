@@ -38,18 +38,34 @@ describe('useAuth composable', () => {
   });
 
   it('should fetch session and populate user on success', async () => {
-    const mockUser = {
+    const mockProfileResponse = {
       id: 'usr-1',
       email: 'test@example.com',
-      roles: ['USER'],
+      role: 'USER',
+      isEmailVerified: true,
+      isMfaEnabled: false,
+      profile: {
+        firstName: 'Alice',
+        lastName: 'Smith',
+      },
+      providers: ['EMAIL'],
     };
-    mockApi.mockResolvedValueOnce(mockUser);
+    mockApi.mockResolvedValueOnce(mockProfileResponse);
 
     const { user, isAuthenticated, fetchSession } = useAuth();
     await fetchSession();
 
     expect(mockApi).toHaveBeenCalledWith('/iam/me', { method: 'GET' });
-    expect(user.value).toEqual(mockUser);
+    expect(user.value).toEqual({
+      id: 'usr-1',
+      email: 'test@example.com',
+      firstName: 'Alice',
+      lastName: 'Smith',
+      role: 'USER',
+      isMfaEnabled: false,
+      avatarUrl: undefined,
+      language: undefined,
+    });
     expect(isAuthenticated.value).toBe(true);
   });
 

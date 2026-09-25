@@ -1,4 +1,11 @@
 import {
+  AppConfigService,
+  DEFAULT_THROTTLE_AUTH_LIMIT,
+  DEFAULT_THROTTLE_AUTH_TTL_MS,
+} from '@core/config';
+import { getCookieOptions } from '@core/shared-server';
+import type { Controller as BaseController } from '@core/shared-server';
+import {
   Controller,
   HttpCode,
   HttpStatus,
@@ -14,18 +21,11 @@ import {
 } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { getCookieOptions } from '@core/shared-server';
-import {
-  AppConfigService,
-  DEFAULT_THROTTLE_AUTH_LIMIT,
-  DEFAULT_THROTTLE_AUTH_TTL_MS,
-} from '@core/config';
 import { RotateSessionUseCase } from '../../../../application';
 import { InvalidRefreshTokenException } from '../../../../application/exceptions';
-import type { Controller as BaseController } from '@core/shared-server';
 
-import { RefreshTokenResponseDto } from './refresh-token-response.dto';
 import { Public } from '../../../http';
+import { RefreshTokenResponseDto } from './refresh-token-response.dto';
 
 @ApiTags('IAM - Authentication')
 @Public()
@@ -62,27 +62,34 @@ export class RefreshTokenController
   @Post('/refresh-token')
   @HttpCode(HttpStatus.OK)
   async handle(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    const defaultCookieOpts = getCookieOptions(this.appConfigService.IS_HTTPS);
     const refreshToken = req.cookies?.refresh_token;
     if (!refreshToken) {
+      res.clearCookie('access_token', defaultCookieOpts);
+      res.clearCookie('refresh_token', defaultCookieOpts);
       throw new InvalidRefreshTokenException();
     }
 
-    const session = await this.rotateSession.execute({ refreshToken });
+    try {
+      const session = await this.rotateSession.execute({ refreshToken });
 
-    const defaultCookieOpts = getCookieOptions(this.appConfigService.IS_HTTPS);
+      res.setCookie('access_token', session.accessToken, {
+        ...defaultCookieOpts,
+        maxAge: 60 * 15,
+      });
 
-    res.setCookie('access_token', session.accessToken, {
-      ...defaultCookieOpts,
-      maxAge: 60 * 15,
-    });
+      res.setCookie('refresh_token', session.refreshToken, {
+        ...defaultCookieOpts,
+        maxAge: 60 * 60 * 24 * 7,
+      });
 
-    res.setCookie('refresh_token', session.refreshToken, {
-      ...defaultCookieOpts,
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    res.status(HttpStatus.OK).send({
-      message: 'Tokens rotated successfully',
-    });
+      res.status(HttpStatus.OK).send({
+        message: 'Tokens rotated successfully',
+      });
+    } catch (error) {
+      res.clearCookie('access_token', defaultCookieOpts);
+      res.clearCookie('refresh_token', defaultCookieOpts);
+      throw error;
+    }
   }
 }

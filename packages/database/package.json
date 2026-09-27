@@ -19,7 +19,7 @@
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/seeders/data-source.ts",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/seeders/data-source.ts",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
-    "seed": "typeorm-ts-node-commonjs src/seeders/run-seeder.ts"
+    "seed": "ts-node src/seeders/run-seeder.ts"
   },
   "dependencies": {
     "@core/config": "workspace:*",
@@ -35,6 +35,8 @@
   "devDependencies": {
     "@configs/typescript": "workspace:*",
     "@types/node": "catalog:",
+    "dotenv": "catalog:",
+    "ts-node": "catalog:",
     "typescript": "catalog:"
   }
 }

@@ -6,7 +6,6 @@ export const en = {
   },
   identity: {
     title: 'User Identity',
-    userId: 'User ID',
     email: 'Email',
     fullName: 'Full Name',
     role: 'Role',

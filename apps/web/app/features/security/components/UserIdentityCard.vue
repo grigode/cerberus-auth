@@ -18,10 +18,6 @@ const fullName = computed(() =>
 
     <div class="flex flex-col gap-3 text-sm">
       <div class="flex justify-between py-1.5 border-b border-default">
-        <span class="text-muted">{{ ts('userId') }}</span>
-        <span class="font-mono text-xs">{{ user?.id }}</span>
-      </div>
-      <div class="flex justify-between py-1.5 border-b border-default">
         <span class="text-muted">{{ ts('email') }}</span>
         <span class="font-medium">{{ user?.email }}</span>
       </div>

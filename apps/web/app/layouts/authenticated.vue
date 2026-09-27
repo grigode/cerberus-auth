@@ -2,6 +2,7 @@
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
 
 import Logo from '~/assets/icons/logo.vue';
+import NotificationCenter from '~/features/notifications/components/NotificationCenter.vue';
 
 const { ts } = useI18nShorter('core.layout');
 const { user, logout } = useAuth();
@@ -123,7 +124,13 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
           :ui="{
             root: 'h-16',
           }"
-        />
+        >
+          <template #right>
+            <div class="flex items-center gap-2">
+              <NotificationCenter />
+            </div>
+          </template>
+        </UDashboardNavbar>
       </template>
 
       <template #body>

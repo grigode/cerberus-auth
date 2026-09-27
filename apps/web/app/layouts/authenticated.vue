@@ -68,7 +68,7 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
           class="flex items-center gap-2 overflow-hidden"
         >
           <Logo class="fill-primary size-8 shrink-0" />
-          <span v-if="!collapsed" class="text-lg font-semibold truncate">
+          <span v-if="!collapsed" class="font-semibold text-lg truncate">
             {{ ts("brand") }}
           </span>
         </NuxtLink>
@@ -118,7 +118,12 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
 
     <UDashboardPanel>
       <template #header>
-        <UDashboardNavbar :title="activeTitle" />
+        <UDashboardNavbar
+          :title="activeTitle"
+          :ui="{
+            root: 'h-16',
+          }"
+        />
       </template>
 
       <template #body>

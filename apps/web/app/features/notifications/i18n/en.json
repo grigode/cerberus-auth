@@ -1,0 +1,28 @@
+{
+  "center": {
+    "title": "Notifications",
+    "unreadCount": "{count} unread",
+    "markAllRead": "Mark all as read",
+    "filterAll": "All",
+    "filterUnread": "Unread",
+    "emptyTitle": "No notifications",
+    "emptyDescription": "You're all caught up! System notifications will appear here.",
+    "loadMore": "Load more",
+    "justNow": "Just now",
+    "timeAgo": "{time} ago",
+    "today": "Today",
+    "yesterday": "Yesterday"
+  },
+  "item": {
+    "markAsRead": "Mark as read",
+    "unread": "Unread",
+    "read": "Read"
+  },
+  "types": {
+    "info": "Information",
+    "success": "Success",
+    "warning": "Warning",
+    "error": "Alert",
+    "system": "System"
+  }
+}

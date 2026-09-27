@@ -1,0 +1,28 @@
+{
+  "center": {
+    "title": "Notificaciones",
+    "unreadCount": "{count} sin leer",
+    "markAllRead": "Marcar todas como leídas",
+    "filterAll": "Todas",
+    "filterUnread": "Sin leer",
+    "emptyTitle": "No hay notificaciones",
+    "emptyDescription": "¡Estás al día! Las notificaciones del sistema aparecerán aquí.",
+    "loadMore": "Cargar más",
+    "justNow": "Ahora mismo",
+    "timeAgo": "Hace {time}",
+    "today": "Hoy",
+    "yesterday": "Ayer"
+  },
+  "item": {
+    "markAsRead": "Marcar como leída",
+    "unread": "Sin leer",
+    "read": "Leída"
+  },
+  "types": {
+    "info": "Información",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "error": "Alerta",
+    "system": "Sistema"
+  }
+}

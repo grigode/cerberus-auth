@@ -9,8 +9,7 @@ import {
 import { RoleVo } from '@core/domain';
 import type { Controller as BaseController } from '@core/shared-server';
 import { Roles } from '../../../../iam/infrastructure/http/decorators/roles.decorator';
-import type { GetAuditLogsDto } from '../../../application';
-import { GetAuditLogsUseCase } from '../../../application';
+import { GetAuditLogsDto, GetAuditLogsUseCase } from '../../../application';
 
 @ApiTags('Audit')
 @ApiBearerAuth()

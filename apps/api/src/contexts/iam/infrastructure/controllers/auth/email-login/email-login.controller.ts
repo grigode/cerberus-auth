@@ -20,7 +20,7 @@ import { EmailLoginUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { EmailLoginResponseDto } from './email-login-response.dto';
-import type { EmailLoginDto } from './email-login.dto';
+import { EmailLoginDto } from './email-login.dto';
 import { Public } from '../../../http';
 
 @ApiTags('IAM - Authentication')

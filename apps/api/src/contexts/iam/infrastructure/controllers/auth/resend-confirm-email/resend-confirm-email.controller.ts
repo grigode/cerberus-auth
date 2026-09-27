@@ -9,7 +9,7 @@ import { ResendConfirmationEmailUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ResendConfirmEmailResponseDto } from './resend-confirm-email-response.dto';
-import type { ResendConfirmEmailDto } from './resend-confirm-email.dto';
+import { ResendConfirmEmailDto } from './resend-confirm-email.dto';
 import { Public } from '../../../http';
 
 @ApiTags('IAM - Authentication')

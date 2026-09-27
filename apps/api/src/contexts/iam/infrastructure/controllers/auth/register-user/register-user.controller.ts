@@ -11,7 +11,7 @@ import { ProviderVo } from '@core/domain';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { RegisterUserResponseDto } from './register-user-response.dto';
-import type { RegisterUserDto } from './register-user.dto';
+import { RegisterUserDto } from './register-user.dto';
 import { Public } from '../../../http';
 
 @ApiTags('IAM - Authentication')

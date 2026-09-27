@@ -9,7 +9,7 @@ import { UpdateProfileUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { UpdateProfileResponseDto } from './update-profile-response.dto';
-import type { UpdateProfileDto } from './update-profile.dto';
+import { UpdateProfileDto } from './update-profile.dto';
 import { CurrentUser } from '../../../http';
 
 @ApiTags('IAM - Profile & Identity')

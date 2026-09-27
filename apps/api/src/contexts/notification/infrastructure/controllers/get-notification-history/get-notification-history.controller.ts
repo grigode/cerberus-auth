@@ -14,7 +14,7 @@ import {
   InAppNotificationResponseDto,
   PaginatedNotificationsResponseDto,
 } from './in-app-notification-response.dto';
-import type { QueryNotificationsDto } from './query-notifications.dto';
+import { QueryNotificationsDto } from './query-notifications.dto';
 
 @ApiTags('Notifications - In-App & Realtime SSE')
 @ApiCookieAuth('access_token')

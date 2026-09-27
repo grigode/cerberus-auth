@@ -13,7 +13,7 @@ import { GoogleLoginUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { GOOGLE_ENDPOINTS } from './constants';
-import type { GoogleAuthCallbackQueryDto } from './google-auth-callback.dto';
+import { GoogleAuthCallbackQueryDto } from './google-auth-callback.dto';
 import { Public } from '../../../http';
 
 @ApiTags('IAM - Authentication')

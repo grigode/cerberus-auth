@@ -10,7 +10,7 @@ import { ConfirmEmailUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ConfirmEmailResponseDto } from './confirm-email-response.dto';
-import type { ConfirmEmailQueryDto } from './confirm-email.dto';
+import { ConfirmEmailQueryDto } from './confirm-email.dto';
 import { Public } from '../../../http';
 
 @ApiTags('IAM - Authentication')

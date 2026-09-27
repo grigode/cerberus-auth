@@ -20,7 +20,7 @@ import { VerifyMfaUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { MfaVerifyResponseDto } from './mfa-verify-response.dto';
-import type { MfaVerifyDto } from './mfa-verify.dto';
+import { MfaVerifyDto } from './mfa-verify.dto';
 import { Public } from '../../../http';
 
 @ApiTags('IAM - Multi-Factor Authentication')

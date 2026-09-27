@@ -7,7 +7,7 @@ import {
 
 import { GeneratePresignedUploadUrlUseCase } from '../../../application';
 import { PresignedUploadUrlResponseDto } from './presigned-upload-url-response.dto';
-import type { RequestPresignedUploadUrlDto } from './request-presigned-upload-url.dto';
+import { RequestPresignedUploadUrlDto } from './request-presigned-upload-url.dto';
 
 @ApiTags('Storage')
 @Controller('storage')

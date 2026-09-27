@@ -9,7 +9,7 @@ import { ResetPasswordUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ResetPasswordResponseDto } from './reset-password-response.dto';
-import type { ResetPasswordDto } from './reset-password.dto';
+import { ResetPasswordDto } from './reset-password.dto';
 import { Public } from '../../../http';
 
 @ApiTags('IAM - Authentication')

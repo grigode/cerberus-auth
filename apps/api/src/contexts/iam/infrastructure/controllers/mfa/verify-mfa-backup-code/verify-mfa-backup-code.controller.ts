@@ -19,7 +19,7 @@ import {
 import { VerifyMfaBackupCodeUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
-import type { VerifyMfaBackupCodeRequestDto } from './verify-mfa-backup-code.dto';
+import { VerifyMfaBackupCodeRequestDto } from './verify-mfa-backup-code.dto';
 import { Public } from '../../../http';
 import { EmailLoginResponseDto } from '../../auth/email-login/email-login-response.dto';
 

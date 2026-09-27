@@ -9,7 +9,7 @@ import { ForgotPasswordUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { ForgotPasswordResponseDto } from './forgot-password-response.dto';
-import type { ForgotPasswordDto } from './forgot-password.dto';
+import { ForgotPasswordDto } from './forgot-password.dto';
 import { Public } from '../../../http';
 
 @ApiTags('IAM - Authentication')

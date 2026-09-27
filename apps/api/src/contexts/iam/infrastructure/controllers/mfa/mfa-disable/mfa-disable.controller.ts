@@ -10,7 +10,7 @@ import { DisableMfaUseCase } from '../../../../application';
 import type { Controller as BaseController } from '@core/shared-server';
 
 import { MfaDisableResponseDto } from './mfa-disable-response.dto';
-import type { MfaDisableDto } from './mfa-disable.dto';
+import { MfaDisableDto } from './mfa-disable.dto';
 import { CurrentUser } from '../../../http';
 
 @ApiTags('IAM - Multi-Factor Authentication')

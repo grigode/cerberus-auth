@@ -8,6 +8,8 @@ import {
   type IProfileRepository,
   SessionsRepository,
   type ISessionsRepository,
+  NotificationRepository,
+  type INotificationRepository,
 } from '~/services/api/repositories';
 
 export interface Repositories {
@@ -15,6 +17,7 @@ export interface Repositories {
   mfa: IMfaRepository;
   profile: IProfileRepository;
   sessions: ISessionsRepository;
+  notifications: INotificationRepository;
 }
 
 export const useRepositories = (): Repositories => {
@@ -28,6 +31,7 @@ export const useRepositories = (): Repositories => {
       mfa: new MfaRepository(api),
       profile: new ProfileRepository(api),
       sessions: new SessionsRepository(api),
+      notifications: new NotificationRepository(api),
     };
   }
 
@@ -40,3 +44,5 @@ export const useProfileRepository = (): IProfileRepository =>
   useRepositories().profile;
 export const useSessionsRepository = (): ISessionsRepository =>
   useRepositories().sessions;
+export const useNotificationRepository = (): INotificationRepository =>
+  useRepositories().notifications;

@@ -1,13 +1,17 @@
+<script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+});
+</script>
+
 <template>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="100"
-    height="100"
-    viewBox="0 0 100 100"
-    v-bind="$attrs"
-  >
-    <path
-      d="M50 95c-18-5-44-50-6-60V23h1.5v2c4.5-2 4.5-2 9 0v-2H56v12c38 10 12 55-6 60M28.321 72.876 16 81l7 14-1-12 6.631-9.469m43.048-.655L84 81l-7 14 1-12-6.631-9.469m-46.32-10.45L5 63 0 76l8-8 17.242-4m49.709-.919L95 63l5 13-8-8-17.242-4M26.56 47.5 6 42 2.1 25.1 11 37l16.136 9.417M73.44 47.5 94 42l3.9-16.9L89 37l-16.136 9.417M33.42 39.655 18 17 31 5l-6 14 9.03 20.242m32.55.413L82 17 69 5l6 14-9.03 20.242"
+  <picture class="contents">
+    <source srcset="/logo.webp" type="image/webp" />
+    <img
+      src="/logo.png"
+      alt="Cerberus"
+      class="object-contain inline-block select-none pointer-events-none"
+      v-bind="$attrs"
     />
-  </svg>
+  </picture>
 </template>
